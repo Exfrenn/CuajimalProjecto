@@ -1,2 +1,0 @@
-# CuajimalProjecto
-Proyecto cuajimalpa
