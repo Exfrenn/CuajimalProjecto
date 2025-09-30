@@ -4,7 +4,7 @@ export const authProvider: AuthProvider = {
     // called when the user attempts to log in
     async login({ username, password }) {
         // localStorage.setItem("username", username);
-        if (username !== 'A01769546' || password !== 'TC2007B'){
+        if (username !== 'usuario' || password !== 'ejemplo'){
             throw new Error("Credenciales inválidas, por favor intenta de nuevo");
         } 
         localStorage.setItem("username", username);
