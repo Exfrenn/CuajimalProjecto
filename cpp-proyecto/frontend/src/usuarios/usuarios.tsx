@@ -37,7 +37,7 @@ export const UsuarioEdit = () => {
 
     const onSuccess = () => {
         notify('Cambios guardados', {undoable:true});
-        redirect('/posts');
+        redirect('/usuarios');
         refresh();
     }
 
@@ -59,7 +59,7 @@ export const UsuarioEdit = () => {
 
 export const UsuarioCreate = () => (
         <Create>
-            <SimpleForm warnWhenUnsavedChanges>
+            <SimpleForm>
                 <TextInput source="nombre" label="Nombre"/>
                 <TextInput source="apellido" label="Apellido"/>
                 <TextInput source="rol" label="Rol"/>
@@ -68,7 +68,7 @@ export const UsuarioCreate = () => (
                 </ReferenceInput>
             </SimpleForm>
         </Create>
-    )
+)
 
 export const UsuarioShow = () => (
     <Show>
