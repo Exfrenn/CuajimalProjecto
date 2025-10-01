@@ -13,7 +13,6 @@ export const ReporteList = () => {
                 />
             ) : (
                 <DataTable>
-                    <DataTable.Col source="id" label="Id"/>
                     <DataTable.Col source="preambulo.folio" label="Folio"/>
                     <DataTable.Col source="preambulo.fecha" label="Fecha">
                         <DateField source="preambulo.fecha" />
