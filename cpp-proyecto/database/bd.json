@@ -1,0 +1,551 @@
+{
+  "turnos": [
+    {
+      "id": 1,
+      "nombre_clave": "Matutino Semanal",
+      "descripcion": "Lunes a Viernes (8am - 3pm)"
+    },
+    {
+      "id": 2,
+      "nombre_clave": "Vespertino Semanal",
+      "descripcion": "Lunes a Viernes (3pm - 9pm)"
+    },
+    {
+      "id": 3,
+      "nombre_clave": "Nocturno A (L-M-V)",
+      "descripcion": "Lunes, Miércoles, Viernes (9pm - 8am)"
+    },
+    {
+      "id": 4,
+      "nombre_clave": "Nocturno B (M-J-D)",
+      "descripcion": "Martes, Jueves, Domingo (9pm - 8am)"
+    },
+    {
+      "id": 5,
+      "nombre_clave": "Diurno Fin de Semana",
+      "descripcion": "Sábados, Domingos y Festivos (9am - 8pm)"
+    },
+    {
+      "id": 6,
+      "nombre_clave": "Nocturno Fin de Semana",
+      "descripcion": "Sábados, Domingos y Festivos (8pm - 8am)"
+    }
+  ],
+  "usuarios": [
+    {
+      "id": 101,
+      "nombre": "Ana",
+      "apellido": "Gutiérrez",
+      "rol": "T.U.M.",
+      "turnoId": 1
+    },
+    {
+      "id": 102,
+      "nombre": "Carlos",
+      "apellido": "Herrera",
+      "rol": "Operador",
+      "turnoId": 2
+    },
+    {
+      "id": 103,
+      "nombre": "Sofía",
+      "apellido": "Rojas",
+      "rol": "Socorrista",
+      "turnoId": 3
+    },
+    {
+      "id": 104,
+      "nombre": "Javier",
+      "apellido": "Morales",
+      "rol": "T.U.M.",
+      "turnoId": 4
+    },
+    {
+      "id": 105,
+      "nombre": "Elena",
+      "apellido": "Vargas",
+      "rol": "Médico",
+      "turnoId": 5
+    },
+    {
+      "id": 106,
+      "nombre": "Miguel",
+      "apellido": "Torres",
+      "rol": "Paramédico",
+      "turnoId": 6
+    }
+  ],
+  "reportes": [
+    {
+      "id": 1,
+      "preambulo": {
+        "fecha": "2025-09-24",
+        "folio": "CUAJ-PH-001"
+      },
+      "datos_servicio": {
+        "cronometria": {
+          "hora_llamada": "2025-09-24T10:00:00Z",
+          "hora_salida": "2025-09-24T10:02:00Z",
+          "hora_llegada": "2025-09-24T10:15:00Z",
+          "hora_traslado": "2025-09-24T10:30:00Z",
+          "hora_hospital": "2025-09-24T10:45:00Z",
+          "salida_hospital": "2025-09-24T11:00:00Z",
+          "hora_base": "2025-09-24T11:20:00Z"
+        },
+        "motivo_atencion": "Accidente automovilístico",
+        "ubicacion": {
+          "calle": "Carretera México-Toluca Km 25",
+          "interseccion1": "Av. de los Poetas",
+          "interseccion2": "Entrada a La Venta",
+          "colonia": "La Venta",
+          "alcaldia": "Cuajimalpa",
+          "lugar_ocurrencia": "Vía pública"
+        }
+      },
+      "control": {
+        "numero_ambulancia": "MX-021-CMX",
+        "operadorId": 102,
+        "tumId": 104,
+        "socorristaId": null,
+        "helicoptero_matricula": null
+      },
+      "datos_paciente": {
+        "nombre": "Ricardo Jiménez",
+        "sexo": "Masculino",
+        "edad": {
+          "años": 35,
+          "meses": 0
+        },
+        "domicilio": "Av. Santa Fe 421",
+        "colonia": "Santa Fe",
+        "alcaldia": "Cuajimalpa",
+        "derechohabiente_a": "IMSS",
+        "telefono": "5512345678",
+        "ocupacion": "Contador"
+      },
+      "parto": null,
+      "causa_traumatica": {
+        "agente_causal": "Accidente automovilístico",
+        "accidente_automovilistico": {
+          "tipo": "Choque frontal",
+          "impacto": "Frontal",
+          "hundimiento": "Sí, >30cm",
+          "parabrisas": "Estrellado",
+          "volante": "Deformado",
+          "bolsa_de_aire": "Activada",
+          "cinturon_seguridad": "Sí",
+          "dentro_del_vehiculo": "Conductor"
+        },
+        "atropellado": "No aplica"
+      },
+      "causa_clinica": null,
+      "evaluacion_inicial": {
+        "nivel_consciencia": "Alerta",
+        "deglucion": "Presente",
+        "via_aerea": "Permeable",
+        "ventilacion": "Simétrica",
+        "auscultacion": "Campos pulmonares ventilados",
+        "hemitorax": "Estable",
+        "sitio": "Bilateral",
+        "presencia_pulsos": "Sí, radial y pedio",
+        "calidad": "Fuerte",
+        "piel": "Térmica",
+        "caracteristicas": "Normocoloreada",
+        "comentario": "Paciente orientado en tiempo, lugar y persona."
+      },
+      "evaluacion_secundaria": {
+        "exploracion_fisica": "Presencia de contusión en tórax y abrasiones en antebrazo derecho.",
+        "zonas_lesion": [
+          {
+            "nombre": "Tórax anterior",
+            "asunto": "Contusión por cinturón",
+            "fecha": "2025-09-24"
+          }
+        ],
+        "pupilas": "Isocóricas normorreflecticas",
+        "signos_vitales": [
+          {
+            "hora": "10:20",
+            "fr": 20,
+            "fc": 88,
+            "tas": 120,
+            "tad": 80,
+            "sao2": 97,
+            "gluc": 95,
+            "neuro_test": "Sin alteraciones"
+          }
+        ],
+        "glasgow": 15,
+        "alergias": "Ninguna conocida",
+        "medicamentos": "Ninguno",
+        "padecimientos_cirugias": "Apendicectomía hace 5 años",
+        "ultima_comida": "Hace 4 horas",
+        "eventos_previos": "Refiere haber perdido el control del vehículo por lluvia.",
+        "condicion_paciente": "Estable",
+        "prioridad": "Amarillo (Urgente)"
+      },
+      "traslado": {
+        "institucion": {
+          "hospital": "Hospital ABC Santa Fe",
+          "doctor_recibe": "Dr. Ramírez",
+          "folio_cru": "CRUM-98765"
+        },
+        "negativa_atencion": null
+      },
+      "tratamiento": {
+        "via_aerea_manejo": "Observación",
+        "control_cervical": "Collarín cervical",
+        "asistencia_ventilatoria": {
+          "tipo": "Ninguna",
+          "lts_min": null
+        },
+        "medicamentos": [],
+        "control_hemorragias": "Limpieza de abrasiones",
+        "vias_venosas": [
+          {
+            "tipo_solucion": "Cloruro de Sodio 0.9%",
+            "cateter_n": 18,
+            "cantidad_ml": 500
+          }
+        ],
+        "atencion_basica": "Inmovilización en tabla rígida"
+      },
+      "observaciones_pertenencias": "Se entrega cartera con identificaciones y celular a personal de seguridad del hospital.",
+      "ministerio_publico": null,
+      "datos_legales": {
+        "autoridades": [
+          {
+            "dependencia": "Guardia Nacional - Carreteras",
+            "numero_unidad": "GN-12345",
+            "numero_oficiales": 2
+          }
+        ],
+        "vehiculos_involucrados": [
+          {
+            "tipo_marca": "Nissan Versa",
+            "placas": "ABC-123-XYZ"
+          }
+        ]
+      },
+      "firmas": {
+        "paciente": "Ricardo Jiménez",
+        "testigo": "Oficial Juan López",
+        "paramedico": "Javier Morales",
+        "medico_recibe": "Dr. Ramírez"
+      },
+      "modificaciones": {
+        "usuarioId": 104,
+        "fecha": "2025-09-24"
+      },
+      "adicionales": {
+        "reporte_escaneado": "/path/to/scan/001.pdf",
+        "turnoId": 2
+      }
+    },
+    {
+      "id": 2,
+      "preambulo": {
+        "fecha": "2025-09-24",
+        "folio": "CUAJ-PH-002"
+      },
+      "datos_servicio": {
+        "cronometria": {
+          "hora_llamada": "2025-09-24T12:05:00Z",
+          "hora_salida": "2025-09-24T12:07:00Z",
+          "hora_llegada": "2025-09-24T12:20:00Z",
+          "hora_traslado": "2025-09-24T12:40:00Z",
+          "hora_hospital": "2025-09-24T12:55:00Z",
+          "salida_hospital": "2025-09-24T13:10:00Z",
+          "hora_base": "2025-09-24T13:25:00Z"
+        },
+        "motivo_atencion": "Dolor torácico",
+        "ubicacion": {
+          "calle": "Av. Arteaga y Salazar",
+          "interseccion1": "Loma de la Palma",
+          "interseccion2": "Cedros",
+          "colonia": "Contadero",
+          "alcaldia": "Cuajimalpa",
+          "lugar_ocurrencia": "Domicilio"
+        }
+      },
+      "control": {
+        "numero_ambulancia": "MX-015-CMX",
+        "operadorId": 102,
+        "tumId": 101,
+        "socorristaId": null,
+        "helicoptero_matricula": null
+      },
+      "datos_paciente": {
+        "nombre": "Laura Fernández",
+        "sexo": "Femenino",
+        "edad": {
+          "años": 68,
+          "meses": 0
+        },
+        "domicilio": "Calle Cedros 54",
+        "colonia": "Contadero",
+        "alcaldia": "Cuajimalpa",
+        "derechohabiente_a": "ISSSTE",
+        "telefono": "5587654321",
+        "ocupacion": "Jubilada"
+      },
+      "parto": null,
+      "causa_traumatica": null,
+      "causa_clinica": {
+        "origen_probable": "Cardiológico",
+        "primera_vez": "No",
+        "subsecuente": "Sí"
+      },
+      "evaluacion_inicial": {
+        "nivel_consciencia": "Alerta",
+        "deglucion": "Presente",
+        "via_aerea": "Permeable",
+        "ventilacion": "Normal",
+        "auscultacion": "Murmullo vesicular presente",
+        "hemitorax": "Estable",
+        "sitio": "Bilateral",
+        "presencia_pulsos": "Sí, radial",
+        "calidad": "Rítmico",
+        "piel": "Pálida",
+        "caracteristicas": "Diaforética",
+        "comentario": "Paciente refiere dolor opresivo en pecho irradiado a brazo izquierdo."
+      },
+      "evaluacion_secundaria": {
+        "exploracion_fisica": "Sin hallazgos de trauma.",
+        "zonas_lesion": [],
+        "pupilas": "Isocóricas normorreflecticas",
+        "signos_vitales": [
+          {
+            "hora": "12:25",
+            "fr": 22,
+            "fc": 95,
+            "tas": 150,
+            "tad": 90,
+            "sao2": 94,
+            "gluc": 110,
+            "neuro_test": "Normal"
+          }
+        ],
+        "glasgow": 15,
+        "alergias": "Penicilina",
+        "medicamentos": "Losartán, Metformina",
+        "padecimientos_cirugias": "Hipertensión, Diabetes Mellitus tipo 2",
+        "ultima_comida": "Hace 2 horas",
+        "eventos_previos": "Inició con dolor hace 30 minutos mientras reposaba.",
+        "condicion_paciente": "Delicado",
+        "prioridad": "Rojo (Emergencia)"
+      },
+      "traslado": {
+        "institucion": {
+          "hospital": "Hospital General Enrique Cabrera",
+          "doctor_recibe": "Dra. Soto",
+          "folio_cru": "CRUM-98766"
+        },
+        "negativa_atencion": null
+      },
+      "tratamiento": {
+        "via_aerea_manejo": "Observación",
+        "control_cervical": "No requerido",
+        "asistencia_ventilatoria": {
+          "tipo": "Puntas nasales",
+          "lts_min": 3
+        },
+        "medicamentos": [
+          {
+            "hora": "12:30",
+            "medicamento": "AAS",
+            "dosis": "300mg",
+            "via_administracion": "Oral",
+            "doctor_tratante": "Dr. a bordo (ficticio)"
+          }
+        ],
+        "control_hemorragias": "No requerido",
+        "vias_venosas": [
+          {
+            "tipo_solucion": "Solución Hartman",
+            "cateter_n": 20,
+            "cantidad_ml": 250
+          }
+        ],
+        "atencion_basica": "Monitoreo cardiaco continuo"
+      },
+      "observaciones_pertenencias": "Se entregan pertenencias a familiar (hija) en el lugar.",
+      "ministerio_publico": null,
+      "datos_legales": null,
+      "firmas": {
+        "paciente": "Laura Fernández",
+        "testigo": "Hija, Ana Gómez",
+        "paramedico": "Ana Gutiérrez",
+        "medico_recibe": "Dra. Soto"
+      },
+      "modificaciones": {
+        "usuarioId": 101,
+        "fecha": "2025-09-24"
+      },
+      "adicionales": {
+        "reporte_escaneado": "/path/to/scan/002.pdf",
+        "turnoId": 1
+      }
+    },
+    {
+      "id": 3,
+      "preambulo": {
+        "fecha": "2025-09-24",
+        "folio": "CUAJ-PH-003"
+      },
+      "datos_servicio": {
+        "cronometria": {
+          "hora_llamada": "2025-09-24T20:00:00Z",
+          "hora_salida": "2025-09-24T20:03:00Z",
+          "hora_llegada": "2025-09-24T20:18:00Z",
+          "hora_traslado": "2025-09-24T20:35:00Z",
+          "hora_hospital": "2025-09-24T20:50:00Z",
+          "salida_hospital": "2025-09-24T21:10:00Z",
+          "hora_base": "2025-09-24T21:30:00Z"
+        },
+        "motivo_atencion": "Trabajo de parto",
+        "ubicacion": {
+          "calle": "Cerrada de Sauce",
+          "interseccion1": "Prolongación Juárez",
+          "interseccion2": "Ninguna",
+          "colonia": "San Lorenzo Acopilco",
+          "alcaldia": "Cuajimalpa",
+          "lugar_ocurrencia": "Domicilio"
+        }
+      },
+      "control": {
+        "numero_ambulancia": "MX-021-CMX",
+        "operadorId": 102,
+        "tumId": 103,
+        "socorristaId": null,
+        "helicoptero_matricula": null
+      },
+      "datos_paciente": {
+        "nombre": "Mariana López",
+        "sexo": "Femenino",
+        "edad": {
+          "años": 25,
+          "meses": 0
+        },
+        "domicilio": "Cerrada de Sauce 15",
+        "colonia": "San Lorenzo Acopilco",
+        "alcaldia": "Cuajimalpa",
+        "derechohabiente_a": "Ninguno",
+        "telefono": "5598765432",
+        "ocupacion": "Ama de casa"
+      },
+      "parto": {
+        "datos_madre": {
+          "semanas_gesta": 39,
+          "hora_inicio_contracciones": "18:00",
+          "frecuencia_min": 3,
+          "duracion_seg": 60
+        },
+        "datos_post_parto": {
+          "hora_nacimiento": "20:30",
+          "placenta_expulsada": "No",
+          "lugar": "En ambulancia",
+          "producto": "Único, vivo",
+          "sexo": "Masculino"
+        },
+        "puntaje_apgar": {
+          "edad_gestacional": "A término",
+          "color": 2,
+          "fc": 2,
+          "irritabilidad": 2,
+          "tono_muscular": 1,
+          "respiracion": 2,
+          "tiempo": "1 minuto"
+        }
+      },
+      "causa_traumatica": null,
+      "causa_clinica": {
+        "origen_probable": "Gineco-obstétrico",
+        "primera_vez": "No",
+        "subsecuente": "No"
+      },
+      "evaluacion_inicial": {
+        "nivel_consciencia": "Alerta",
+        "deglucion": "Presente",
+        "via_aerea": "Permeable",
+        "ventilacion": "Normal",
+        "auscultacion": "Normal",
+        "hemitorax": "Normal",
+        "sitio": "Bilateral",
+        "presencia_pulsos": "Sí",
+        "calidad": "Fuerte",
+        "piel": "Normal",
+        "caracteristicas": "Normal",
+        "comentario": "Atención de parto en la unidad."
+      },
+      "evaluacion_secundaria": {
+        "exploracion_fisica": "Expulsión de producto en la unidad, se procede a pinzar y cortar cordón umbilical.",
+        "zonas_lesion": [],
+        "pupilas": "Normales",
+        "signos_vitales": [
+          {
+            "hora": "20:20",
+            "fr": 22,
+            "fc": 100,
+            "tas": 130,
+            "tad": 85,
+            "sao2": 98,
+            "gluc": 100,
+            "neuro_test": "Normal"
+          }
+        ],
+        "glasgow": 15,
+        "alergias": "Ninguna",
+        "medicamentos": "Ácido fólico",
+        "padecimientos_cirugias": "Ninguno",
+        "ultima_comida": "Hace 6 horas",
+        "eventos_previos": "Trabajo de parto activo.",
+        "condicion_paciente": "Estable",
+        "prioridad": "Rojo (Emergencia)"
+      },
+      "traslado": {
+        "institucion": {
+          "hospital": "Hospital de la Mujer",
+          "doctor_recibe": "Dra. Castillo",
+          "folio_cru": "CRUM-98767"
+        },
+        "negativa_atencion": null
+      },
+      "tratamiento": {
+        "via_aerea_manejo": "Aspiración de secreciones a neonato.",
+        "control_cervical": "No requerido",
+        "asistencia_ventilatoria": {
+          "tipo": "Ninguna",
+          "lts_min": null
+        },
+        "medicamentos": [],
+        "control_hemorragias": "Masaje uterino",
+        "vias_venosas": [
+          {
+            "tipo_solucion": "Cloruro de Sodio 0.9%",
+            "cateter_n": 18,
+            "cantidad_ml": 1000
+          }
+        ],
+        "atencion_basica": "Secado y abrigo de neonato, valoración Apgar."
+      },
+      "observaciones_pertenencias": "Se traslada binomio madre-hijo estables.",
+      "ministerio_publico": null,
+      "datos_legales": null,
+      "firmas": {
+        "paciente": "Mariana López",
+        "testigo": "Familiar, Pedro López",
+        "paramedico": "Sofía Rojas",
+        "medico_recibe": "Dra. Castillo"
+      },
+      "modificaciones": {
+        "usuarioId": 103,
+        "fecha": "2025-09-24"
+      },
+      "adicionales": {
+        "reporte_escaneado": "/path/to/scan/003.pdf",
+        "turnoId": 3
+      }
+    }
+  ]
+}
