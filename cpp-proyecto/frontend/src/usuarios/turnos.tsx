@@ -71,7 +71,7 @@ export const TurnoEdit = () => {
     const refresh = useRefresh();
 
     const onSuccess = () => {
-        notify('Cambios guardados', {undoable:true});
+        notify('Cambios guardados', {undoable:true, autoHideDuration: 5000});
         redirect('/turnos');
         refresh();
     }
@@ -79,7 +79,8 @@ export const TurnoEdit = () => {
 
     return(
         <Edit mutationOptions={{onSuccess}}>
-            <SimpleForm>
+            <SimpleForm warnWhenUnsavedChanges>
+                <TextInput source="id" label="Id" InputProps={{ disabled: true }} />
                 <TextInput source="nombre" label="Nombre del Turno"/>
                 <SelectArrayInput source="dias" label="Dias laborales" choices={[
                     {id: 'Lun', name: 'Lunes'},
