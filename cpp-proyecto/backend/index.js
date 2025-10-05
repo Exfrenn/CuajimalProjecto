@@ -26,9 +26,14 @@ app.get("/turnos/:id", async (req,res)=>{
 //createOne
 app.post("/turnos", async (req,res)=>{
 	let valores=req.body
+	if (valores["id"] === undefined || valores["id"] === null) {
+        const last = await db.collection("turnos").find().sort({ id: -1 }).limit(1).toArray();
+        valores["id"] = last.length > 0 ? last[0].id + 1 : 1;
+    }
 	valores["id"]=Number(valores["id"])
 	let data=await db.collection("turnos").insertOne(valores);
-	res.json(data)
+	console.log("MongoDB insert response:", data);
+	res.json(valores)
 });
 
 //deleteOne
