@@ -2,18 +2,22 @@ import { Admin, Resource } from "react-admin";
 import { Layout } from "./Layout";
 import { dataProvider} from "./dataProvider";
 import { i18nProvider } from "./i18nProvider";
+
 import { UsuarioCreate, UsuarioEdit, UsuarioList, UsuarioShow } from "./usuarios/usuarios";
 import { ReporteList, ReporteShow } from "./reportes/reportes_prehospitalarios";
 import { TurnoCreate, TurnoEdit, TurnoList, TurnoShow } from "./usuarios/turnos";
+import { RolCreate, RolEdit, RolList, RolShow } from "./usuarios/roles";
 
 import IconoUsuario from "@mui/icons-material/Group";
 import IconoHospital from '@mui/icons-material/LocalHospital';
 import IconoTurno from '@mui/icons-material/Schedule';
+import IconoRol from '@mui/icons-material/AdminPanelSettings';
 
 export const App = () => (
     <Admin layout={Layout} dataProvider={dataProvider} i18nProvider={i18nProvider}>
+        <Resource name="turnos" list={TurnoList} show={TurnoShow} create={TurnoCreate} edit={TurnoEdit} icon={IconoTurno}/>
+        <Resource name="roles" list={RolList} show={RolShow} create={RolCreate} edit={RolEdit} icon={IconoRol}/>
         <Resource name="usuarios" list={UsuarioList} show={UsuarioShow} edit={UsuarioEdit} create={UsuarioCreate} icon={IconoUsuario}/>
         <Resource name="reportes" list={ReporteList} show={ReporteShow} icon={IconoHospital}/>
-        <Resource name="turnos" list={TurnoList} show={TurnoShow} create={TurnoCreate} edit={TurnoEdit} icon={IconoTurno}/>
     </Admin>
 );

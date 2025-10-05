@@ -99,22 +99,35 @@ export const TurnoEdit = () => {
     )
 };
 
-export const TurnoCreate = () => (
-    <Create>
-        <SimpleForm>
-            <TextInput source="nombre" label="Nombre del Turno"/>
-            <SelectArrayInput source="dias" label="Dias laborales" choices={[
-                {id: 'Lun', name: 'Lunes'},
-                {id: 'Mar', name: 'Martes'},
-                {id: 'Mie', name: 'Miercoles'},
-                {id: 'Jue', name: 'Jueves'},
-                {id: 'Vie', name: 'Viernes'},
-                {id: 'Sab', name: 'Sabado'},
-                {id: 'Dom', name: 'Domingo'},
-                {id: 'Fes', name: 'Festivo'}
-            ]} />
-            <TimeInput source="hora_inicio" label="Hora de Entrada"/>
-            <TimeInput source="hora_fin" label="Hora de Salida"/>
-        </SimpleForm>
-    </Create>
-);
+export const TurnoCreate = () => {
+
+    const notify = useNotify();
+    const redirect = useRedirect();
+    const refresh = useRefresh();
+
+    const onSuccess = () => {
+        notify('Turno creado exitosamente');
+        redirect('/turnos');
+        refresh();
+    }
+
+    return(
+        <Create mutationOptions={{onSuccess}}>
+            <SimpleForm warnWhenUnsavedChanges>
+                <TextInput source="nombre" label="Nombre del Turno"/>
+                <SelectArrayInput source="dias" label="Dias laborales" choices={[
+                    {id: 'Lun', name: 'Lunes'},
+                    {id: 'Mar', name: 'Martes'},
+                    {id: 'Mie', name: 'Miercoles'},
+                    {id: 'Jue', name: 'Jueves'},
+                    {id: 'Vie', name: 'Viernes'},
+                    {id: 'Sab', name: 'Sabado'},
+                    {id: 'Dom', name: 'Domingo'},
+                    {id: 'Fes', name: 'Festivo'}
+                ]} />
+                <TimeInput source="hora_inicio" label="Hora de Entrada"/>
+                <TimeInput source="hora_fin" label="Hora de Salida"/>
+            </SimpleForm>
+        </Create>
+    )
+}
