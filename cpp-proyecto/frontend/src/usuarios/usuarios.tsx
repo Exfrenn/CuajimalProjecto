@@ -27,7 +27,7 @@ export const UsuarioList = () => {
             )}
         </List>
     );
-}
+};
 
 export const UsuarioEdit = () => {
 
@@ -55,7 +55,7 @@ export const UsuarioEdit = () => {
             </SimpleForm>
         </Edit>
     )
-}
+};
 
 export const UsuarioCreate = () => (
         <Create>
@@ -80,4 +80,4 @@ export const UsuarioShow = () => (
             <ReferenceField source="turnoId" reference="turnos" link="show" label="TurnoId"/>
         </SimpleShowLayout>
     </Show>
-)
+);
