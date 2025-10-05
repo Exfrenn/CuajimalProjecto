@@ -1,5 +1,5 @@
 import { useMediaQuery, Theme } from "@mui/material";
-import { List, SimpleList, DataTable, Show, SimpleShowLayout, TextField, FunctionField, DateField, Form, Create, SimpleForm, TextInput, SelectInput, SelectArrayInput, TimeInput } from "react-admin";
+import { List, SimpleList, DataTable, Show, SimpleShowLayout, TextField, FunctionField, Create, SimpleForm, TextInput, SelectInput, SelectArrayInput, TimeInput, useNotify, useRedirect, useRefresh, Edit, EditButton } from "react-admin";
 
 export const TurnoList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
@@ -26,6 +26,9 @@ export const TurnoList = () => {
                         label="Hora de Salida"
                         render={record => record.hora_fin ? new Date(record.hora_fin).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
                     />
+                    <DataTable.Col>
+                        <EditButton/>
+                    </DataTable.Col>
                 </DataTable>
             )}
         </List>
@@ -60,6 +63,40 @@ export const TurnoShow = () => (
         </SimpleShowLayout>
     </Show>
 );
+
+export const TurnoEdit = () => {
+
+    const notify = useNotify();
+    const redirect = useRedirect();
+    const refresh = useRefresh();
+
+    const onSuccess = () => {
+        notify('Cambios guardados', {undoable:true});
+        redirect('/turnos');
+        refresh();
+    }
+
+
+    return(
+        <Edit mutationOptions={{onSuccess}}>
+            <SimpleForm>
+                <TextInput source="nombre" label="Nombre del Turno"/>
+                <SelectArrayInput source="dias" label="Dias laborales" choices={[
+                    {id: 'Lun', name: 'Lunes'},
+                    {id: 'Mar', name: 'Martes'},
+                    {id: 'Mie', name: 'Miercoles'},
+                    {id: 'Jue', name: 'Jueves'},
+                    {id: 'Vie', name: 'Viernes'},
+                    {id: 'Sab', name: 'Sabado'},
+                    {id: 'Dom', name: 'Domingo'},
+                    {id: 'Fes', name: 'Festivo'}
+                ]} />
+                <TimeInput source="hora_inicio" label="Hora de Entrada"/>
+                <TimeInput source="hora_fin" label="Hora de Salida"/>
+            </SimpleForm>
+        </Edit>
+    )
+};
 
 export const TurnoCreate = () => (
     <Create>
