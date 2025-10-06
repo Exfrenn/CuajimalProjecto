@@ -93,6 +93,47 @@ app.put("/roles/:id", async(req,res)=>{
 	res.json(data[0]);
 })
 
+//Usuarios-------------------------------------------------------------------------
+app.get("/usuarios", async (req,res)=>{
+    let data = await db.collection("usuarios").find({}).project({_id:0}).toArray();
+    res.set("Access-Control-Expose-Headers", "X-Total-Count");
+    res.set("X-Total-Count", data.length);
+    res.json(data);
+})
+
+//getOne
+app.get("/usuarios/:id", async (req,res)=>{
+	let data=await db.collection("usuarios").find({"id": Number(req.params.id)}).project({_id:0}).toArray();
+	res.json(data[0]);
+});
+
+//createOne
+app.post("/usuarios", async (req,res)=>{
+	let valores=req.body
+	if (valores["id"] === undefined || valores["id"] === null) {
+        const last = await db.collection("usuarios").find().sort({ id: -1 }).limit(1).toArray();
+        valores["id"] = last.length > 0 ? last[0].id + 1 : 1;
+    }
+	valores["id"]=Number(valores["id"])
+	let data=await db.collection("usuarios").insertOne(valores);
+	console.log("MongoDB insert response:", data);
+	res.json(valores)
+});
+
+//deleteOne
+app.delete("/usuarios/:id", async(req,res)=>{
+	let data=await db.collection("usuarios").deleteOne({"id": Number(req.params.id)});
+	res.json(data)
+})
+
+//updateOne
+app.put("/usuarios/:id", async(req,res)=>{
+	let valores=req.body
+	valores["id"]=Number(valores["id"])
+	let data =await db.collection("usuarios").updateOne({"id":valores["id"]}, {"$set":valores})
+	data=await db.collection("usuarios").find({"id":valores["id"]}).project({_id:0}).toArray();
+	res.json(data[0]);
+})
 
 async function connectToDB(){
     let client = new MongoClient("mongodb://127.0.0.1:27017/ProyectoCPP");

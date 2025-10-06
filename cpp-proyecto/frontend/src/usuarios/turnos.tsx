@@ -1,5 +1,5 @@
 import { useMediaQuery, Theme } from "@mui/material";
-import { List, SimpleList, DataTable, Show, SimpleShowLayout, TextField, FunctionField, Create, SimpleForm, TextInput, SelectInput, SelectArrayInput, TimeInput, useNotify, useRedirect, useRefresh, Edit, EditButton } from "react-admin";
+import { List, SimpleList, DataTable, Show, SimpleShowLayout, TextField, FunctionField, Create, SimpleForm, TextInput, SelectArrayInput, TimeInput, useNotify, useRedirect, useRefresh, Edit, EditButton } from "react-admin";
 
 export const TurnoList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
@@ -7,8 +7,7 @@ export const TurnoList = () => {
         <List>
             {isSmall ? (
                 <SimpleList
-                    primaryText={(record) => record.id}
-                    secondaryText={(record) => record.nombre}
+                    primaryText={(record) => record.nombre}
                 />
             ) : (
                 <DataTable>

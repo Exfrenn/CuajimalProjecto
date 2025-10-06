@@ -17,7 +17,7 @@ export const App = () => (
     <Admin layout={Layout} dataProvider={dataProvider} i18nProvider={i18nProvider}>
         <Resource name="turnos" list={TurnoList} show={TurnoShow} create={TurnoCreate} edit={TurnoEdit} icon={IconoTurno}/>
         <Resource name="roles" list={RolList} show={RolShow} create={RolCreate} edit={RolEdit} icon={IconoRol}/>
-        <Resource name="usuarios" list={UsuarioList} show={UsuarioShow} edit={UsuarioEdit} create={UsuarioCreate} icon={IconoUsuario}/>
+        <Resource name="usuarios" list={UsuarioList} show={UsuarioShow} create={UsuarioCreate} edit={UsuarioEdit} icon={IconoUsuario}/>
         <Resource name="reportes" list={ReporteList} show={ReporteShow} icon={IconoHospital}/>
     </Admin>
 );
