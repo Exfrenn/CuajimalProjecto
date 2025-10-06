@@ -7,8 +7,7 @@ export const RolList = () => {
         <List>
             {isSmall ? (
                 <SimpleList
-                    primaryText={(record) => record.id}
-                    secondaryText={(record) => record.nombre}
+                    primaryText={(record) => record.nombre}
                 />
             ) : (
                 <DataTable>
