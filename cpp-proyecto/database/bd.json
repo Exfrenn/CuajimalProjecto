@@ -91,6 +91,7 @@
     ],
     "usuarios": [
         {
+            "id": 1,
             "nombre": "Juan",
             "apellido": "Pérez",
             "email": "juan.perez@emergencia.com",
@@ -99,6 +100,7 @@
             "turno_id": 1
         },
         {
+            "id": 2,
             "nombre": "Ana",
             "apellido": "Gutiérrez",
             "email": "ana.gutierrez@emergencia.com",
@@ -107,6 +109,7 @@
             "turno_id": 2
         },
         {
+            "id": 3,
             "nombre": "Carlos",
             "apellido": "Herrera",
             "email": "carlos.herrera@emergencia.com",
@@ -115,6 +118,7 @@
             "turno_id": 3
         },
         {
+            "id": 4,
             "nombre": "Sofía",
             "apellido": "Rojas",
             "email": "sofia.rojas@emergencia.com",
@@ -123,6 +127,7 @@
             "turno_id": 4
         },
         {
+            "id": 5,
             "nombre": "Miguel",
             "apellido": "Torres",
             "email": "miguel.torres@emergencia.com",
@@ -131,6 +136,7 @@
             "turno_id": 5
         },
         {
+            "id": 6,
             "nombre": "Elena",
             "apellido": "Vargas",
             "email": "elena.vargas@emergencia.com",
@@ -139,6 +145,7 @@
             "turno_id": 6
         },
         {
+            "id": 7,
             "nombre": "Luis",
             "apellido": "Ramírez",
             "email": "luis.ramirez@emergencia.com",
@@ -147,6 +154,7 @@
             "turno_id": 1
         },
         {
+            "id": 8,
             "nombre": "Patricia",
             "apellido": "López",
             "email": "patricia.lopez@emergencia.com",
@@ -155,6 +163,7 @@
             "turno_id": 2
         },
         {
+            "id": 9,
             "nombre": "Gabriela",
             "apellido": "Martínez",
             "email": "gabriela.martinez@emergencia.com",
@@ -174,10 +183,10 @@
             "personal_y_activacion": {
                 "personal_a_cargo": [
                     {
-                        "personal_id": "NaN"
+                        "personal_id": 2
                     },
                     {
-                        "personal_id": "NaN"
+                        "personal_id": 4
                     }
                 ],
                 "modo_activacion": "Llamada de emergencia",
