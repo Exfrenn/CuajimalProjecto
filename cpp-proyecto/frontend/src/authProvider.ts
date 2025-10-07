@@ -1,12 +1,16 @@
+// in src/authProvider.ts
 import { AuthProvider } from "react-admin";
 
 export const authProvider: AuthProvider = {
     // called when the user attempts to log in
     async login({ username, password }) {
-        // localStorage.setItem("username", username);
-        if (username !== 'usuario' || password !== 'ejemplo'){
-            throw new Error("Credenciales inválidas, por favor intenta de nuevo");
-        } 
+        if(username !=="a01772695" || password !=="jose"){
+            throw new Error('login failed');
+        }
+
+        if (false) {
+            throw new Error("Invalid credentials, please try again");
+        }
         localStorage.setItem("username", username);
     },
     // called when the user clicks on the logout button
@@ -17,13 +21,13 @@ export const authProvider: AuthProvider = {
     async checkError({ status }: { status: number }) {
         if (status === 401 || status === 403) {
             localStorage.removeItem("username");
-            throw new Error("Sesión expirada");
+            throw new Error("Session expired");
         }
     },
     // called when the user navigates to a new location, to check for authentication
     async checkAuth() {
         if (!localStorage.getItem("username")) {
-            throw new Error("Autenticación requerida");
+            throw new Error("Authentication required");
         }
     },
 };
