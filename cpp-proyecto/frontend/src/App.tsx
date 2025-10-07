@@ -1,23 +1,35 @@
-import { Admin, Resource } from "react-admin";
+import { Admin, CustomRoutes, nanoDarkTheme, nanoLightTheme, Resource } from "react-admin";
 import { Layout } from "./Layout";
 import { dataProvider} from "./dataProvider";
 import { i18nProvider } from "./i18nProvider";
 
 import { UsuarioCreate, UsuarioEdit, UsuarioList, UsuarioShow } from "./usuarios/usuarios";
-import { ReporteList, ReporteShow } from "./reportes/reportes_prehospitalarios";
 import { TurnoCreate, TurnoEdit, TurnoList, TurnoShow } from "./usuarios/turnos";
 import { RolCreate, RolEdit, RolList, RolShow } from "./usuarios/roles";
+import { ReporteUrbanoList, ReporteUrbanoShow } from "./reportes/reportes_urbanos";
+
+import MapView from "./leaflet/MapView";
+
 
 import IconoUsuario from "@mui/icons-material/Group";
 import IconoHospital from '@mui/icons-material/LocalHospital';
 import IconoTurno from '@mui/icons-material/Schedule';
 import IconoRol from '@mui/icons-material/AdminPanelSettings';
+import IconoReporteUrbano from '@mui/icons-material/LocationCity';
+import IconoMapa from '@mui/icons-material/Map';
+import { Route } from "react-router";
+import Registrarse from "./usuarios/registrarse";
 
 export const App = () => (
-    <Admin layout={Layout} dataProvider={dataProvider} i18nProvider={i18nProvider}>
+    <Admin layout={Layout} dataProvider={dataProvider} i18nProvider={i18nProvider} theme={nanoLightTheme} darkTheme={nanoDarkTheme}>
         <Resource name="turnos" list={TurnoList} show={TurnoShow} create={TurnoCreate} edit={TurnoEdit} icon={IconoTurno}/>
         <Resource name="roles" list={RolList} show={RolShow} create={RolCreate} edit={RolEdit} icon={IconoRol}/>
         <Resource name="usuarios" list={UsuarioList} show={UsuarioShow} create={UsuarioCreate} edit={UsuarioEdit} icon={IconoUsuario}/>
-        <Resource name="reportes" list={ReporteList} show={ReporteShow} icon={IconoHospital}/>
+        <Resource name="reportes_urbanos" list={ReporteUrbanoList} show={ReporteUrbanoShow} icon={IconoReporteUrbano}/>
+        <Resource name="mapa" list={() => <MapView />} icon={IconoMapa}/>
+
+        <CustomRoutes>
+            <Route path="registrarse" element={<Registrarse />}/>
+        </CustomRoutes>
     </Admin>
 );

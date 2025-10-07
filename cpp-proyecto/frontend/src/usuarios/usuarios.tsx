@@ -22,8 +22,8 @@ export const UsuarioList = () => {
                     <DataTable.Col source="id" label="Id"/>
                     <DataTable.Col source="nombre" label="Nombre"/>
                     <DataTable.Col source="apellido" label="Apellido"/>
-                    <DataTable.Col>
-                        <EmailField source="email" label="Email"/>
+                    <DataTable.Col label="Email">
+                        <EmailField source="email"/>
                     </DataTable.Col>
                     <DataTable.Col label = "Rol">
                         <ReferenceField source="rol_id" reference="roles" link={false}>
@@ -61,6 +61,23 @@ export const UsuarioShow = () => (
     </Show>
 )
 
+
+const turnoRequiredIfNotAdmin = (value, allValues) => {
+    // Convierte a número para comparar correctamente
+    const rolId = Number(allValues.rol_id);
+    if (rolId === 1) {
+        return undefined; // No requerido si es admin
+    }
+    return value ? undefined : 'El turno es obligatorio para este rol';
+};
+
+const equalToPassword = (value, allValues) => {
+    if (value !== allValues.password) {
+        return 'Las dos contrasenas deben coincidir';
+    }
+}
+
+
 export const UsuarioEdit = () => {
 
     const notify = useNotify();
@@ -85,17 +102,11 @@ export const UsuarioEdit = () => {
                     <SelectInput optionText="nombre" validate={required()} />
                 </ReferenceInput>
                 <ReferenceInput label="Turno" source="turno_id" reference="turnos">
-                    <SelectInput optionText="nombre"/>
+                    <SelectInput optionText="nombre" validate={turnoRequiredIfNotAdmin}/>
                 </ReferenceInput>
             </SimpleForm>
         </Edit>
     )
-}
-
-const equalToPassword = (value, allValues) => {
-    if (value !== allValues.password) {
-        return 'Las dos contrasenas deben coincidir';
-    }
 }
 
 export const UsuarioCreate = () => {
@@ -122,7 +133,7 @@ export const UsuarioCreate = () => {
                     <SelectInput optionText="nombre" validate={required()} />
                 </ReferenceInput>
                 <ReferenceInput label="Turno" source="turno_id" reference="turnos">
-                    <SelectInput optionText="nombre" />
+                    <SelectInput optionText="nombre" validate={turnoRequiredIfNotAdmin}/>
                 </ReferenceInput>
             </SimpleForm>
         </Create>
