@@ -2,6 +2,8 @@ import { Admin, CustomRoutes, nanoDarkTheme, nanoLightTheme, Resource } from "re
 import { Layout } from "./Layout";
 import { dataProvider} from "./dataProvider";
 import { i18nProvider } from "./i18nProvider";
+import AdminDashboard from './Slides';
+import IconoEstadisticas from '@mui/icons-material/BarChart';
 
 import { UsuarioCreate, UsuarioEdit, UsuarioList, UsuarioShow } from "./usuarios/usuarios";
 import { TurnoCreate, TurnoEdit, TurnoList, TurnoShow } from "./usuarios/turnos";
@@ -27,6 +29,7 @@ export const App = () => (
         <Resource name="usuarios" list={UsuarioList} show={UsuarioShow} create={UsuarioCreate} edit={UsuarioEdit} icon={IconoUsuario}/>
         <Resource name="reportes_urbanos" list={ReporteUrbanoList} show={ReporteUrbanoShow} icon={IconoReporteUrbano}/>
         <Resource name="mapa" list={() => <MapView />} icon={IconoMapa}/>
+        <Resource name="estadisticas" list={AdminDashboard} icon={IconoEstadisticas} />
 
         <CustomRoutes>
             <Route path="registrarse" element={<Registrarse />}/>
