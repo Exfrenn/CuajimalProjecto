@@ -3,12 +3,68 @@ const MongoClient = require ("mongodb").MongoClient;
 var cors = require ("cors");
 const bodyParser = require ("body-parser");
 const argon2=require("argon2")
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 const app = express();
 app.use(cors());
 const PORT = 3000;
 let db;
 app.use(bodyParser.json());
+
+// Crear directorio uploads si no existe
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Configuración de multer para subida de archivos
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ 
+    storage: storage,
+    limits: {
+        fileSize: 5000000 // 5MB
+    },
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype.startsWith('image/')) {
+            cb(null, true);
+        } else {
+            cb(new Error('Solo se permiten archivos de imagen'));
+        }
+    }
+});
+
+// Servir archivos estáticos desde la carpeta uploads
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Ruta para subir imágenes
+app.post('/api/upload', upload.array('images', 10), (req, res) => {
+    try {
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({ error: 'No se subieron archivos' });
+        }
+
+        const files = req.files.map(file => ({
+            src: `http://localhost:3000/uploads/${file.filename}`,
+            title: file.originalname
+        }));
+        
+        res.json(files);
+    } catch (error) {
+        console.error('Error al subir archivos:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 //Turnos------------------------------------------------------------------------
 //getList
