@@ -5,6 +5,8 @@ import MarkerClusterGroup from "./MakeClusterGroup";
 import { Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "./styles.css";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
 export interface ReporteUrbano {
   id: number;

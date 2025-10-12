@@ -17,7 +17,6 @@ export default function AlcaldiasLayer({ geojson, onFeatureClick }: AlcaldiasLay
     if (feature.properties) {
       // Extrae los campos que necesitas
       const {
-        sta_name,
         mun_code,
         mun_name,
         col_name,

@@ -1,12 +1,23 @@
 import jsonServerProvider from 'ra-data-json-server';
-import { DataProvider } from 'react-admin';
+import { DataProvider, fetchUtils } from 'react-admin';
 
+// Función personalizada para fetch con autenticación
+export const fetchJsonUtil = (url: string, options: fetchUtils.Options = {}) => {
+    if (!options.headers) {
+        options.headers = new Headers({ Accept: "application/json" });
+    }
+    options.headers.set("Authentication", sessionStorage.getItem("auth"));
+    return fetchUtils.fetchJson(url, options);
+};
+
+// Usa fetchJsonUtil en el dataProvider
 const baseDataProvider = jsonServerProvider(
     import.meta.env.VITE_JSON_SERVER_URL,
+    fetchJsonUtil
 );
 
 // Función para subir archivos al servidor
-const uploadFile = async (file: File): Promise<{src: string, title: string}> => {
+const uploadFile = async (file: File): Promise<{ src: string, title: string }> => {
     const formData = new FormData();
     formData.append('images', file);
 
@@ -64,7 +75,7 @@ const addUploadFeature = (requestHandler: DataProvider): DataProvider => {
                         return observacion;
                     })
                 );
-                
+
                 params.data = {
                     ...params.data,
                     acciones_realizadas: {
@@ -111,7 +122,7 @@ const addUploadFeature = (requestHandler: DataProvider): DataProvider => {
                         return observacion;
                     })
                 );
-                
+
                 params.data = {
                     ...params.data,
                     acciones_realizadas: {
