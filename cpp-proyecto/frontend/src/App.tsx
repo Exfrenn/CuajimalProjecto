@@ -6,7 +6,7 @@ import { i18nProvider } from "./i18nProvider";
 import { UsuarioCreate, UsuarioEdit, UsuarioList, UsuarioShow } from "./usuarios/usuarios";
 import { TurnoCreate, TurnoEdit, TurnoList, TurnoShow } from "./usuarios/turnos";
 import { RolCreate, RolEdit, RolList, RolShow } from "./usuarios/roles";
-import { ReporteUrbanoCreate, ReporteUrbanoEdit, ReporteUrbanoList, ReporteUrbanoShow} from "./reportes/reportes_urbanos";
+import { ReporteUrbanoCreate, ReporteUrbanoEdit, ReporteUrbanoList, ReporteUrbanoShow} from "./reportes/reporte_urbano/reportes_urbanos";
 
 import ClusteredMapWrapper from "./leaflet/ClusteredMapWrapper";
 
