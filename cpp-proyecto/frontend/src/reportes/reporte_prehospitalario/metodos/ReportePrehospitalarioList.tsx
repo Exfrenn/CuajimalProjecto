@@ -32,11 +32,10 @@ export const ReportePrehospitalarioList = () => {
                         label="Fecha"
                         showTime={false}
                     />
-                    <TextField source="servicio.cronometro.hora_llamada" label="Hora Llamada" />
-                    <TextField source="paciente.nombre" label="Paciente" />
-                    <TextField source="servicio.motivo" label="Motivo de Atención" />
-                    <TextField source="control.operador" label="Operador" />
-                    <TextField source="traslado.hospital" label="Hospital de Traslado" />
+                    <TextField source="datos_servicio.cronometria.hora_llamada" label="Hora Llamada" />
+                    <TextField source="datos_paciente.nombre" label="Paciente" />
+                    <TextField source="datos_servicio.motivo_atencion" label="Motivo de Atención" />
+                    <TextField source="datos_servicio.cronometria.hora_traslado" label="Hospital de Traslado" />
                     <TextField source="evaluacion_secundaria.prioridad" label="Prioridad" />
                     <TextField source="evaluacion_inicial.nivel_consciencia" label="Nivel Consciencia" />
                     <EditButton />
