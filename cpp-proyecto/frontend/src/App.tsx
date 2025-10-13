@@ -33,7 +33,7 @@ export const App = () => (
         <Resource name="roles" list={RolList} show={RolShow} create={RolCreate} edit={RolEdit} icon={IconoRol}/>
         <Resource name="usuarios" list={UsuarioList} show={UsuarioShow} create={UsuarioCreate} edit={UsuarioEdit} icon={IconoUsuario}/>
         <Resource name="reportes_urbanos" list={ReporteUrbanoList} show={ReporteUrbanoShow} edit={ReporteUrbanoEdit} create={ReporteUrbanoCreate} icon={IconoReporteUrbano}/>
-        <Resource name="reportes_prehospitalarios" list={ReportePrehospitalarioList} show={ReportePrehospitalarioShow} edit={ReportePrehospitalarioEdit} create={ReportePrehospitalarioCreate} icon={IconoReporteUrbano}/>
+        <Resource name="reportes_prehospitalarios" list={ReportePrehospitalarioList} show={ReportePrehospitalarioShow} edit={ReportePrehospitalarioEdit} create={ReportePrehospitalarioCreate} icon={IconoHospital}/>
         <Resource name="mapa" list={() => <ClusteredMapWrapper />} icon={IconoMapa}/>
         <CustomRoutes>
             <Route path="registrarse" element={<Registrarse />}/>

@@ -15,15 +15,14 @@ export default function AlcaldiasLayer({ geojson, onFeatureClick }: AlcaldiasLay
 
   const onEachFeature = (feature: any, layer: any) => {
     if (feature.properties) {
-      // Extrae los campos que necesitas
       const {
         mun_code,
         mun_name,
         col_name,
-        NOM_ALC // por si quieres seguir mostrando el nombre de la alcaldía
+        NOM_ALC
       } = feature.properties;
 
-      // Construye el contenido del popup
+ 
       const popupContent = `
         <br/><b>Código Municipio:</b> ${mun_code ? mun_code[0] : ""}
         <br/><b>Alcaldía:</b> ${mun_name ? mun_name[0] : NOM_ALC || ""}

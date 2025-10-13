@@ -40,7 +40,6 @@ export default function ClusteredMap({ reportes, alcaldiasGeojson }: ClusteredMa
 
   const [alcaldiaSeleccionada, setAlcaldiaSeleccionada] = useState<string | null>(null);
 
-  // Filtra reportes con coordenadas válidas y por alcaldía seleccionada
   const reportesConCoord = useMemo(() => {
     const base = alcaldiaSeleccionada
       ? agrupadosPorAlcaldia[alcaldiaSeleccionada] || []
