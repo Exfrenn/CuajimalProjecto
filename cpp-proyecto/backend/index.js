@@ -3,12 +3,88 @@ const MongoClient = require ("mongodb").MongoClient;
 var cors = require ("cors");
 const bodyParser = require ("body-parser");
 const argon2=require("argon2")
+const jwt=require("jsonwebtoken")
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 const app = express();
 app.use(cors());
 const PORT = 3000;
 let db;
 app.use(bodyParser.json());
+
+async function crearUsuario({ nombre, apellido, usuario, email, password, rol_id, turno_id }) {
+    const hash = await argon2.hash(password, { type: argon2.argon2id, memoryCost: 19*1024, timeCost:2, parallelism:1, saltLength:16 });
+    // Calcula el siguiente id
+    const last = await db.collection("usuarios").find().sort({ id: -1 }).limit(1).toArray();
+    const id = last.length > 0 ? last[0].id + 1 : 1;
+    const usuarioAgregar = { id, nombre, apellido, usuario, email, password: hash, rol_id, turno_id };
+    await db.collection("usuarios").insertOne(usuarioAgregar);
+    return usuarioAgregar;
+}
+
+async function log(sujeto, objeto, accion){
+	toLog={};
+	toLog["timestamp"]=new Date();
+	toLog["sujeto"]=sujeto;
+	toLog["objeto"]=objeto;
+	toLog["accion"]=accion;
+	await db.collection("log402").insertOne(toLog);
+}
+
+// Crear directorio uploads si no existe
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Configuración de multer para subida de archivos
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ 
+    storage: storage,
+    limits: {
+        fileSize: 5000000 // 5MB
+    },
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype.startsWith('image/')) {
+            cb(null, true);
+        } else {
+            cb(new Error('Solo se permiten archivos de imagen'));
+        }
+    }
+});
+
+// Servir archivos estáticos desde la carpeta uploads
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Ruta para subir imágenes
+app.post('/api/upload', upload.array('images', 10), (req, res) => {
+    try {
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({ error: 'No se subieron archivos' });
+        }
+
+        const files = req.files.map(file => ({
+            src: `http://localhost:3000/uploads/${file.filename}`,
+            title: file.originalname
+        }));
+        
+        res.json(files);
+    } catch (error) {
+        console.error('Error al subir archivos:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 //Turnos------------------------------------------------------------------------
 //getList
@@ -131,16 +207,15 @@ app.get("/usuarios/:id", async (req,res)=>{
 });
 
 //createOne
-app.post("/usuarios", async (req,res)=>{
-	let valores=req.body
-	if (valores["id"] === undefined || valores["id"] === null) {
-        const last = await db.collection("usuarios").find().sort({ id: -1 }).limit(1).toArray();
-        valores["id"] = last.length > 0 ? last[0].id + 1 : 1;
+app.post("/usuarios", async (req, res) => {
+    const { nombre, apellido, usuario, email, password, rol_id, turno_id } = req.body;
+    let data = await db.collection("usuarios").findOne({ "usuario": usuario });
+    if(data == null){
+        const usuarioCreado = await crearUsuario({ nombre, apellido, usuario, email, password, rol_id, turno_id });
+        res.json(usuarioCreado);
+    } else {
+        res.status(409).json({ error: "Usuario ya existe" });
     }
-	valores["id"]=Number(valores["id"])
-	let data=await db.collection("usuarios").insertOne(valores);
-	console.log("MongoDB insert response:", data);
-	res.json(valores)
 });
 
 //deleteOne
@@ -150,13 +225,28 @@ app.delete("/usuarios/:id", async(req,res)=>{
 })
 
 //updateOne
-app.put("/usuarios/:id", async(req,res)=>{
-	let valores=req.body
-	valores["id"]=Number(valores["id"])
-	let data =await db.collection("usuarios").updateOne({"id":valores["id"]}, {"$set":valores})
-	data=await db.collection("usuarios").find({"id":valores["id"]}).project({_id:0}).toArray();
-	res.json(data[0]);
-})
+app.put("/usuarios/:id", async (req, res) => {
+    let valores = req.body;
+    valores["id"] = Number(valores["id"]);
+
+    // Si viene el campo password y NO está vacío, hashearlo antes de guardar
+    if (typeof valores.password === "string" && valores.password.trim() !== "") {
+        valores.password = await argon2.hash(valores.password, {
+            type: argon2.argon2id,
+            memoryCost: 19 * 1024,
+            timeCost: 2,
+            parallelism: 1,
+            saltLength: 16
+        });
+    } else {
+        // Si no se quiere cambiar la contraseña, elimina el campo para no sobreescribir el hash existente
+        delete valores.password;
+    }
+
+    await db.collection("usuarios").updateOne({ "id": valores["id"] }, { "$set": valores });
+    const data = await db.collection("usuarios").find({ "id": valores["id"] }).project({ _id: 0 }).toArray();
+    res.json(data[0]);
+});
 
 //Reporte Urbanoss--------------------------------------------------------------
 app.get("/reportes_urbanos", async (req,res)=>{
@@ -203,20 +293,39 @@ app.put("/reportes_urbanos/:id", async(req,res)=>{
 
 //Registrarse-----------------------------------------------------------------------------------------------------------
 app.post("/registrarse", async(req, res)=>{
-	let user=req.body.username;
-	let pass=req.body.password;
-	let nombre=req.body.nombre;
-	let tipo=req.body.tipo;
-	let data=await db.collection("usuarios").findOne({"usuario":user})
-	if(data==null){
-		const hash=await argon2.hash(pass, {type: argon2.argon2id, memoryCost: 19*1024, timeCost:2, parallelism:1, saltLength:16})
-		let usuarioAgregar={"usuario":user, "password":hash, "nombre":nombre, "tipo":tipo}
-		data=await db.collection("usuarios").insertOne(usuarioAgregar);
-		res.sendStatus(201);
-	}else{
-		res.sendStatus(403)
-	}
-})
+    const { nombre, apellido, usuario, email, password, rol_id, turno_id } = req.body;
+    let data = await db.collection("usuarios").findOne({ "usuario": usuario });
+    if(data == null){
+        await crearUsuario({ nombre, apellido, usuario, email, password, rol_id, turno_id });
+        res.sendStatus(201);
+    } else {
+        res.sendStatus(403);
+    }
+});
+
+//Login-----------------------------------------------------------------------------------------------------------
+app.post("/login", async (req, res) => {
+    let email = req.body.email;
+    let pass = req.body.password;
+    let data = await db.collection("usuarios").findOne({ "email": email });
+    
+    if (data == null) {
+        res.sendStatus(401);
+    } else if (await argon2.verify(data.password, pass)) {
+        let token = jwt.sign({ "email": data.email, "rol_id": data.rol_id }, "secretKey", { expiresIn: 900 });
+        res.json({ 
+            "token": token, 
+            "id": data.id,
+			"email": data.email, 
+            "nombre": data.nombre,
+            "rol_id": data.rol_id,
+			"turno_id": data.turno_id
+        });
+    } else {
+        res.sendStatus(401);
+    }
+});
+
 
 async function connectToDB(){
     let client = new MongoClient("mongodb://127.0.0.1:27017/ProyectoCPP");

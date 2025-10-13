@@ -6,9 +6,9 @@ import { i18nProvider } from "./i18nProvider";
 import { UsuarioCreate, UsuarioEdit, UsuarioList, UsuarioShow } from "./usuarios/usuarios";
 import { TurnoCreate, TurnoEdit, TurnoList, TurnoShow } from "./usuarios/turnos";
 import { RolCreate, RolEdit, RolList, RolShow } from "./usuarios/roles";
-import { ReporteUrbanoList, ReporteUrbanoShow } from "./reportes/reportes_urbanos";
+import { ReporteUrbanoCreate, ReporteUrbanoEdit, ReporteUrbanoList, ReporteUrbanoShow} from "./reportes/reporte_urbano/reportes_urbanos";
 
-import MapView from "./leaflet/MapView";
+import ClusteredMapWrapper from "./leaflet/ClusteredMapWrapper";
 
 
 import IconoUsuario from "@mui/icons-material/Group";
@@ -19,15 +19,16 @@ import IconoReporteUrbano from '@mui/icons-material/LocationCity';
 import IconoMapa from '@mui/icons-material/Map';
 import { Route } from "react-router";
 import Registrarse from "./usuarios/registrarse";
+import authProvider from "./authProvider";
+import LoginPage from "./login/LoginPage";
 
 export const App = () => (
-    <Admin layout={Layout} dataProvider={dataProvider} i18nProvider={i18nProvider} theme={nanoLightTheme} darkTheme={nanoDarkTheme}>
+    <Admin layout={Layout} loginPage={LoginPage} authProvider={authProvider} dataProvider={dataProvider} i18nProvider={i18nProvider} theme={nanoLightTheme} darkTheme={nanoDarkTheme}>
         <Resource name="turnos" list={TurnoList} show={TurnoShow} create={TurnoCreate} edit={TurnoEdit} icon={IconoTurno}/>
         <Resource name="roles" list={RolList} show={RolShow} create={RolCreate} edit={RolEdit} icon={IconoRol}/>
         <Resource name="usuarios" list={UsuarioList} show={UsuarioShow} create={UsuarioCreate} edit={UsuarioEdit} icon={IconoUsuario}/>
-        <Resource name="reportes_urbanos" list={ReporteUrbanoList} show={ReporteUrbanoShow} icon={IconoReporteUrbano}/>
-        <Resource name="mapa" list={() => <MapView />} icon={IconoMapa}/>
-
+        <Resource name="reportes_urbanos" list={ReporteUrbanoList} show={ReporteUrbanoShow} edit={ReporteUrbanoEdit} create={ReporteUrbanoCreate} icon={IconoReporteUrbano}/>
+        <Resource name="mapa" list={() => <ClusteredMapWrapper />} icon={IconoMapa}/>
         <CustomRoutes>
             <Route path="registrarse" element={<Registrarse />}/>
         </CustomRoutes>

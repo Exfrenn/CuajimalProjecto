@@ -47,7 +47,7 @@ export const TurnoShow = () => (
                 label="Hora de Entrada"
                 render={record =>
                     record.hora_inicio
-                        ? new Date(record.hora_fin).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                        ? new Date(record.hora_inicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                         : ''
                 }
             />

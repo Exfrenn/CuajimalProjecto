@@ -1,5 +1,8 @@
 import { useMediaQuery, Theme } from "@mui/material";
 import { List, SimpleList, DataTable, EditButton, ReferenceField, TextField, useGetOne, Show, SimpleShowLayout, useNotify, useRedirect, useRefresh, Edit, SimpleForm, TextInput, PasswordInput, ReferenceInput, SelectInput, required, EmailField, Create } from "react-admin";
+import ColoniasCDMXMapa from "../leaflet/ejemplo";
+
+
 
 export const UsuarioList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
@@ -22,6 +25,7 @@ export const UsuarioList = () => {
                     <DataTable.Col source="id" label="Id"/>
                     <DataTable.Col source="nombre" label="Nombre"/>
                     <DataTable.Col source="apellido" label="Apellido"/>
+                    <DataTable.Col source="usuario" label="Nombre de Usuario"/>
                     <DataTable.Col label="Email">
                         <EmailField source="email"/>
                     </DataTable.Col>
@@ -50,6 +54,7 @@ export const UsuarioShow = () => (
             <TextField source="id" label="Id"/>
             <TextField source="nombre" label="Nombre"/>
             <TextField source="apellido" label="Apellido"/>
+            <TextField source="usuario" label="Nombre de Usuario"/>
             <EmailField source="email" label="Email"/>
             <ReferenceField source="rol_id" reference="roles" label="Rol" link={false}>
                 <TextField source="nombre"/>
@@ -96,8 +101,9 @@ export const UsuarioEdit = () => {
                 <TextInput source="id" label="Id" InputProps={{ disabled: true }} />
                 <TextInput source="nombre" label="Nombre"/>
                 <TextInput source="apellido" label="Apellido"/>
+                <TextInput source="usuario" label="Nombre de Usuario"/>
                 <TextInput source="email" label="Email"/>
-                <PasswordInput source="password" label="Contrasena"/>
+                <PasswordInput source="password" label="Nueva contraseña" />
                 <ReferenceInput label="Rol" source="rol_id" reference="roles">
                     <SelectInput optionText="nombre" validate={required()} />
                 </ReferenceInput>
@@ -126,6 +132,7 @@ export const UsuarioCreate = () => {
             <SimpleForm warnWhenUnsavedChanges>
                 <TextInput source="nombre" label="Nombre"/>
                 <TextInput source="apellido" label="Apellido"/>
+                <TextInput source="usuario" label="Nombre de Usuario"/>
                 <TextInput source="email" label="Email"/>
                 <PasswordInput source="password" label="Contrasena" validate={required()}/>
                 <PasswordInput source="validar_password" label="Validar contrasena" validate={equalToPassword}/>
