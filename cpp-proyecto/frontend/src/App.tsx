@@ -8,6 +8,8 @@ import { UsuarioCreate, UsuarioEdit, UsuarioList, UsuarioShow } from "./usuarios
 import { TurnoCreate, TurnoEdit, TurnoList, TurnoShow } from "./usuarios/turnos";
 import { RolCreate, RolEdit, RolList, RolShow } from "./usuarios/roles";
 import { ReporteUrbanoCreate, ReporteUrbanoEdit, ReporteUrbanoList, ReporteUrbanoShow} from "./reportes/reporte_urbano/reportes_urbanos";
+import { ReportePrehospitalarioCreate, ReportePrehospitalarioEdit, ReportePrehospitalarioList, ReportePrehospitalarioShow} from "./reportes/reporte_prehospitalario/reportes_prehospitalarios";
+
 
 import ClusteredMapWrapper from "./leaflet/ClusteredMapWrapper";
 
@@ -31,6 +33,7 @@ export const App = () => (
         <Resource name="roles" list={RolList} show={RolShow} create={RolCreate} edit={RolEdit} icon={IconoRol}/>
         <Resource name="usuarios" list={UsuarioList} show={UsuarioShow} create={UsuarioCreate} edit={UsuarioEdit} icon={IconoUsuario}/>
         <Resource name="reportes_urbanos" list={ReporteUrbanoList} show={ReporteUrbanoShow} edit={ReporteUrbanoEdit} create={ReporteUrbanoCreate} icon={IconoReporteUrbano}/>
+        <Resource name="reportes_prehospitalarios" list={ReportePrehospitalarioList} show={ReportePrehospitalarioShow} edit={ReportePrehospitalarioEdit} create={ReportePrehospitalarioCreate} icon={IconoReporteUrbano}/>
         <Resource name="mapa" list={() => <ClusteredMapWrapper />} icon={IconoMapa}/>
         <CustomRoutes>
             <Route path="registrarse" element={<Registrarse />}/>
