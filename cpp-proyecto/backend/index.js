@@ -33,13 +33,11 @@ async function log(sujeto, objeto, accion){
 	await db.collection("log402").insertOne(toLog);
 }
 
-// Crear directorio uploads si no existe
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-// Configuración de multer para subida de archivos
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/');
@@ -64,10 +62,8 @@ const upload = multer({
     }
 });
 
-// Servir archivos estáticos desde la carpeta uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Ruta para subir imágenes
 app.post('/api/upload', upload.array('images', 10), (req, res) => {
     try {
         if (!req.files || req.files.length === 0) {
@@ -238,7 +234,6 @@ app.put("/usuarios/:id", async (req, res) => {
     let valores = req.body;
     valores["id"] = Number(valores["id"]);
 
-    // Si viene el campo password y NO está vacío, hashearlo antes de guardar
     if (typeof valores.password === "string" && valores.password.trim() !== "") {
         valores.password = await argon2.hash(valores.password, {
             type: argon2.argon2id,
@@ -248,7 +243,6 @@ app.put("/usuarios/:id", async (req, res) => {
             saltLength: 16
         });
     } else {
-        // Si no se quiere cambiar la contraseña, elimina el campo para no sobreescribir el hash existente
         delete valores.password;
     }
 
