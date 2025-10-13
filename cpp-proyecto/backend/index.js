@@ -89,31 +89,40 @@ app.post('/api/upload', upload.array('images', 10), (req, res) => {
 //Turnos------------------------------------------------------------------------
 //getList
 app.get("/turnos", async (req,res)=>{
-	if("_sort" in req.query){
-		let sortBy=req.query._sort;
-		let sortOrder=req.query._order=="ASC"?1:-1;
-		let inicio=Number(req.query._start);
-		let fin=Number(req.query._end);
-		let sorter={}
-		sorter[sortBy]=sortOrder;
-		let data= await db.collection("turnos").find({}).sort(sorter).project({_id:0}).toArray();
-		res.set("Access-Control-Expose-Headers", "X-Total-Count");
-		res.set("X-Total-Count", data.length);
-		data=data.slice(inicio,fin)
-		res.json(data)
-	}else if("id" in req.query){
-		let data=[];
-		for(let index=0; index<req.query.id.length; index++){
-			let dataParcial=await db.collection("turnos").find({id: Number(req.query.id[index])}).project({_id:0}).toArray();
-			data= await data.concat(dataParcial);
-		}
-		res.json(data);
-	}else{
-		let data=await db.collection("turnos").find(req.query).project({_id:0}).toArray();
-		res.set("Access-Control-Expose-Headers", "X-Total-Count");
-		res.set("X-Total-Count", data.length);
-		res.json(data);
-	}
+    try{
+        let token=req.get("Authentication");
+        let verifiedToken=await jwt.verify(token, "secretKey");
+        let user=verifiedToken.email; // Cambiado de .usuario a .email según tu login
+        
+        if("_sort" in req.query){
+            let sortBy=req.query._sort;
+            let sortOrder=req.query._order=="ASC"?1:-1;
+            let inicio=Number(req.query._start);
+            let fin=Number(req.query._end);
+            let sorter={}
+            sorter[sortBy]=sortOrder;
+            let data= await db.collection("turnos").find({}).sort(sorter).project({_id:0}).toArray();
+            res.set("Access-Control-Expose-Headers", "X-Total-Count");
+            res.set("X-Total-Count", data.length);
+            data=data.slice(inicio,fin)
+            await log(user, "turnos", "leer");
+            res.json(data)
+        }else if("id" in req.query){
+            let data=[];
+            for(let index=0; index<req.query.id.length; index++){
+                let dataParcial=await db.collection("turnos").find({id: Number(req.query.id[index])}).project({_id:0}).toArray();
+                data= await data.concat(dataParcial);
+            }
+            res.json(data);
+        }else{
+            let data=await db.collection("turnos").find(req.query).project({_id:0}).toArray();
+            res.set("Access-Control-Expose-Headers", "X-Total-Count");
+            res.set("X-Total-Count", data.length);
+            res.json(data);
+        }
+    }catch{
+        res.sendStatus(401);
+    }
 });
 
 //getOne
@@ -290,6 +299,47 @@ app.put("/reportes_urbanos/:id", async(req,res)=>{
 	res.json(data[0]);
 })
 
+//Reporte Prehospitalarios------------------------------------------------------
+app.get("/reportes_prehospitalarios", async (req,res)=>{
+    let data = await db.collection("reportes_prehospitalarios").find({}).project({_id:0}).toArray();
+    res.set("Access-Control-Expose-Headers", "X-Total-Count");
+    res.set("X-Total-Count", data.length);
+    res.json(data);
+})
+
+//getOne
+app.get("/reportes_prehospitalarios/:id", async (req,res)=>{
+	let data=await db.collection("reportes_prehospitalarios").find({"id": Number(req.params.id)}).project({_id:0}).toArray();
+	res.json(data[0]);
+});
+
+//createOne
+app.post("/reportes_prehospitalarios", async (req,res)=>{
+	let valores=req.body
+	if (valores["id"] === undefined || valores["id"] === null) {
+        const last = await db.collection("reportes_prehospitalarios").find().sort({ id: -1 }).limit(1).toArray();
+        valores["id"] = last.length > 0 ? last[0].id + 1 : 1;
+    }
+	valores["id"]=Number(valores["id"])
+	let data=await db.collection("reportes_prehospitalarios").insertOne(valores);
+	console.log("MongoDB insert response:", data);
+	res.json(valores)
+});
+
+//deleteOne
+app.delete("/reportes_prehospitalarios/:id", async(req,res)=>{
+	let data=await db.collection("reportes_prehospitalarios").deleteOne({"id": Number(req.params.id)});
+	res.json(data)
+})
+
+//updateOne
+app.put("/reportes_prehospitalarios/:id", async(req,res)=>{
+	let valores=req.body
+	valores["id"]=Number(valores["id"])
+	let data =await db.collection("reportes_prehospitalarios").updateOne({"id":valores["id"]}, {"$set":valores})
+	data=await db.collection("reportes_prehospitalarios").find({"id":valores["id"]}).project({_id:0}).toArray();
+	res.json(data[0]);
+})
 
 //Registrarse-----------------------------------------------------------------------------------------------------------
 app.post("/registrarse", async(req, res)=>{
