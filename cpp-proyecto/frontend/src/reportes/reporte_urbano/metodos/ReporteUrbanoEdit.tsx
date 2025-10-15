@@ -13,7 +13,9 @@ import {
     SimpleFormIterator, 
     ArrayInput, 
     ImageInput, 
-    ImageField 
+    ImageField, 
+    useCreate,
+    TabbedFormTabs
 } from "react-admin";
 import { useReporteNotifications } from "../hooks/useReporteNotifications";
 import { SubtipoServicioInput } from "../misc/SubtipoServicioInput";
@@ -23,7 +25,6 @@ import {
     alcaldiasCDMX, 
     gravedadChoices, 
     modoActivacionChoices, 
-    institucionChoices 
 } from "../../data/choices";
 
 export const ReporteUrbanoEdit = () => {
@@ -31,7 +32,7 @@ export const ReporteUrbanoEdit = () => {
     
     return (
         <Edit mutationOptions={{ onSuccess: onEditSuccess }}>
-            <TabbedForm warnWhenUnsavedChanges>
+            <TabbedForm warnWhenUnsavedChanges tabs={<TabbedFormTabs variant="scrollable" scrollButtons="auto" />}>
                 <TabbedForm.Tab label="Datos Generales">
                     <DateTimeInput 
                         source="datos_generales.fecha" 
@@ -235,13 +236,7 @@ export const ReporteUrbanoEdit = () => {
 
                     <ArrayInput source="responsables_y_autoridades.autoridades_participantes" label="Autoridades Participantes">
                         <SimpleFormIterator>
-                            <SelectInput 
-                                source="institucion" 
-                                label="Institución" 
-                                fullWidth
-                                choices={institucionChoices}
-                                validate={required()}
-                            />
+                            <InstitucionInput/>
                             <TextInput 
                                 source="unidad" 
                                 label="Unidad" 
@@ -265,5 +260,34 @@ export const ReporteUrbanoEdit = () => {
                 </TabbedForm.Tab>
             </TabbedForm>
         </Edit>
+    );
+};
+
+const InstitucionInput = () => {
+    const [create] = useCreate();
+    return (
+        <ReferenceInput
+            source="institucion"
+            reference="instituciones"
+            sort={{field: "nombre", order: "ASC"}}
+        >
+            <SelectInput
+                validate={required()}
+                label="Institución"
+                optionText="nombre"
+                fullWidth
+                onCreate={async ()=>{
+                    const newNombreInstitucion = prompt("Ingresa el nombre de la nueva institución");
+                    if (newNombreInstitucion){
+                        const newInstitucion = await create(
+                            "instituciones",
+                            {data: {nombre: newNombreInstitucion}},
+                            {returnPromise : true}
+                        );
+                        return newInstitucion;
+                    }
+                }}
+            />
+        </ReferenceInput>
     );
 };

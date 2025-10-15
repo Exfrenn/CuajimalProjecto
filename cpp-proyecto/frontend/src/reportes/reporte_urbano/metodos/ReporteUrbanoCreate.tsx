@@ -1,7 +1,6 @@
-// reportes/reporte_urbano/components/ReporteUrbanoCreate.tsx
+// reportes/reporte_urbano/components/ReporteUrbanoEdit.tsx
 import { 
     TabbedForm, 
-    Create, 
     TextInput, 
     DateTimeInput, 
     ReferenceInput, 
@@ -13,7 +12,10 @@ import {
     SimpleFormIterator, 
     ArrayInput, 
     ImageInput, 
-    ImageField 
+    ImageField, 
+    useCreate,
+    TabbedFormTabs,
+    Create
 } from "react-admin";
 import { useReporteNotifications } from "../hooks/useReporteNotifications";
 import { SubtipoServicioInput } from "../misc/SubtipoServicioInput";
@@ -23,15 +25,14 @@ import {
     alcaldiasCDMX, 
     gravedadChoices, 
     modoActivacionChoices, 
-    institucionChoices 
 } from "../../data/choices";
 
 export const ReporteUrbanoCreate = () => {
-    const { onCreateSuccess } = useReporteNotifications();
-
+    const { onEditSuccess } = useReporteNotifications();
+    
     return (
-        <Create mutationOptions={{ onSuccess: onCreateSuccess }}>
-            <TabbedForm warnWhenUnsavedChanges>
+        <Create mutationOptions={{ onSuccess: onEditSuccess }}>
+            <TabbedForm warnWhenUnsavedChanges tabs={<TabbedFormTabs variant="scrollable" scrollButtons="auto" />}>
                 <TabbedForm.Tab label="Datos Generales">
                     <DateTimeInput 
                         source="datos_generales.fecha" 
@@ -151,7 +152,7 @@ export const ReporteUrbanoCreate = () => {
                         label="Referencia" 
                         fullWidth 
                     />
-
+                    
                     <BotonSoloCoordenadas />
                     
                     <SelectInput 
@@ -235,13 +236,7 @@ export const ReporteUrbanoCreate = () => {
 
                     <ArrayInput source="responsables_y_autoridades.autoridades_participantes" label="Autoridades Participantes">
                         <SimpleFormIterator>
-                            <SelectInput 
-                                source="institucion" 
-                                label="Institución" 
-                                fullWidth
-                                choices={institucionChoices}
-                                validate={required()}
-                            />
+                            <InstitucionInput/>
                             <TextInput 
                                 source="unidad" 
                                 label="Unidad" 
@@ -265,5 +260,34 @@ export const ReporteUrbanoCreate = () => {
                 </TabbedForm.Tab>
             </TabbedForm>
         </Create>
+    );
+};
+
+const InstitucionInput = () => {
+    const [create] = useCreate();
+    return (
+        <ReferenceInput
+            source="institucion"
+            reference="instituciones"
+            sort={{field: "nombre", order: "ASC"}}
+        >
+            <SelectInput
+                validate={required()}
+                label="Institución"
+                optionText="nombre"
+                fullWidth
+                onCreate={async ()=>{
+                    const newNombreInstitucion = prompt("Ingresa el nombre de la nueva institución");
+                    if (newNombreInstitucion){
+                        const newInstitucion = await create(
+                            "instituciones",
+                            {data: {nombre: newNombreInstitucion}},
+                            {returnPromise : true}
+                        );
+                        return newInstitucion;
+                    }
+                }}
+            />
+        </ReferenceInput>
     );
 };

@@ -36,6 +36,7 @@ export const ReporteUrbanoShow = () => (
                 </ReferenceArrayField>
                 <TextField source="personal_y_activacion.modo_activacion" label="Modo de Activación"/>
                 <TextField source="personal_y_activacion.tipo_servicio" label="Tipo de Servicio"/>
+                <TextField source="personal_y_activacion.subtipo_servicio" label="Subtipo de Servicio"/>
             </TabbedShowLayout.Tab>
 
             <TabbedShowLayout.Tab label="Atención de Emergencia">
