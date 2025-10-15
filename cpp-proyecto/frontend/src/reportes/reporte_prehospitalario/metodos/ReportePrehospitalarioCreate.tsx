@@ -19,7 +19,16 @@ export const ReportePrehospitalarioCreate = () => {
     const { onCreateSuccess } = useReporteNotifications();
 
     return (
-        <Create mutationOptions={{ onSuccess: onCreateSuccess }}>
+        <Create mutationOptions={{ onSuccess: onCreateSuccess }} 
+        sx = {{
+            display : 'flex',
+            flexDirection : 'collumn',
+            margin : '0 auto',
+            xs : { width : '100%' },
+            sm : { width : '100%' },
+            md : { width : '80%' },
+            lg : { width : '70%' },
+        }}>  
             <TabbedForm warnWhenUnsavedChanges>
 
                 {/* PREÁMBULO */}

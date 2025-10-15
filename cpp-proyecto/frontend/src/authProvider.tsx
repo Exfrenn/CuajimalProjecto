@@ -60,7 +60,7 @@ const authProvider:AuthProvider={
             return Promise.reject();
         }
     },
-    canAccess: async ({resource, action}) => {
+    canAccess: async ({resource: _resource, action}) => {
         try {
             const identity = sessionStorage.getItem("identity");
             if (identity) {

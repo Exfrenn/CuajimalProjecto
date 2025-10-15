@@ -20,7 +20,7 @@ const BotonSoloCoordenadas = () => {
                 setValue("atencion_emergencia.ubicacion.coordenadas.1", latitude, { shouldDirty: true });
                 notify("Coordenadas obtenidas correctamente", { type: "info" });
             },
-            (error) => {
+            (_) => {
                 notify("No se pudo obtener la ubicación", { type: "warning" });
             }
         );
