@@ -1,4 +1,25 @@
-import { Edit, TabbedForm, TextInput, DateInput, NumberInput, SelectInput, ArrayInput, SimpleFormIterator, required, DateTimeInput, TimeInput, ReferenceArrayInput, SelectArrayInput, useCreate, ReferenceInput, FileInput, FileField, TabbedFormTabs} from "react-admin";
+import { 
+    Edit, 
+    TabbedForm, 
+    TextInput, 
+    DateInput, 
+    NumberInput, 
+    SelectInput, 
+    ArrayInput, 
+    SimpleFormIterator, 
+    required, 
+    DateTimeInput, 
+    TimeInput, 
+    ReferenceArrayInput, 
+    SelectArrayInput, 
+    useCreate, 
+    ReferenceInput, 
+    FileInput, 
+    FileField, 
+    TabbedFormTabs,
+    ImageInput,
+    ImageField
+} from "react-admin";
 import { useReporteNotifications } from "../hooks/useReporteNotifications";
 import BotonSoloCoordenadas from "../misc/BotonSoloCoordenadas";
 import TablaApgar from "../misc/TablaApgar";
@@ -15,7 +36,9 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
 import LocalPharmacyIcon from '@mui/icons-material/LocalPharmacy';
 import AirportShuttleIcon from '@mui/icons-material/AirportShuttle';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { SectionCard } from "../../components/SectionCard";
+import { GlasgowTotal } from "../misc/GlasgowTotal";
 
 import { 
     atencionChoices,
@@ -32,15 +55,23 @@ import {
     viasVenosasChoices,
     atencionBasicaChoices
 } from "../../data/choices";
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import { GlasgowTotal } from "../misc/GlasgowTotal";
 
 export const ReportePrehospitalarioEdit = () => {
     const { onEditSuccess } = useReporteNotifications();
 
     return (
-        <Edit mutationOptions={{ onSuccess: onEditSuccess }}>
+        <Edit mutationOptions={{ onSuccess: onEditSuccess }} 
+        sx = {{
+            display : 'flex',
+            flexDirection : 'collumn',
+            margin : '0 auto',
+            xs : { width : '100%' },
+            sm : { width : '100%' },
+            md : { width : '80%' },
+            lg : { width : '70%' },
+        }}>  
             <TabbedForm warnWhenUnsavedChanges tabs={<TabbedFormTabs variant="scrollable" scrollButtons="auto" />}>
+                <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: 2 }}>
 
                 {/* PREÁMBULO */}
                 <TabbedForm.Tab label="PREÁMBULO">

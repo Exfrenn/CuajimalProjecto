@@ -26,6 +26,12 @@ const LoginPage = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
+                flexDirection: 'column',
+                margin: '0 auto',
+                xs: { width: '90%' },
+                sm: { width: '100%' },
+                md: { width: '80%' },
+                lg: { width: '70%' },
             }}
         >
             <Card 
@@ -59,13 +65,13 @@ const LoginPage = () => {
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             sx={{
-                                '& .MuiInputLabel-root': { color: 'black' },
+                                '& .MuiInputLabel-root': { color: 'white' },
                                 '& .MuiOutlinedInput-root': {
                                     borderRadius: '20px', 
-                                    '& fieldset': { borderColor: 'black' },
-                                    '&:hover fieldset': { borderColor: 'black' },
-                                    '&.Mui-focused fieldset': { borderColor: 'black' },
-                                    '& input': { color: 'black' }
+                                    '& fieldset': { borderColor: 'white' },
+                                    '&:hover fieldset': { borderColor: 'white' },
+                                    '&.Mui-focused fieldset': { borderColor: 'white' },
+                                    '& input': { color: 'white' }
                                 }
                             }}
                         />
@@ -78,13 +84,13 @@ const LoginPage = () => {
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                             sx={{
-                                '& .MuiInputLabel-root': { color: 'black' },
+                                '& .MuiInputLabel-root': { color: 'white' },
                                 '& .MuiOutlinedInput-root': {
                                     borderRadius: '20px',
-                                    '& fieldset': { borderColor: 'black' },
-                                    '&:hover fieldset': { borderColor: 'black' },
-                                    '&.Mui-focused fieldset': { borderColor: 'black'},
-                                    '& input': { color: 'black' }
+                                    '& fieldset': { borderColor: 'white' },
+                                    '&:hover fieldset': { borderColor: 'white' },
+                                    '&.Mui-focused fieldset': { borderColor: 'white' },
+                                    '& input': { color: 'white' }
                                 }
                             }}
                         />

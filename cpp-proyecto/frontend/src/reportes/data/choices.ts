@@ -21,21 +21,8 @@ export const subtipoChoices = {
 
 export const alcaldiasCDMX = [
     { id: "Álvaro Obregón", name: "Álvaro Obregón" },
-    { id: "Azcapotzalco", name: "Azcapotzalco" },
-    { id: "Benito Juárez", name: "Benito Juárez" },
-    { id: "Coyoacán", name: "Coyoacán" },
     { id: "Cuajimalpa de Morelos", name: "Cuajimalpa de Morelos" },
-    { id: "Cuauhtémoc", name: "Cuauhtémoc" },
-    { id: "Gustavo A. Madero", name: "Gustavo A. Madero" },
-    { id: "Iztacalco", name: "Iztacalco" },
-    { id: "Iztapalapa", name: "Iztapalapa" },
-    { id: "La Magdalena Contreras", name: "La Magdalena Contreras" },
     { id: "Miguel Hidalgo", name: "Miguel Hidalgo" },
-    { id: "Milpa Alta", name: "Milpa Alta" },
-    { id: "Tláhuac", name: "Tláhuac" },
-    { id: "Tlalpan", name: "Tlalpan" },
-    { id: "Venustiano Carranza", name: "Venustiano Carranza" },
-    { id: "Xochimilco", name: "Xochimilco" }
 ];
 
 export const atencionChoices = [
