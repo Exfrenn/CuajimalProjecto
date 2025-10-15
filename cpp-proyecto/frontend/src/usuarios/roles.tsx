@@ -1,5 +1,6 @@
 import { useMediaQuery, Theme } from "@mui/material";
-import { List, SimpleList, DataTable, Show, SimpleShowLayout, TextField, Create, SimpleForm, TextInput, useNotify, useRedirect, useRefresh, Edit, EditButton } from "react-admin";
+import { List, SimpleList, DataTable, Show, SimpleShowLayout, TextField, Create, SimpleForm, TextInput, useNotify, useRedirect, useRefresh, Edit, EditButton, FunctionField, SelectArrayInput } from "react-admin";
+import { permisosChoices } from "./choices";
 
 export const RolList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
@@ -27,6 +28,11 @@ export const RolShow = () => (
         <SimpleShowLayout>
             <TextField source="id" label="Id"/>
             <TextField source="nombre" label="Rol"/>
+            <FunctionField
+                label="Permisos"
+                render={record => Array.isArray(record.permisos) ? record.permisos.join(', ') : record.permisos}
+            />
+
         </SimpleShowLayout>
     </Show>
 );
@@ -49,6 +55,7 @@ export const RolEdit = () => {
             <SimpleForm warnWhenUnsavedChanges>
                 <TextInput source="id" label="Id" InputProps={{ disabled: true }} />
                 <TextInput source="nombre" label="Rol"/>
+                <SelectArrayInput source="permisos" choices={permisosChoices}/>
             </SimpleForm>
         </Edit>
     )
@@ -70,6 +77,7 @@ export const RolCreate = () => {
         <Create mutationOptions={{onSuccess}}>
             <SimpleForm warnWhenUnsavedChanges>
                 <TextInput source="nombre" label="Rol"/>
+                <SelectArrayInput source="permisos" choices={permisosChoices}/>
             </SimpleForm>
         </Create>
     )

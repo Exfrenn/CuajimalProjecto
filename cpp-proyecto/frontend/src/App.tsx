@@ -1,8 +1,7 @@
-import { Admin, CustomRoutes, Resource } from "react-admin";
+import { Admin, CustomRoutes, Resource, nanoLightTheme, nanoDarkTheme } from "react-admin";
 import { Layout } from "./Layout";
 import { dataProvider} from "./dataProvider";
 import { i18nProvider } from "./i18nProvider";
-import { customTheme, customDarkTheme } from "./theme";
 
 import { UsuarioCreate, UsuarioEdit, UsuarioList, UsuarioShow } from "./usuarios/usuarios";
 import { TurnoCreate, TurnoEdit, TurnoList, TurnoShow } from "./usuarios/turnos";
@@ -26,8 +25,9 @@ import authProvider from "./authProvider";
 import LoginPage from "./login/LoginPage";
 import { Dashboard } from "./Dashboard";
 
+
 export const App = () => (
-    <Admin layout={Layout}  loginPage={LoginPage} dashboard={Dashboard}  authProvider={authProvider}  dataProvider={dataProvider} i18nProvider={i18nProvider} theme={customTheme} darkTheme={customDarkTheme}
+    <Admin layout={Layout} loginPage={LoginPage} dashboard={Dashboard} authProvider={authProvider} dataProvider={dataProvider} i18nProvider={i18nProvider} theme={nanoLightTheme} darkTheme={nanoDarkTheme}
     >
         <Resource name="turnos" list={TurnoList} show={TurnoShow} create={TurnoCreate} edit={TurnoEdit} icon={IconoTurno}/>
         <Resource name="roles" list={RolList} show={RolShow} create={RolCreate} edit={RolEdit} icon={IconoRol}/>

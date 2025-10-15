@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLogin, useNotify } from 'react-admin';
-import { Card, CardContent, TextField, Button, Typography, Box } from '@mui/material';
+import { Card, CardContent, TextField, Button, Box } from '@mui/material';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');

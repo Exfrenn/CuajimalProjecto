@@ -1,6 +1,5 @@
 import { useMediaQuery, Theme } from "@mui/material";
 import { List, SimpleList, DataTable, EditButton, ReferenceField, TextField, useGetOne, Show, SimpleShowLayout, useNotify, useRedirect, useRefresh, Edit, SimpleForm, TextInput, PasswordInput, ReferenceInput, SelectInput, required, EmailField, Create } from "react-admin";
-import ColoniasCDMXMapa from "../leaflet/ejemplo";
 
 // xs celulare sm tablets y md laptops lg computadoras
 

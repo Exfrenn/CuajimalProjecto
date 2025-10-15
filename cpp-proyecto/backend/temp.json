@@ -1,0 +1,58 @@
+[
+    {
+        id:1,
+        nombre:"Neurologica"  
+    },
+    {
+        id:2,
+        nombre:"Infecciosa"  
+    },
+    {
+        id:3,
+        nombre:"Musculo esqueletico"  
+    },
+    {
+        id:4,
+        nombre:"Urogenital"  
+    },
+    {
+        id:5,
+        nombre:"Digestiva"  
+    },
+    {
+        id:6,
+        nombre:"Cardiovascular"  
+    },
+    {
+        id:7,
+        nombre:"Oncologico"  
+    },
+    {
+        id:8,
+        nombre:"Metabolico"  
+    },
+    {
+        id:9,
+        nombre:"Ginecoobstetrica"  
+    },
+    {
+        id:10,
+        nombre:"Respiratorio"  
+    },
+    {
+        id:11,
+        nombre:"Cognitivo emocional"  
+    },
+    {
+        id:12,
+        nombre:"Sustancia toxica"  
+    },
+    {
+        id:13,
+        nombre:"Producto biologico"  
+    },
+    {
+        id:14,
+        nombre:"Ser humano"  
+    }
+]

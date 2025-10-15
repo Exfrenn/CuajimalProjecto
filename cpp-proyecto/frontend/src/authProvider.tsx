@@ -42,16 +42,14 @@ const authProvider:AuthProvider={
         }
         return Promise.resolve();
     },
-    getIdentity: () => {
+    getIdentity: async () => {
         try {
             const identity = sessionStorage.getItem("identity");
             if (identity) {
                 const user = JSON.parse(identity);
                 return Promise.resolve({
                     id: user.id,
-                    name: user.name,
-                    rol_id: user.rol_id,
-                    turno_id: user.turno_id,
+                    fullName: user.name,  // ✅ React-Admin espera "fullName" no "name"
                     avatar: undefined  // Opcional: puedes agregar avatar después
                 });
             }

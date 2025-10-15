@@ -34,11 +34,42 @@ const uploadFile = async (file: File): Promise<{ src: string, title: string }> =
     return result[0]; // Devuelve el primer archivo subido
 };
 
+// Función para subir PDFs al servidor
+const uploadPDF = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('pdf', file);
+
+    const response = await fetch('http://localhost:3000/api/upload-pdf', {
+        method: 'POST',
+        body: formData,
+    });
+
+    if (!response.ok) {
+        throw new Error('Error al subir PDF');
+    }
+
+    const result = await response.json();
+    return result.path; // Devuelve la ruta del PDF
+};
+
 // Función para procesar archivos
 const addUploadFeature = (requestHandler: DataProvider): DataProvider => {
     return {
         ...requestHandler,
         update: async (resource: string, params: any) => {
+            // Procesar PDF si existe
+            if (params.data.documento_pdf?.rawFile instanceof File) {
+                try {
+                    const pdfPath = await uploadPDF(params.data.documento_pdf.rawFile);
+                    params.data = {
+                        ...params.data,
+                        documento_pdf: pdfPath,
+                    };
+                } catch (error) {
+                    console.error('Error al subir PDF:', error);
+                }
+            }
+
             // Procesar archivos en observaciones antes de enviar
             if (params.data.acciones_realizadas?.observaciones) {
                 const observaciones = await Promise.all(
@@ -88,6 +119,19 @@ const addUploadFeature = (requestHandler: DataProvider): DataProvider => {
             return requestHandler.update(resource, params);
         },
         create: async (resource: string, params: any) => {
+            // Procesar PDF si existe
+            if (params.data.documento_pdf?.rawFile instanceof File) {
+                try {
+                    const pdfPath = await uploadPDF(params.data.documento_pdf.rawFile);
+                    params.data = {
+                        ...params.data,
+                        documento_pdf: pdfPath,
+                    };
+                } catch (error) {
+                    console.error('Error al subir PDF:', error);
+                }
+            }
+
             // Procesar archivos en observaciones antes de enviar
             if (params.data.acciones_realizadas?.observaciones) {
                 const observaciones = await Promise.all(
