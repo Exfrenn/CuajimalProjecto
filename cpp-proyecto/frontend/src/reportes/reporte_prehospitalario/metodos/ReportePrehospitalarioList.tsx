@@ -13,7 +13,15 @@ export const ReportePrehospitalarioList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
 
     return (
-        <List>
+        <List sx = {{
+            display : 'flex',
+            flexDirection : 'collumn',
+            margin : '0 auto',
+            xs : { width : '100%' },
+            sm : { width : '100%' },
+            md : { width : '80%' },
+            lg : { width : '70%' },
+        }}>
             {isSmall ? (
                 <SimpleList
                     primaryText={(record) => `Folio: ${record.preambulo?.folio || "Sin folio"}`}

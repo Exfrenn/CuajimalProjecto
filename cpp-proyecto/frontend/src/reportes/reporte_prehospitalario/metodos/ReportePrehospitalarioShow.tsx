@@ -4,7 +4,16 @@ import {
 } from "react-admin";
 
 export const ReportePrehospitalarioShow = () => (
-    <Show>
+    <Show
+    sx = {{
+            display : 'flex',
+            flexDirection : 'collumn',
+            margin : '0 auto',
+            xs : { width : '100%' },
+            sm : { width : '100%' },
+            md : { width : '80%' },
+            lg : { width : '70%' },
+        }}>  
         <TabbedShowLayout>
             <TabbedShowLayout.Tab label="Preámbulo">
                 <DateField source="preambulo.fecha" label="Fecha"/>

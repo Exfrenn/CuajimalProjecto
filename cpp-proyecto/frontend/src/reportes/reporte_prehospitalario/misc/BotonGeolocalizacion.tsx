@@ -5,10 +5,9 @@ import { useNotify } from "react-admin";
 
 // Lista de alcaldías válidas de CDMX
 const alcaldiasCDMX = [
-    "Álvaro Obregón", "Azcapotzalco", "Benito Juárez", "Coyoacán",
-    "Cuajimalpa de Morelos", "Cuauhtémoc", "Gustavo A. Madero", "Iztacalco",
-    "Iztapalapa", "La Magdalena Contreras", "Miguel Hidalgo", "Milpa Alta",
-    "Tláhuac", "Tlalpan", "Venustiano Carranza", "Xochimilco"
+    "Álvaro Obregón",
+    "Cuajimalpa de Morelos",
+    ,"Miguel Hidalgo"
 ];
 
 // Reemplaza esto con tu API KEY de Google

@@ -9,16 +9,27 @@ import {
     SimpleFormIterator,
     required,
     ImageInput,
-    ImageField
+    ImageField,
 } from "react-admin";
 import { useReporteNotifications } from "../hooks/useReporteNotifications";
+import { Box } from "@mui/material";
 
 export const ReportePrehospitalarioEdit = () => {
     const { onEditSuccess } = useReporteNotifications();
 
     return (
-        <Edit mutationOptions={{ onSuccess: onEditSuccess }}>
+        <Edit mutationOptions={{ onSuccess: onEditSuccess }} 
+        sx = {{
+            display : 'flex',
+            flexDirection : 'collumn',
+            margin : '0 auto',
+            xs : { width : '100%' },
+            sm : { width : '100%' },
+            md : { width : '80%' },
+            lg : { width : '70%' },
+        }}>  
             <TabbedForm warnWhenUnsavedChanges>
+                <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: 2 }}>
 
                 {/* PREÁMBULO */}
                 <TabbedForm.Tab label="PREÁMBULO">
@@ -265,6 +276,7 @@ export const ReportePrehospitalarioEdit = () => {
                     <TextInput source="adicionales.reporte_escaneado" label="Reporte escaneado" />
                     <TextInput source="adicionales.turno" label="Turno" />
                 </TabbedForm.Tab>
+                </Box>
             </TabbedForm>
         </Edit>
     );

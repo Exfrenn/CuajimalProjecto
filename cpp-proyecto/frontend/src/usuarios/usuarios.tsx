@@ -2,12 +2,21 @@ import { useMediaQuery, Theme } from "@mui/material";
 import { List, SimpleList, DataTable, EditButton, ReferenceField, TextField, useGetOne, Show, SimpleShowLayout, useNotify, useRedirect, useRefresh, Edit, SimpleForm, TextInput, PasswordInput, ReferenceInput, SelectInput, required, EmailField, Create } from "react-admin";
 import ColoniasCDMXMapa from "../leaflet/ejemplo";
 
-
+// xs celulare sm tablets y md laptops lg computadoras
 
 export const UsuarioList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
     return (
-        <List>
+        <List
+        sx = {{
+            display : 'flex',
+            flexDirection : 'collumn',
+            margin : '0 auto',
+            xs : { width : '100%' },
+            sm : { width : '100%' },
+            md : { width : '80%' },
+            lg : { width : '70%' },
+        }}>     
             {isSmall ? (
                 <SimpleList
                     primaryText={(record) => `${record.nombre} ${record.apellido}`}
@@ -67,7 +76,7 @@ export const UsuarioShow = () => (
 )
 
 
-const turnoRequiredIfNotAdmin = (value, allValues) => {
+const turnoRequiredIfNotAdmin = (value: any, allValues: any) => {
     // Convierte a número para comparar correctamente
     const rolId = Number(allValues.rol_id);
     if (rolId === 1) {
@@ -76,7 +85,7 @@ const turnoRequiredIfNotAdmin = (value, allValues) => {
     return value ? undefined : 'El turno es obligatorio para este rol';
 };
 
-const equalToPassword = (value, allValues) => {
+const equalToPassword = (value: any, allValues: any) => {
     if (value !== allValues.password) {
         return 'Las dos contrasenas deben coincidir';
     }
