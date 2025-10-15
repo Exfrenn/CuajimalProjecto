@@ -30,7 +30,7 @@ async function log(sujeto, objeto, accion){
 	toLog["sujeto"]=sujeto;
 	toLog["objeto"]=objeto;
 	toLog["accion"]=accion;
-	await db.collection("log402").insertOne(toLog);
+	await db.collection("logs").insertOne(toLog);
 }
 
 const uploadsDir = path.join(__dirname, 'uploads');
@@ -332,6 +332,174 @@ app.put("/reportes_prehospitalarios/:id", async(req,res)=>{
 	valores["id"]=Number(valores["id"])
 	let data =await db.collection("reportes_prehospitalarios").updateOne({"id":valores["id"]}, {"$set":valores})
 	data=await db.collection("reportes_prehospitalarios").find({"id":valores["id"]}).project({_id:0}).toArray();
+	res.json(data[0]);
+})
+
+//Lugares de ocurrencia---------------------------------------------------------
+app.get("/lugares_ocurrencia", async (req,res)=>{
+    let data = await db.collection("lugares_ocurrencia").find({}).project({_id:0}).toArray();
+    res.set("Access-Control-Expose-Headers", "X-Total-Count");
+    res.set("X-Total-Count", data.length);
+    res.json(data);
+})
+
+//getOne
+app.get("/lugares_ocurrencia/:id", async (req,res)=>{
+	let data=await db.collection("lugares_ocurrencia").find({"id": Number(req.params.id)}).project({_id:0}).toArray();
+	res.json(data[0]);
+});
+
+//createOne
+app.post("/lugares_ocurrencia", async (req,res)=>{
+	let valores=req.body
+	if (valores["id"] === undefined || valores["id"] === null) {
+        const last = await db.collection("lugares_ocurrencia").find().sort({ id: -1 }).limit(1).toArray();
+        valores["id"] = last.length > 0 ? last[0].id + 1 : 1;
+    }
+	valores["id"]=Number(valores["id"])
+	let data=await db.collection("lugares_ocurrencia").insertOne(valores);
+	console.log("MongoDB insert response:", data);
+	res.json(valores)
+});
+
+//deleteOne
+app.delete("/lugares_ocurrencia/:id", async(req,res)=>{
+	let data=await db.collection("lugares_ocurrencia").deleteOne({"id": Number(req.params.id)});
+	res.json(data)
+})
+
+//updateOne
+app.put("/lugares_ocurrencia/:id", async(req,res)=>{
+	let valores=req.body
+	valores["id"]=Number(valores["id"])
+	let data =await db.collection("lugares_ocurrencia").updateOne({"id":valores["id"]}, {"$set":valores})
+	data=await db.collection("lugares_ocurrencia").find({"id":valores["id"]}).project({_id:0}).toArray();
+	res.json(data[0]);
+})
+
+//Instituciones-----------------------------------------------------------------
+app.get("/instituciones", async (req,res)=>{
+    let data = await db.collection("instituciones").find({}).project({_id:0}).toArray();
+    res.set("Access-Control-Expose-Headers", "X-Total-Count");
+    res.set("X-Total-Count", data.length);
+    res.json(data);
+})
+
+//getOne
+app.get("/instituciones/:id", async (req,res)=>{
+	let data=await db.collection("instituciones").find({"id": Number(req.params.id)}).project({_id:0}).toArray();
+	res.json(data[0]);
+});
+
+//createOne
+app.post("/instituciones", async (req,res)=>{
+	let valores=req.body
+	if (valores["id"] === undefined || valores["id"] === null) {
+        const last = await db.collection("instituciones").find().sort({ id: -1 }).limit(1).toArray();
+        valores["id"] = last.length > 0 ? last[0].id + 1 : 1;
+    }
+	valores["id"]=Number(valores["id"])
+	let data=await db.collection("instituciones").insertOne(valores);
+	console.log("MongoDB insert response:", data);
+	res.json(valores)
+});
+
+//deleteOne
+app.delete("/instituciones/:id", async(req,res)=>{
+	let data=await db.collection("instituciones").deleteOne({"id": Number(req.params.id)});
+	res.json(data)
+})
+
+//updateOne
+app.put("/instituciones/:id", async(req,res)=>{
+	let valores=req.body
+	valores["id"]=Number(valores["id"])
+	let data =await db.collection("instituciones").updateOne({"id":valores["id"]}, {"$set":valores})
+	data=await db.collection("instituciones").find({"id":valores["id"]}).project({_id:0}).toArray();
+	res.json(data[0]);
+})
+
+//Agentes causal--------------------------------------------------------------------------------------------------------
+app.get("/agentes_causal", async (req,res)=>{
+    let data = await db.collection("agentes_causal").find({}).project({_id:0}).toArray();
+    res.set("Access-Control-Expose-Headers", "X-Total-Count");
+    res.set("X-Total-Count", data.length);
+    res.json(data);
+})
+
+//getOne
+app.get("/agentes_causal/:id", async (req,res)=>{
+	let data=await db.collection("agentes_causal").find({"id": Number(req.params.id)}).project({_id:0}).toArray();
+	res.json(data[0]);
+});
+
+//createOne
+app.post("/agentes_causal", async (req,res)=>{
+	let valores=req.body
+	if (valores["id"] === undefined || valores["id"] === null) {
+        const last = await db.collection("agentes_causal").find().sort({ id: -1 }).limit(1).toArray();
+        valores["id"] = last.length > 0 ? last[0].id + 1 : 1;
+    }
+	valores["id"]=Number(valores["id"])
+	let data=await db.collection("agentes_causal").insertOne(valores);
+	console.log("MongoDB insert response:", data);
+	res.json(valores)
+});
+
+//deleteOne
+app.delete("/agentes_causal/:id", async(req,res)=>{
+	let data=await db.collection("agentes_causal").deleteOne({"id": Number(req.params.id)});
+	res.json(data)
+})
+
+//updateOne
+app.put("/agentes_causal/:id", async(req,res)=>{
+	let valores=req.body
+	valores["id"]=Number(valores["id"])
+	let data =await db.collection("agentes_causal").updateOne({"id":valores["id"]}, {"$set":valores})
+	data=await db.collection("agentes_causal").find({"id":valores["id"]}).project({_id:0}).toArray();
+	res.json(data[0]);
+})
+
+//Origen probable-------------------------------------------------------------------------------------------------------
+app.get("/origen_probable", async (req,res)=>{
+    let data = await db.collection("origen_probable").find({}).project({_id:0}).toArray();
+    res.set("Access-Control-Expose-Headers", "X-Total-Count");
+    res.set("X-Total-Count", data.length);
+    res.json(data);
+})
+
+//getOne
+app.get("/origen_probable/:id", async (req,res)=>{
+	let data=await db.collection("origen_probable").find({"id": Number(req.params.id)}).project({_id:0}).toArray();
+	res.json(data[0]);
+});
+
+//createOne
+app.post("/origen_probable", async (req,res)=>{
+	let valores=req.body
+	if (valores["id"] === undefined || valores["id"] === null) {
+        const last = await db.collection("origen_probable").find().sort({ id: -1 }).limit(1).toArray();
+        valores["id"] = last.length > 0 ? last[0].id + 1 : 1;
+    }
+	valores["id"]=Number(valores["id"])
+	let data=await db.collection("origen_probable").insertOne(valores);
+	console.log("MongoDB insert response:", data);
+	res.json(valores)
+});
+
+//deleteOne
+app.delete("/origen_probable/:id", async(req,res)=>{
+	let data=await db.collection("origen_probable").deleteOne({"id": Number(req.params.id)});
+	res.json(data)
+})
+
+//updateOne
+app.put("/origen_probable/:id", async(req,res)=>{
+	let valores=req.body
+	valores["id"]=Number(valores["id"])
+	let data =await db.collection("origen_probable").updateOne({"id":valores["id"]}, {"$set":valores})
+	data=await db.collection("origen_probable").find({"id":valores["id"]}).project({_id:0}).toArray();
 	res.json(data[0]);
 })
 
