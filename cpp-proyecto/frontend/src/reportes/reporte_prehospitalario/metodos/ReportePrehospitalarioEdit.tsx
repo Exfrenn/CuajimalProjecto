@@ -2,6 +2,20 @@ import { Edit, TabbedForm, TextInput, DateInput, NumberInput, SelectInput, Array
 import { useReporteNotifications } from "../hooks/useReporteNotifications";
 import BotonSoloCoordenadas from "../misc/BotonSoloCoordenadas";
 import TablaApgar from "../misc/TablaApgar";
+import { Stack, Box } from "@mui/material";
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import PersonIcon from '@mui/icons-material/Person';
+import PregnantWomanIcon from '@mui/icons-material/PregnantWoman';
+import WarningIcon from '@mui/icons-material/Warning';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
+import LocalPharmacyIcon from '@mui/icons-material/LocalPharmacy';
+import AirportShuttleIcon from '@mui/icons-material/AirportShuttle';
+import { SectionCard } from "../../components/SectionCard";
 
 import { 
     atencionChoices,
@@ -36,25 +50,43 @@ export const ReportePrehospitalarioEdit = () => {
 
                 {/* I. DATOS DEL SERVICIO */}
                 <TabbedForm.Tab label="I. DATOS DEL SERVICIO">
-                    <TimeInput source="servicio.cronometro.hora_llamada" label="Hora de llamada" />
-                    <TimeInput source="servicio.cronometro.hora_salida" label="Hora de salida" />
-                    <TimeInput source="servicio.cronometro.hora_llegada" label="Hora de llegada" />
-                    <TimeInput source="servicio.cronometro.hora_traslado" label="Hora de traslado" />
-                    <TimeInput source="servicio.cronometro.hora_hospital" label="Hora hospital" />
-                    <TimeInput source="servicio.cronometro.salida_hospital" label="Salida hospital" />
-                    <TimeInput source="servicio.cronometro.hora_base" label="Hora base" />
+                    <SectionCard title="Cronometría" icon={<AccessTimeIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <TimeInput source="servicio.cronometro.hora_llamada" label="Hora de llamada" sx={{ flex: 1 }} />
+                            <TimeInput source="servicio.cronometro.hora_salida" label="Hora de salida" sx={{ flex: 1 }} />
+                            <TimeInput source="servicio.cronometro.hora_llegada" label="Hora de llegada" sx={{ flex: 1 }} />
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <TimeInput source="servicio.cronometro.hora_traslado" label="Hora de traslado" sx={{ flex: 1 }} />
+                            <TimeInput source="servicio.cronometro.hora_hospital" label="Hora hospital" sx={{ flex: 1 }} />
+                            <TimeInput source="servicio.cronometro.salida_hospital" label="Salida hospital" sx={{ flex: 1 }} />
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <TimeInput source="servicio.cronometro.hora_base" label="Hora base" sx={{ flex: 1 }} />
+                        </Stack>
+                    </SectionCard>
+
                     <SelectInput source="servicio.motivo" label="Motivo de atención" choices={atencionChoices} validate={required()} fullWidth />
 
-
-                    <TextInput source="servicio.ubicacion.calle" label="Calle" fullWidth />
-                    <TextInput source="servicio.ubicacion.interseccion1" label="Intersección 1" />
-                    <TextInput source="servicio.ubicacion.interseccion2" label="Intersección 2" />
-                    <TextInput source="servicio.ubicacion.colonia" label="Colonia/Comunidad" fullWidth />
-                    <SelectInput source="servicio.ubicacion.alcaldia" label="Alcaldía" choices={alcaldiasCDMX} fullWidth validate={required()} />
-                    <LugarOcurrenciaInput/>
-                    <NumberInput source="servicio.ubicacion.coordenadas.0" label="Longitud" fullWidth />
-                    <NumberInput source="servicio.ubicacion.coordenadas.1" label="Latitud" fullWidth />
-                    <BotonSoloCoordenadas/>
+                    <SectionCard title="Ubicación del Servicio" icon={<LocationOnIcon />}>
+                        <TextInput source="servicio.ubicacion.calle" label="Calle" fullWidth />
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <TextInput source="servicio.ubicacion.interseccion1" label="Intersección 1" sx={{ flex: 1 }} />
+                            <TextInput source="servicio.ubicacion.interseccion2" label="Intersección 2" sx={{ flex: 1 }} />
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <TextInput source="servicio.ubicacion.colonia" label="Colonia/Comunidad" sx={{ flex: 1 }} />
+                            <SelectInput source="servicio.ubicacion.alcaldia" label="Alcaldía" choices={alcaldiasCDMX} validate={required()} sx={{ flex: 1 }} />
+                        </Stack>
+                        <LugarOcurrenciaInput/>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <NumberInput source="servicio.ubicacion.coordenadas.0" label="Longitud" sx={{ flex: 1 }} />
+                            <NumberInput source="servicio.ubicacion.coordenadas.1" label="Latitud" sx={{ flex: 1 }} />
+                        </Stack>
+                        <Box sx={{ mt: 2 }}>
+                            <BotonSoloCoordenadas/>
+                        </Box>
+                    </SectionCard>
                 </TabbedForm.Tab>
 
                 {/* II. CONTROL */}
@@ -80,141 +112,204 @@ export const ReportePrehospitalarioEdit = () => {
 
                 {/* III. DATOS DEL PACIENTE */}
                 <TabbedForm.Tab label="III. DATOS DEL PACIENTE">
-                    <TextInput source="paciente.nombre" label="Nombre del paciente" fullWidth />
-                    <SelectInput
-                        source="paciente.sexo"
-                        label="Sexo"
-                        choices={[
-                            { id: "Masc", name: "Masculino" },
-                            { id: "Fem", name: "Femenino" },
-                        ]}
-                    />
-                    <NumberInput source="paciente.edad.anos" label="Edad (años)" />
-                    <NumberInput source="paciente.edad.meses" label="Edad (meses)" />
-                    <TextInput source="paciente.domicilio" label="Domicilio" fullWidth />
-                    <TextInput source="paciente.colonia" label="Colonia/Comunidad" />
-                    <TextInput source="paciente.alcaldia" label="Alcaldía/Municipio" />
-                    <TextInput source="paciente.derechohabiente" label="Derechohabiente a" />
-                    <TextInput source="paciente.telefono" label="Teléfono" />
-                    <TextInput source="paciente.ocupacion" label="Ocupación" />
+                    <SectionCard title="Información del Paciente" icon={<PersonIcon />}>
+                        <TextInput source="paciente.nombre" label="Nombre del paciente" fullWidth />
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <SelectInput
+                                source="paciente.sexo"
+                                label="Sexo"
+                                choices={[
+                                    { id: "Masc", name: "Masculino" },
+                                    { id: "Fem", name: "Femenino" },
+                                ]}
+                                sx={{ flex: 1 }}
+                            />
+                            <NumberInput source="paciente.edad.anos" label="Edad (años)" sx={{ flex: 1 }} />
+                            <NumberInput source="paciente.edad.meses" label="Edad (meses)" sx={{ flex: 1 }} />
+                        </Stack>
+                        <TextInput source="paciente.domicilio" label="Domicilio" fullWidth sx={{ mt: 2 }} />
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <TextInput source="paciente.colonia" label="Colonia/Comunidad" sx={{ flex: 1 }} />
+                            <TextInput source="paciente.alcaldia" label="Alcaldía/Municipio" sx={{ flex: 1 }} />
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <TextInput source="paciente.derechohabiente" label="Derechohabiente a" sx={{ flex: 1 }} />
+                            <TextInput source="paciente.telefono" label="Teléfono" sx={{ flex: 1 }} />
+                        </Stack>
+                        <TextInput source="paciente.ocupacion" label="Ocupación" fullWidth sx={{ mt: 2 }} />
+                    </SectionCard>
                 </TabbedForm.Tab>
 
                 {/* IV. PARTO */}
                 <TabbedForm.Tab label="IV. PARTO">
-                    <NumberInput source="parto.madre.semanas_gesta" label="Semanas de gesta" />
-                    <TimeInput source="parto.madre.hora_inicio" label="Hora de inicio contracciones" />
-                    <TextInput source="parto.madre.frecuencia" label="Frecuencia" />
-                    <TextInput source="parto.madre.duracion" label="Duración" />
-                    <DateTimeInput source="parto.postparto.hora_nacimiento" label="Hora de nacimiento" />
-                    <TextInput source="parto.postparto.placenta" label="Placenta expulsada" />
-                    <TextInput source="parto.postparto.lugar" label="Lugar" />
-                    <SelectInput
-                        source="parto.postparto.producto"
-                        label="Producto"
-                        choices={[
-                            { id: "vivo", name: "Vivo" },
-                            { id: "muerto", name: "Muerto" },
-                        ]}
-                    />
-                    <SelectInput
-                        source="parto.postparto.sexo"
-                        label="Sexo del RN"
-                        choices={[
-                            { id: "Masc", name: "Masculino" },
-                            { id: "Fem", name: "Femenino" },
-                        ]}
-                    />
-                    {/* Puntaje APGAR - Edad gestacional una sola vez */}
-                    <TextInput source="parto.edad_gestacional" label="Edad gestacional" />
-                    
-                    {/* Tabla APGAR personalizada */}
-                    <TablaApgar />
+                    <SectionCard title="Información de la Madre" icon={<PregnantWomanIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <NumberInput source="parto.madre.semanas_gesta" label="Semanas de gesta" sx={{ flex: 1 }} />
+                            <TimeInput source="parto.madre.hora_inicio" label="Hora de inicio contracciones" sx={{ flex: 1 }} />
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <TextInput source="parto.madre.frecuencia" label="Frecuencia" sx={{ flex: 1 }} />
+                            <TextInput source="parto.madre.duracion" label="Duración" sx={{ flex: 1 }} />
+                        </Stack>
+                    </SectionCard>
+
+                    <SectionCard title="Información del Recién Nacido" icon={<LocalHospitalIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <DateTimeInput source="parto.postparto.hora_nacimiento" label="Hora de nacimiento" sx={{ flex: 1 }} />
+                            <TextInput source="parto.postparto.placenta" label="Placenta expulsada" sx={{ flex: 1 }} />
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <TextInput source="parto.postparto.lugar" label="Lugar" sx={{ flex: 1 }} />
+                            <SelectInput
+                                source="parto.postparto.producto"
+                                label="Producto"
+                                choices={[
+                                    { id: "vivo", name: "Vivo" },
+                                    { id: "muerto", name: "Muerto" },
+                                ]}
+                                sx={{ flex: 1 }}
+                            />
+                        </Stack>
+                        <SelectInput
+                            source="parto.postparto.sexo"
+                            label="Sexo del RN"
+                            choices={[
+                                { id: "Masc", name: "Masculino" },
+                                { id: "Fem", name: "Femenino" },
+                            ]}
+                            sx={{ mt: 2 }}
+                        />
+                        <TextInput source="parto.edad_gestacional" label="Edad gestacional" fullWidth sx={{ mt: 2 }} />
+                        <Box sx={{ mt: 2 }}>
+                            <TablaApgar />
+                        </Box>
+                    </SectionCard>
                 </TabbedForm.Tab>
 
                 {/* V. CAUSA TRAUMÁTICA */}
                 <TabbedForm.Tab label="V. CAUSA TRAUMÁTICA">
-                    <AgenteCausalInput/>
-                    <SelectInput source="trauma.accidente_auto" label= "Accidente automovilistico" choices={accidentesChoices} validate={required()}/>
-                    <SelectInput source="trauma.impacto" label= "Impacto" choices={impactoChoices} validate={required()}/>
-                    <TextInput source="trauma.cms" label = "CMS"/>
-                    <SelectInput 
-                        source="trauma.parabrisas" 
-                        label="Parabrisas" 
-                        validate={required()}
-                        choices={[
-                            {id: "Integro", name: "Integro"},
-                            {id: "Estrellado", name: "Estrellado" },
-                        ]}
-                    />
-                    <SelectInput 
-                        source="trauma.volante" 
-                        label="Volante" 
-                        validate={required()}
-                        choices={[
-                            {id: "Integro", name: "Integro"},
-                            {id: "Doblado", name: "Doblado"},
-                        ]}
-                    />
-                    <SelectInput 
-                        source="trauma.bolsa_aire" 
-                        label="Bolsa de aire" 
-                        validate={required()}
-                        choices={[
-                            {id: "Si", name: "Si"},
-                            {id: "No", name: "No"},
-                        ]}
-                    />
-                    <SelectInput 
-                        source="trauma.cinturon_seguridad" 
-                        label="Cinturon de seguridad" 
-                        validate={required()}
-                        choices={[
-                            {id: "Colocado", name: "Colocado"},
-                            {id: "No colocado", name: "No colocado"},
-                        ]}
-                    />
-                    <SelectInput 
-                        source="trauma.dentro_vehiculo" 
-                        label="Dentro del vehiculo" 
-                        validate={required()}
-                        choices={[
-                            {id: "Si", name: "Si"},
-                            {id: "No", name: "No"},
-                            {id: "Eyectado", name: "Eyectado"},
-                        ]}
-                    />
-                    <SelectInput 
-                        source="trauma.atropellado" 
-                        label="Atropellado" 
-                        validate={required()}
-                        choices={[
-                            {id: "Automotor", name: "Automotor"},
-                            {id: "Motocicleta", name: "Motocicleta"},
-                            {id: "Bicicleta", name: "Bicicleta"},
-                            {id: "Maquinaria", name: "Maquinaria"},
-                        ]}
-                    />
+                    <SectionCard title="Información del Trauma" icon={<WarningIcon />}>
+                        <AgenteCausalInput/>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <SelectInput 
+                                source="trauma.accidente_auto" 
+                                label="Accidente automovilístico" 
+                                choices={accidentesChoices} 
+                                validate={required()}
+                                fullWidth
+                            />
+                            <SelectInput 
+                                source="trauma.impacto" 
+                                label="Impacto" 
+                                choices={impactoChoices} 
+                                validate={required()}
+                                fullWidth
+                            />
+                        </Stack>
+                        <TextInput source="trauma.cms" label="CMS" fullWidth/>
+                    </SectionCard>
+
+                    <SectionCard title="Condiciones del Vehículo" icon={<DirectionsCarIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <SelectInput 
+                                source="trauma.parabrisas" 
+                                label="Parabrisas" 
+                                validate={required()}
+                                choices={[
+                                    {id: "Integro", name: "Íntegro"},
+                                    {id: "Estrellado", name: "Estrellado" },
+                                ]}
+                                fullWidth
+                            />
+                            <SelectInput 
+                                source="trauma.volante" 
+                                label="Volante" 
+                                validate={required()}
+                                choices={[
+                                    {id: "Integro", name: "Íntegro"},
+                                    {id: "Doblado", name: "Doblado"},
+                                ]}
+                                fullWidth
+                            />
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <SelectInput 
+                                source="trauma.bolsa_aire" 
+                                label="Bolsa de aire" 
+                                validate={required()}
+                                choices={[
+                                    {id: "Si", name: "Sí"},
+                                    {id: "No", name: "No"},
+                                ]}
+                                fullWidth
+                            />
+                            <SelectInput 
+                                source="trauma.cinturon_seguridad" 
+                                label="Cinturón de seguridad" 
+                                validate={required()}
+                                choices={[
+                                    {id: "Colocado", name: "Colocado"},
+                                    {id: "No colocado", name: "No colocado"},
+                                ]}
+                                fullWidth
+                            />
+                        </Stack>
+                    </SectionCard>
+
+                    <SectionCard title="Situación del Paciente" icon={<PersonIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <SelectInput 
+                                source="trauma.dentro_vehiculo" 
+                                label="Dentro del vehículo" 
+                                validate={required()}
+                                choices={[
+                                    {id: "Si", name: "Sí"},
+                                    {id: "No", name: "No"},
+                                    {id: "Eyectado", name: "Eyectado"},
+                                ]}
+                                fullWidth
+                            />
+                            <SelectInput 
+                                source="trauma.atropellado" 
+                                label="Atropellado" 
+                                validate={required()}
+                                choices={[
+                                    {id: "Automotor", name: "Automotor"},
+                                    {id: "Motocicleta", name: "Motocicleta"},
+                                    {id: "Bicicleta", name: "Bicicleta"},
+                                    {id: "Maquinaria", name: "Maquinaria"},
+                                ]}
+                                fullWidth
+                            />
+                        </Stack>
+                    </SectionCard>
                 </TabbedForm.Tab>
 
                 {/* VI. CAUSA CLÍNICA */}
                 <TabbedForm.Tab label="VI. CAUSA CLÍNICA">
-                    <OrigenProbableInput/>
-                    <SelectInput
-                        source="clinica.primera_vez"
-                        label="¿Primera vez?"
-                        choices={[
-                            { id: "sí", name: "Sí" },
-                            { id: "no", name: "No" },
-                        ]}
-                    />
-                    <SelectInput
-                        source="clinica.subsecuente"
-                        label="¿Subsecuente?"
-                        choices={[
-                            { id: "sí", name: "Sí" },
-                            { id: "no", name: "No" },
-                        ]}
-                    />
+                    <SectionCard title="Origen Clínico" icon={<MedicalServicesIcon />}>
+                        <OrigenProbableInput/>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <SelectInput
+                                source="clinica.primera_vez"
+                                label="¿Primera vez?"
+                                choices={[
+                                    { id: "sí", name: "Sí" },
+                                    { id: "no", name: "No" },
+                                ]}
+                                fullWidth
+                            />
+                            <SelectInput
+                                source="clinica.subsecuente"
+                                label="¿Subsecuente?"
+                                choices={[
+                                    { id: "sí", name: "Sí" },
+                                    { id: "no", name: "No" },
+                                ]}
+                                fullWidth
+                            />
+                        </Stack>
+                    </SectionCard>
                 </TabbedForm.Tab>
 
                 {/* VII. EVALUACIÓN INICIAL */}

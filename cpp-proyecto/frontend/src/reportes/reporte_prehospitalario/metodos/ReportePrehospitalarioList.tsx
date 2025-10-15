@@ -1,43 +1,76 @@
-import { useMediaQuery, Theme } from "@mui/material";
+import { useMediaQuery, Theme, Chip } from "@mui/material";
 import {
     List,
     SimpleList,
     Datagrid,
     TextField,
     DateField,
-    ReferenceField,
-    EditButton
+    EditButton,
+    SearchInput,
+    TextInput,
+    SelectInput,
+    DateInput,
+    FunctionField,
+    ShowButton
 } from "react-admin";
+
+const reporteFilters = [
+    <SearchInput source="q" alwaysOn placeholder="Buscar por folio o paciente" />,
+    <DateInput source="preambulo.fecha" label="Fecha" />,
+    <SelectInput source="evaluacion_secundaria.prioridad" label="Prioridad" choices={[
+        { id: "Rojo", name: "Rojo" },
+        { id: "Amarillo", name: "Amarillo" },
+        { id: "Verde", name: "Verde" },
+        { id: "Negra", name: "Negra" },
+    ]} />,
+    <TextInput source="paciente.nombre" label="Paciente" />,
+];
+
+const PrioridadField = ({ record }: { record?: any }) => {
+    const prioridad = record?.evaluacion_secundaria?.prioridad;
+    const colorMap: Record<string, "error" | "warning" | "success" | "default"> = {
+        "Rojo": "error",
+        "Amarillo": "warning",
+        "Verde": "success",
+        "Negra": "default"
+    };
+    return prioridad ? (
+        <Chip label={prioridad} color={colorMap[prioridad] || "default"} size="small" />
+    ) : null;
+};
 
 export const ReportePrehospitalarioList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
 
     return (
-        <List>
+        <List filters={reporteFilters} sort={{ field: 'preambulo.fecha', order: 'DESC' }}>
             {isSmall ? (
                 <SimpleList
                     primaryText={(record) => `Folio: ${record.preambulo?.folio || "Sin folio"}`}
                     secondaryText={(record) =>
-                        `Fecha: ${record.preambulo?.fecha?.dia || "?"}/${record.preambulo?.fecha?.mes || "?"}/${record.preambulo?.fecha?.ano || "?"}`
+                        `Fecha: ${new Date(record.preambulo?.fecha).toLocaleDateString()}`
                     }
                     tertiaryText={(record) =>
                         `Paciente: ${record.paciente?.nombre || "No registrado"}`
                     }
                 />
             ) : (
-                <Datagrid rowClick="show">
+                <Datagrid rowClick="show" bulkActionButtons={false}>
                     <TextField source="preambulo.folio" label="Folio" />
                     <DateField
                         source="preambulo.fecha"
                         label="Fecha"
-                        showTime={false}
+                        showTime
                     />
-                    <TextField source="datos_servicio.cronometria.hora_llamada" label="Hora Llamada" />
-                    <TextField source="datos_paciente.nombre" label="Paciente" />
-                    <TextField source="datos_servicio.motivo_atencion" label="Motivo de Atención" />
-                    <TextField source="datos_servicio.cronometria.hora_traslado" label="Hospital de Traslado" />
-                    <TextField source="evaluacion_secundaria.prioridad" label="Prioridad" />
+                    <TextField source="paciente.nombre" label="Paciente" />
+                    <TextField source="servicio.motivo" label="Motivo de Atención" />
+                    <TextField source="traslado.hospital" label="Hospital de Traslado" />
+                    <FunctionField 
+                        label="Prioridad" 
+                        render={record => <PrioridadField record={record} />} 
+                    />
                     <TextField source="evaluacion_inicial.nivel_consciencia" label="Nivel Consciencia" />
+                    <ShowButton />
                     <EditButton />
                 </Datagrid>
             )}

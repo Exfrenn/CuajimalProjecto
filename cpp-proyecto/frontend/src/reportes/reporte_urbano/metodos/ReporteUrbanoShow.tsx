@@ -2,102 +2,204 @@
 import { 
     Show, TabbedShowLayout, TextField, ReferenceField, DateField, 
     FunctionField, ArrayField, Datagrid, NumberField, ImageField, 
-    ReferenceArrayField
+    ReferenceArrayField, Labeled
 } from "react-admin";
+import { Stack, Box, Chip, useMediaQuery, Theme } from "@mui/material";
+import { SectionCard } from "../../components/SectionCard";
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import GroupIcon from '@mui/icons-material/Group';
+import BuildIcon from '@mui/icons-material/Build';
+import GavelIcon from '@mui/icons-material/Gavel';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 
-export const ReporteUrbanoShow = () => (
-    <Show>
-        <TabbedShowLayout>
-            <TabbedShowLayout.Tab label="Datos Generales">
-                <DateField source="datos_generales.fecha" label="Día" locales="es-MX" options={{weekday: 'long'}}/>
-                <DateField source="datos_generales.fecha" label="Fecha"/>
-                <DateField source="datos_generales.fecha" label="Hora" locales="es-MX" showDate={false} showTime/>
-                <TextField source="datos_generales.folio" label="Folio"/>
-                <ReferenceField source="datos_generales.turno_id" reference="turnos" label="Turno">
-                    <TextField source="nombre"/>
-                </ReferenceField>
-            </TabbedShowLayout.Tab>
+export const ReporteUrbanoShow = () => {
+    const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
 
-            <TabbedShowLayout.Tab label="Personal y Activación">
-                <ReferenceArrayField
-                    label="Personal a Cargo"
-                    reference="usuarios"
-                    source="personal_y_activacion.personal_a_cargo"
-                >
-                    <Datagrid bulkActionButtons={false} rowClick="show">
-                        <FunctionField
-                            label="Nombre completo"
-                            render={record => `${record.nombre} ${record.apellido}`}
-                        />
-                        <ReferenceField source="rol_id" reference="roles" label="Rol" link={false}>
-                            <TextField source="nombre"/>
-                        </ReferenceField>
-                    </Datagrid>
-                </ReferenceArrayField>
-                <TextField source="personal_y_activacion.modo_activacion" label="Modo de Activación"/>
-                <TextField source="personal_y_activacion.tipo_servicio" label="Tipo de Servicio"/>
-                <TextField source="personal_y_activacion.subtipo_servicio" label="Subtipo de Servicio"/>
-            </TabbedShowLayout.Tab>
+    return (
+        <Show>
+            <TabbedShowLayout>
+                <TabbedShowLayout.Tab label="Datos Generales">
+                    <SectionCard title="Información del Reporte" icon={<AccessTimeIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <Labeled label="Día">
+                                <DateField source="datos_generales.fecha" locales="es-MX" options={{weekday: 'long'}}/>
+                            </Labeled>
+                            <Labeled label="Fecha">
+                                <DateField source="datos_generales.fecha"/>
+                            </Labeled>
+                            <Labeled label="Hora">
+                                <DateField source="datos_generales.fecha" locales="es-MX" showDate={false} showTime/>
+                            </Labeled>
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <Labeled label="Folio">
+                                <TextField source="datos_generales.folio"/>
+                            </Labeled>
+                            <Labeled label="Turno">
+                                <ReferenceField source="datos_generales.turno_id" reference="turnos" link={false}>
+                                    <TextField source="nombre"/>
+                                </ReferenceField>
+                            </Labeled>
+                        </Stack>
+                    </SectionCard>
+                </TabbedShowLayout.Tab>
 
-            <TabbedShowLayout.Tab label="Atención de Emergencia">
-                <DateField source="atencion_emergencia.fecha_hora_atencion" label="Fecha y Hora de Atención" showTime/>
-                <NumberField source="atencion_emergencia.tiempo_traslado_minutos" label="Tiempo de Traslado (min)"/>
-                <NumberField source="atencion_emergencia.km_recorridos" label="Kilómetros Recorridos"/>
-                <TextField source="atencion_emergencia.ubicacion.calle" label="Calle" />
-                <TextField source="atencion_emergencia.ubicacion.colonia" label="Colonia" />
-                <TextField source="atencion_emergencia.ubicacion.alcaldia" label="Alcaldía" />
-                <TextField source="atencion_emergencia.ubicacion.estado" label="Estado" />
-                <TextField source="atencion_emergencia.ubicacion.municipio" label="Municipio" />
-                <TextField source="atencion_emergencia.ubicacion.codigo_postal" label="Codigo Postal"/>
-                <FunctionField 
-                    source="atencion_emergencia.ubicacion.coordenadas" 
-                    label="Coordenadas"
-                    render={record => 
-                        record.atencion_emergencia?.ubicacion?.coordenadas ? 
-                        `${record.atencion_emergencia.ubicacion.coordenadas[1]}, ${record.atencion_emergencia.ubicacion.coordenadas[0]}`
-                        : ''
-                    }
-                />
-                <TextField source="atencion_emergencia.ubicacion.referencia" label="Referencia de Ubicación"/>
-                <TextField source="atencion_emergencia.gravedad_emergencia" label="Gravedad de la Emergencia"/>
-            </TabbedShowLayout.Tab>
+                <TabbedShowLayout.Tab label="Personal y Activación">
+                    <SectionCard title="Personal a Cargo" icon={<GroupIcon />}>
+                        <ReferenceArrayField
+                            reference="usuarios"
+                            source="personal_y_activacion.personal_a_cargo"
+                        >
+                            <Datagrid bulkActionButtons={false} rowClick="show">
+                                <FunctionField
+                                    label="Nombre completo"
+                                    render={record => `${record.nombre} ${record.apellido}`}
+                                />
+                                <ReferenceField source="rol_id" reference="roles" label="Rol" link={false}>
+                                    <TextField source="nombre"/>
+                                </ReferenceField>
+                            </Datagrid>
+                        </ReferenceArrayField>
+                    </SectionCard>
 
-            <TabbedShowLayout.Tab label="Acciones Realizadas">
-                <TextField source="acciones_realizadas.trabajos_realizados" label="Trabajos Realizados"/>
-                <TextField source="acciones_realizadas.conclusion_dictamen" label="Conclusión/Dictamen"/>
-                
-                <ArrayField source="acciones_realizadas.observaciones" label="Observaciones">
-                    <Datagrid bulkActionButtons={false} rowClick={false}>
-                        <TextField source="texto" label="Observación"/>
-                        <ArrayField source="fotos" label="Fotos">
+                    <SectionCard title="Activación del Servicio" icon={<LocalFireDepartmentIcon />}>
+                        <Box sx={{ mb: 2 }}>
+                            <Labeled label="Modo de Activación">
+                                <TextField source="personal_y_activacion.modo_activacion"/>
+                            </Labeled>
+                        </Box>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <Labeled label="Tipo de Servicio">
+                                <TextField source="personal_y_activacion.tipo_servicio"/>
+                            </Labeled>
+                            <Labeled label="Subtipo de Servicio">
+                                <TextField source="personal_y_activacion.subtipo_servicio"/>
+                            </Labeled>
+                        </Stack>
+                    </SectionCard>
+                </TabbedShowLayout.Tab>
+
+                <TabbedShowLayout.Tab label="Atención de Emergencia">
+                    <SectionCard title="Tiempo y Distancia" icon={<AccessTimeIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <Labeled label="Fecha y Hora de Atención">
+                                <DateField source="atencion_emergencia.fecha_hora_atencion" showTime/>
+                            </Labeled>
+                            <Labeled label="Tiempo de Traslado (min)">
+                                <NumberField source="atencion_emergencia.tiempo_traslado_minutos"/>
+                            </Labeled>
+                            <Labeled label="Kilómetros Recorridos">
+                                <NumberField source="atencion_emergencia.km_recorridos"/>
+                            </Labeled>
+                        </Stack>
+                    </SectionCard>
+
+                    <SectionCard title="Ubicación del Servicio" icon={<LocationOnIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <Labeled label="Calle">
+                                <TextField source="atencion_emergencia.ubicacion.calle"/>
+                            </Labeled>
+                            <Labeled label="Colonia">
+                                <TextField source="atencion_emergencia.ubicacion.colonia"/>
+                            </Labeled>
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <Labeled label="Alcaldía">
+                                <TextField source="atencion_emergencia.ubicacion.alcaldia"/>
+                            </Labeled>
+                            <Labeled label="Código Postal">
+                                <TextField source="atencion_emergencia.ubicacion.codigo_postal"/>
+                            </Labeled>
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <Labeled label="Estado">
+                                <TextField source="atencion_emergencia.ubicacion.estado"/>
+                            </Labeled>
+                            <Labeled label="Municipio">
+                                <TextField source="atencion_emergencia.ubicacion.municipio"/>
+                            </Labeled>
+                        </Stack>
+                        <Box sx={{ mt: 2 }}>
+                            <Labeled label="Coordenadas">
+                                <FunctionField 
+                                    source="atencion_emergencia.ubicacion.coordenadas"
+                                    render={record => 
+                                        record.atencion_emergencia?.ubicacion?.coordenadas ? 
+                                        `${record.atencion_emergencia.ubicacion.coordenadas[1]}, ${record.atencion_emergencia.ubicacion.coordenadas[0]}`
+                                        : ''
+                                    }
+                                />
+                            </Labeled>
+                        </Box>
+                        <Box sx={{ mt: 2 }}>
+                            <Labeled label="Referencia de Ubicación">
+                                <TextField source="atencion_emergencia.ubicacion.referencia"/>
+                            </Labeled>
+                        </Box>
+                    </SectionCard>
+
+                    <SectionCard title="Gravedad" icon={<LocalFireDepartmentIcon />}>
+                        <Labeled label="Gravedad de la Emergencia">
+                            <TextField source="atencion_emergencia.gravedad_emergencia"/>
+                        </Labeled>
+                    </SectionCard>
+                </TabbedShowLayout.Tab>
+
+                <TabbedShowLayout.Tab label="Acciones Realizadas">
+                    <SectionCard title="Trabajos Realizados" icon={<BuildIcon />}>
+                        <Box sx={{ mb: 2 }}>
+                            <Labeled label="Trabajos Realizados">
+                                <TextField source="acciones_realizadas.trabajos_realizados"/>
+                            </Labeled>
+                        </Box>
+                        <Box>
+                            <Labeled label="Conclusión/Dictamen">
+                                <TextField source="acciones_realizadas.conclusion_dictamen"/>
+                            </Labeled>
+                        </Box>
+                    </SectionCard>
+                    
+                    <SectionCard title="Observaciones y Fotografías" icon={<CameraAltIcon />}>
+                        <ArrayField source="acciones_realizadas.observaciones">
                             <Datagrid bulkActionButtons={false} rowClick={false}>
-                                <ImageField source="src" title="title" label=""/>
+                                <TextField source="texto" label="Observación"/>
+                                <ArrayField source="fotos" label="Fotos">
+                                    <Datagrid bulkActionButtons={false} rowClick={false}>
+                                        <ImageField source="src" title="title" label=""/>
+                                    </Datagrid>
+                                </ArrayField>
                             </Datagrid>
                         </ArrayField>
-                    </Datagrid>
-                </ArrayField>
-            </TabbedShowLayout.Tab>
+                    </SectionCard>
+                </TabbedShowLayout.Tab>
 
-            <TabbedShowLayout.Tab label="Responsables y Autoridades">
-                <ArrayField source="responsables_y_autoridades.responsables" label="Responsables">
-                    <Datagrid bulkActionButtons={false} rowClick={false}>
-                        <TextField source="relacion" label="Relación"/>
-                        <TextField source="nombre" label="Nombre"/>
-                        <TextField source="telefono" label="Teléfono"/>
-                        <TextField source="direccion" label="Dirección"/>
-                        <TextField source="identificacion" label="Identificación"/>
-                    </Datagrid>
-                </ArrayField>
+                <TabbedShowLayout.Tab label="Responsables y Autoridades">
+                    <SectionCard title="Responsables" icon={<GroupIcon />}>
+                        <ArrayField source="responsables_y_autoridades.responsables">
+                            <Datagrid bulkActionButtons={false} rowClick={false}>
+                                <TextField source="relacion" label="Relación"/>
+                                <TextField source="nombre" label="Nombre"/>
+                                <TextField source="telefono" label="Teléfono"/>
+                                <TextField source="direccion" label="Dirección"/>
+                                <TextField source="identificacion" label="Identificación"/>
+                            </Datagrid>
+                        </ArrayField>
+                    </SectionCard>
 
-                <ArrayField source="responsables_y_autoridades.autoridades_participantes" label="Autoridades Participantes">
-                    <Datagrid bulkActionButtons={false} rowClick={false}>
-                        <TextField source="institucion" label="Institución"/>
-                        <TextField source="unidad" label="Unidad"/>
-                        <TextField source="responsable" label="Responsable"/>
-                        <TextField source="matricula" label="Matrícula"/>
-                    </Datagrid>
-                </ArrayField>
-            </TabbedShowLayout.Tab>
-        </TabbedShowLayout>
-    </Show>
-);
+                    <SectionCard title="Autoridades Participantes" icon={<GavelIcon />}>
+                        <ArrayField source="responsables_y_autoridades.autoridades_participantes">
+                            <Datagrid bulkActionButtons={false} rowClick={false}>
+                                <TextField source="institucion" label="Institución"/>
+                                <TextField source="unidad" label="Unidad"/>
+                                <TextField source="responsable" label="Responsable"/>
+                                <TextField source="matricula" label="Matrícula"/>
+                            </Datagrid>
+                        </ArrayField>
+                    </SectionCard>
+                </TabbedShowLayout.Tab>
+            </TabbedShowLayout>
+        </Show>
+    );
+};
