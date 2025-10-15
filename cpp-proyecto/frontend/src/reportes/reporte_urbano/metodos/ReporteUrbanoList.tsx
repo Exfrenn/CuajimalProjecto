@@ -10,7 +10,7 @@ import {
     SearchInput,
     TextInput,
     SelectInput,
-    ShowButton
+    ShowButton,
 } from "react-admin";
 
 const reporteFilters = [
@@ -37,7 +37,7 @@ export const ReporteUrbanoList = () => {
                 <Datagrid rowClick="show" bulkActionButtons={false}>
                     <TextField source="datos_generales.folio" label="Folio"/>
                     <DateField source="datos_generales.fecha" label="Fecha" />
-                    <TextField source="datos_generales.dia" label="Día"/>
+                    <DateField source="datos_generales.fecha" label="Dia" locales="es-MX" options={{weekday: 'long'}}/>
                     <TextField source="personal_y_activacion.tipo_servicio" label="Tipo de Servicio"/>
                     <TextField source="personal_y_activacion.modo_activacion" label="Modo de Activación"/>
                     <TextField source="atencion_emergencia.gravedad_emergencia" label="Gravedad"/>

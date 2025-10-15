@@ -45,7 +45,7 @@ const usuarioFilters = [
 export const UsuarioList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
     return (
-        <List filters={usuarioFilters} sort={{ field: 'id', order: 'ASC' }}>
+        <List filters={usuarioFilters}>
             {isSmall ? (
                 <SimpleList
                     primaryText={(record) => `${record.nombre} ${record.apellido}`}

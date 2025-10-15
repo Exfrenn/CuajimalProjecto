@@ -2,7 +2,6 @@ import { Admin, CustomRoutes, Resource, nanoLightTheme, nanoDarkTheme } from "re
 import { Layout } from "./Layout";
 import { dataProvider} from "./dataProvider";
 import { i18nProvider } from "./i18nProvider";
-import { customTheme, customDarkTheme } from "./theme";
 
 import { UsuarioCreate, UsuarioEdit, UsuarioList, UsuarioShow } from "./usuarios/usuarios";
 import { TurnoCreate, TurnoEdit, TurnoList, TurnoShow } from "./usuarios/turnos";

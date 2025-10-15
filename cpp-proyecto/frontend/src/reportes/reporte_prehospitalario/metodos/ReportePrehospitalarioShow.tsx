@@ -15,7 +15,6 @@ import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import LocalPharmacyIcon from '@mui/icons-material/LocalPharmacy';
 import AirportShuttleIcon from '@mui/icons-material/AirportShuttle';
 import GavelIcon from '@mui/icons-material/Gavel';
-import DrawIcon from '@mui/icons-material/Draw';
 import WarningIcon from '@mui/icons-material/Warning';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import PregnantWomanIcon from '@mui/icons-material/PregnantWoman';
