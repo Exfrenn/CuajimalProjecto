@@ -27,7 +27,7 @@ import LoginPage from "./login/LoginPage";
 import { Dashboard } from "./Dashboard";
 
 export const App = () => (
-    <Admin layout={Layout} /* loginPage={LoginPage} */ dashboard={Dashboard} /* authProvider={authProvider} */ dataProvider={dataProvider} i18nProvider={i18nProvider} theme={customTheme} darkTheme={customDarkTheme}
+    <Admin layout={Layout}  loginPage={LoginPage} dashboard={Dashboard}  authProvider={authProvider}  dataProvider={dataProvider} i18nProvider={i18nProvider} theme={customTheme} darkTheme={customDarkTheme}
     >
         <Resource name="turnos" list={TurnoList} show={TurnoShow} create={TurnoCreate} edit={TurnoEdit} icon={IconoTurno}/>
         <Resource name="roles" list={RolList} show={RolShow} create={RolCreate} edit={RolEdit} icon={IconoRol}/>
