@@ -1,6 +1,9 @@
 import { 
     Show, TabbedShowLayout, TextField, ReferenceField, DateField, 
-    FunctionField, ArrayField, Datagrid, NumberField, Labeled
+    FunctionField, ArrayField, Datagrid, NumberField, Labeled,
+    ReferenceArrayField,
+    TabbedShowLayoutTabs,
+    FileField
 } from "react-admin";
 import { Stack, Box, Chip, useMediaQuery, Theme } from "@mui/material";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -15,6 +18,8 @@ import GavelIcon from '@mui/icons-material/Gavel';
 import DrawIcon from '@mui/icons-material/Draw';
 import WarningIcon from '@mui/icons-material/Warning';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import PregnantWomanIcon from '@mui/icons-material/PregnantWoman';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import { SectionCard } from "../../components/SectionCard";
 
 export const ReportePrehospitalarioShow = () => {
@@ -22,7 +27,7 @@ export const ReportePrehospitalarioShow = () => {
 
     return (
         <Show>
-            <TabbedShowLayout>
+            <TabbedShowLayout tabs={<TabbedShowLayoutTabs variant="scrollable" scrollButtons="auto" />}>
                 <TabbedShowLayout.Tab label="Preámbulo">
                     <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
                         <Labeled label="Fecha">
@@ -119,7 +124,20 @@ export const ReportePrehospitalarioShow = () => {
                         </Stack>
                         <Box sx={{ mt: 2 }}>
                             <Labeled label="Operadores">
-                                <TextField source="control.operador" />
+                            <ReferenceArrayField
+                                reference="usuarios"
+                                source="control.operador"
+                                >
+                                <Datagrid bulkActionButtons={false} rowClick="show">
+                                    <FunctionField
+                                        label="Nombre completo"
+                                        render={record => `${record.nombre} ${record.apellido}`}
+                                    />
+                                    <ReferenceField source="rol_id" reference="roles" label="Rol" link={false}>
+                                        <TextField source="nombre"/>
+                                    </ReferenceField>
+                                </Datagrid>
+                            </ReferenceArrayField>
                             </Labeled>
                         </Box>
                         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
@@ -162,14 +180,11 @@ export const ReportePrehospitalarioShow = () => {
                                 <TextField source="paciente.alcaldia" />
                             </Labeled>
                         </Stack>
-                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
-                            <Labeled label="Derechohabiente a">
-                                <TextField source="paciente.derechohabiente" />
-                            </Labeled>
+                        <Box sx={{ mt: 2 }}>
                             <Labeled label="Teléfono">
                                 <TextField source="paciente.telefono" />
                             </Labeled>
-                        </Stack>
+                        </Box>
                         <Box sx={{ mt: 2 }}>
                             <Labeled label="Ocupación">
                                 <TextField source="paciente.ocupacion" />
@@ -178,9 +193,183 @@ export const ReportePrehospitalarioShow = () => {
                     </SectionCard>
                 </TabbedShowLayout.Tab>
 
-                <TabbedShowLayout.Tab label="Evaluación Inicial">
-                    <SectionCard title="Evaluación Primaria" icon={<WarningIcon />}>
+                <TabbedShowLayout.Tab label="Parto">
+                    <SectionCard title="Información de la Madre" icon={<PregnantWomanIcon />}>
                         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <Labeled label="Semanas de gestación">
+                                <NumberField source="parto.madre.semanas_gesta" />
+                            </Labeled>
+                            <Labeled label="Hora de inicio contracciones">
+                                <DateField source="parto.madre.hora_inicio" showTime showDate={false} />
+                            </Labeled>
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <Labeled label="Frecuencia">
+                                <TextField source="parto.madre.frecuencia" />
+                            </Labeled>
+                            <Labeled label="Duración">
+                                <TextField source="parto.madre.duracion" />
+                            </Labeled>
+                        </Stack>
+                    </SectionCard>
+
+                    <SectionCard title="Información del Recién Nacido" icon={<LocalHospitalIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <Labeled label="Hora de nacimiento">
+                                <DateField source="parto.postparto.hora_nacimiento" showTime />
+                            </Labeled>
+                            <Labeled label="Placenta expulsada">
+                                <TextField source="parto.postparto.placenta" />
+                            </Labeled>
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <Labeled label="Lugar">
+                                <TextField source="parto.postparto.lugar" />
+                            </Labeled>
+                            <Labeled label="Producto">
+                                <TextField source="parto.postparto.producto" />
+                            </Labeled>
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <Labeled label="Sexo del RN">
+                                <TextField source="parto.postparto.sexo" />
+                            </Labeled>
+                            <Labeled label="Edad gestacional">
+                                <TextField source="parto.edad_gestacional" />
+                            </Labeled>
+                        </Stack>
+                    </SectionCard>
+
+                    <SectionCard title="Evaluaciones APGAR" icon={<MonitorHeartIcon />}>
+                        <ArrayField source="parto.evaluaciones_apgar">
+                            <Datagrid bulkActionButtons={false} rowClick={false}>
+                                <TextField source="tiempo" label="Tiempo"/>
+                                <NumberField source="color" label="Color"/>
+                                <NumberField source="fc" label="FC"/>
+                                <NumberField source="irritabilidad" label="Irritabilidad"/>
+                                <NumberField source="tono" label="Tono"/>
+                                <NumberField source="respiracion" label="Respiración"/>
+                                <NumberField source="puntaje_total" label="Puntaje Total"/>
+                            </Datagrid>
+                        </ArrayField>
+                    </SectionCard>
+                </TabbedShowLayout.Tab>
+
+                <TabbedShowLayout.Tab label="Causa Traumática">
+                    <SectionCard title="Información del Trauma" icon={<WarningIcon />}>
+                        <Labeled label="Agente causal">
+                            <ReferenceField source="trauma.agente" reference="agentes_causal" link={false}>
+                                <TextField source="nombre" />
+                            </ReferenceField>
+                        </Labeled>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <Labeled label="Accidente automovilístico">
+                                <TextField source="trauma.accidente_auto" />
+                            </Labeled>
+                            <Labeled label="Impacto">
+                                <TextField source="trauma.impacto" />
+                            </Labeled>
+                        </Stack>
+                        <Box sx={{ mt: 2 }}>
+                            <Labeled label="CMS">
+                                <TextField source="trauma.cms" />
+                            </Labeled>
+                        </Box>
+                    </SectionCard>
+
+                    <SectionCard title="Condiciones del Vehículo" icon={<DirectionsCarIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <Labeled label="Parabrisas">
+                                <TextField source="trauma.parabrisas" />
+                            </Labeled>
+                            <Labeled label="Volante">
+                                <TextField source="trauma.volante" />
+                            </Labeled>
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <Labeled label="Bolsa de aire">
+                                <TextField source="trauma.bolsa_aire" />
+                            </Labeled>
+                            <Labeled label="Cinturón de seguridad">
+                                <TextField source="trauma.cinturon_seguridad" />
+                            </Labeled>
+                        </Stack>
+                    </SectionCard>
+
+                    <SectionCard title="Situación del Paciente" icon={<PersonIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <Labeled label="Dentro del vehículo">
+                                <TextField source="trauma.dentro_vehiculo" />
+                            </Labeled>
+                            <Labeled label="Atropellado">
+                                <TextField source="trauma.atropellado" />
+                            </Labeled>
+                        </Stack>
+                    </SectionCard>
+                </TabbedShowLayout.Tab>
+
+                <TabbedShowLayout.Tab label="Causa Clínica">
+                    <SectionCard title="Origen Clínico" icon={<MedicalServicesIcon />}>
+                        <Labeled label="Origen probable">
+                            <ReferenceField source="clinica.origen" reference="origen_probable" link={false}>
+                                <TextField source="nombre" />
+                            </ReferenceField>
+                        </Labeled>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <Labeled label="¿Primera vez?">
+                                <TextField source="clinica.primera_vez" />
+                            </Labeled>
+                            <Labeled label="¿Subsecuente?">
+                                <TextField source="clinica.subsecuente" />
+                            </Labeled>
+                        </Stack>
+                    </SectionCard>
+                </TabbedShowLayout.Tab>
+
+                <TabbedShowLayout.Tab label="Evaluación Inicial">
+                    <SectionCard title="Nivel de Consciencia" icon={<WarningIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <Labeled label="Nivel de consciencia">
+                                <TextField source="evaluacion_inicial.nivel_consciencia" />
+                            </Labeled>
+                            <Labeled label="Deglución">
+                                <TextField source="evaluacion_inicial.deglucion" />
+                            </Labeled>
+                        </Stack>
+                    </SectionCard>
+
+                    <SectionCard title="Vía Aérea y Ventilación" icon={<MedicalServicesIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <Labeled label="Vía aérea">
+                                <TextField source="evaluacion_inicial.via_aerea" />
+                            </Labeled>
+                            <Labeled label="Ventilación">
+                                <TextField source="evaluacion_inicial.ventilacion" />
+                            </Labeled>
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <Labeled label="Auscultación">
+                                <TextField source="evaluacion_inicial.auscultacion" />
+                            </Labeled>
+                            <Labeled label="Hemitórax">
+                                <TextField source="evaluacion_inicial.hemitorax" />
+                            </Labeled>
+                            <Labeled label="Sitio">
+                                <TextField source="evaluacion_inicial.sitio" />
+                            </Labeled>
+                        </Stack>
+                    </SectionCard>
+
+                    <SectionCard title="Pulsos y Perfusión" icon={<MonitorHeartIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <Labeled label="Presencia de pulsos">
+                                <TextField source="evaluacion_inicial.pulsos.presencia" />
+                            </Labeled>
+                            <Labeled label="Calidad">
+                                <TextField source="evaluacion_inicial.pulsos.calidad" />
+                            </Labeled>
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
                             <Labeled label="Piel">
                                 <TextField source="evaluacion_inicial.piel" />
                             </Labeled>
@@ -189,25 +378,19 @@ export const ReportePrehospitalarioShow = () => {
                             </Labeled>
                         </Stack>
                         <Box sx={{ mt: 2 }}>
-                            <Labeled label="Comentario">
-                                <TextField source="evaluacion_inicial.comentario" />
+                            <Labeled label="Observaciones">
+                                <TextField source="evaluacion_inicial.observaciones" />
                             </Labeled>
                         </Box>
                     </SectionCard>
                 </TabbedShowLayout.Tab>
 
                 <TabbedShowLayout.Tab label="Evaluación Secundaria">
-                    <SectionCard title="Exploración Física" icon={<VisibilityIcon />}>
-                        <Labeled label="Exploración Física">
-                            <TextField source="evaluacion_secundaria.exploracion_fisica" />
-                        </Labeled>
-                    </SectionCard>
-
                     <SectionCard title="Zonas de Lesión" icon={<WarningIcon />}>
                         <ArrayField source="evaluacion_secundaria.zonas_lesion">
                             <Datagrid bulkActionButtons={false} rowClick={false}>
-                                <TextField source="nombre" label="Zona"/>
-                                <TextField source="asunto" label="Lesión"/>
+                                <TextField source="zona" label="Zona anatómica"/>
+                                <TextField source="hallazgo" label="Hallazgo físico"/>
                                 <DateField source="fecha" label="Fecha"/>
                             </Datagrid>
                         </ArrayField>
@@ -219,20 +402,38 @@ export const ReportePrehospitalarioShow = () => {
                         </Labeled>
                     </SectionCard>
 
-                    <SectionCard title="Signos Vitales" icon={<MonitorHeartIcon />}>
+                    <SectionCard title="Signos Vitales y Monitoreo" icon={<MonitorHeartIcon />}>
                         <ArrayField source="evaluacion_secundaria.signos_vitales">
                             <Datagrid bulkActionButtons={false} rowClick={false}>
                                 <TextField source="hora" label="Hora"/>
-                                <NumberField source="fr" label="FR"/>
-                                <NumberField source="fc" label="FC"/>
-                                <NumberField source="tas" label="TAS"/>
-                                <NumberField source="tad" label="TAD"/>
-                                <NumberField source="sao2" label="SaO2"/>
-                                <NumberField source="gluc" label="Glucosa"/>
-                                <TextField source="neuro_test" label="Neuro Test"/>
-                                <NumberField source="glasgow" label="Glasgow"/>
+                                <TextField source="fr" label="FR"/>
+                                <TextField source="fc" label="FC"/>
+                                <TextField source="tas" label="TAS"/>
+                                <TextField source="tad" label="TAD"/>
+                                <TextField source="sao2" label="SaO2"/>
+                                <TextField source="gluc" label="Glucosa"/>
+                                <TextField source="neuro" label="Neuro Test"/>
                             </Datagrid>
                         </ArrayField>
+                    </SectionCard>
+
+                    <SectionCard title="Escala de Glasgow" icon={<MonitorHeartIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
+                            <Labeled label="Apertura ocular">
+                                <TextField source="evaluacion_secundaria.glasgow_ocular" />
+                            </Labeled>
+                            <Labeled label="Respuesta motora">
+                                <TextField source="evaluacion_secundaria.glasgow_motora" />
+                            </Labeled>
+                            <Labeled label="Respuesta verbal">
+                                <TextField source="evaluacion_secundaria.glasgow_verbal" />
+                            </Labeled>
+                        </Stack>
+                        <Box sx={{ mt: 2 }}>
+                            <Labeled label="Puntaje Total Glasgow">
+                                <NumberField source="evaluacion_secundaria.glasgow"/>
+                            </Labeled>
+                        </Box>
                     </SectionCard>
 
                     <SectionCard title="Historial Médico (SAMPLE)" icon={<MedicalServicesIcon />}>
@@ -248,7 +449,7 @@ export const ReportePrehospitalarioShow = () => {
                         </Box>
                         <Box sx={{ mb: 2 }}>
                             <Labeled label="Padecimientos/Cirugías">
-                                <TextField source="evaluacion_secundaria.padecimientos_cirugias" />
+                                <TextField source="evaluacion_secundaria.padecimientos" />
                             </Labeled>
                         </Box>
                         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
@@ -264,7 +465,7 @@ export const ReportePrehospitalarioShow = () => {
                     <SectionCard title="Condición General" icon={<MonitorHeartIcon />}>
                         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
                             <Labeled label="Condición del Paciente">
-                                <TextField source="evaluacion_secundaria.condicion_paciente" />
+                                <TextField source="evaluacion_secundaria.condicion" />
                             </Labeled>
                             <Labeled label="Prioridad">
                                 <FunctionField
@@ -295,20 +496,20 @@ export const ReportePrehospitalarioShow = () => {
                     <SectionCard title="Institución de Destino" icon={<AirportShuttleIcon />}>
                         <Box sx={{ mb: 2 }}>
                             <Labeled label="Hospital">
-                                <TextField source="traslado.institucion.hospital" />
+                                <TextField source="traslado.hospital" />
                             </Labeled>
                         </Box>
                         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
                             <Labeled label="Doctor que Recibe">
-                                <TextField source="traslado.institucion.doctor_recibe" />
+                                <TextField source="traslado.dr" />
                             </Labeled>
                             <Labeled label="Folio CRU">
-                                <TextField source="traslado.institucion.folio_cru" />
+                                <TextField source="traslado.folio_cru" />
                             </Labeled>
                         </Stack>
                         <Box sx={{ mt: 2 }}>
-                            <Labeled label="Negativa de Atención">
-                                <TextField source="traslado.institucion.negativa_atencion" />
+                            <Labeled label="Negativa a recibir atención/ser trasladado">
+                                <TextField source="traslado.negativa" />
                             </Labeled>
                         </Box>
                     </SectionCard>
@@ -317,8 +518,8 @@ export const ReportePrehospitalarioShow = () => {
                 <TabbedShowLayout.Tab label="Tratamiento">
                     <SectionCard title="Manejo de Vía Aérea" icon={<MedicalServicesIcon />}>
                         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
-                            <Labeled label="Manejo de Vía Aérea">
-                                <TextField source="tratamiento.via_aerea_manejo" />
+                            <Labeled label="Vía aérea">
+                                <TextField source="tratamiento.via_aerea" />
                             </Labeled>
                             <Labeled label="Control Cervical">
                                 <TextField source="tratamiento.control_cervical" />
@@ -332,108 +533,86 @@ export const ReportePrehospitalarioShow = () => {
                                 <TextField source="tratamiento.asistencia_ventilatoria.tipo" />
                             </Labeled>
                             <Labeled label="Lts/min">
-                                <NumberField source="tratamiento.asistencia_ventilatoria.lts_min" />
+                                <NumberField source="tratamiento.asistencia_ventilatoria.ltsxmin" />
                             </Labeled>
                         </Stack>
                     </SectionCard>
 
-                    <SectionCard title="Medicamentos Aplicados" icon={<LocalPharmacyIcon />}>
-                        <ArrayField source="tratamiento.medicamentos">
+                    <SectionCard title="Medicación Administrada" icon={<LocalPharmacyIcon />}>
+                        <ArrayField source="tratamiento.asistencia_ventilatoria.medicacion">
                             <Datagrid bulkActionButtons={false} rowClick={false}>
+                                <DateField source="hora" label="Hora" showTime showDate={false} />
                                 <TextField source="medicamento" label="Medicamento"/>
                                 <TextField source="dosis" label="Dosis"/>
                                 <TextField source="via" label="Vía"/>
                             </Datagrid>
                         </ArrayField>
+                        <Box sx={{ mt: 2 }}>
+                            <Labeled label="Dr. tratante">
+                                <TextField source="tratamiento.dr_tratante" />
+                            </Labeled>
+                        </Box>
                     </SectionCard>
 
                     <SectionCard title="Control de Hemorragias" icon={<MedicalServicesIcon />}>
                         <Labeled label="Control de Hemorragias">
-                            <TextField source="tratamiento.control_hemorragias" />
+                            <TextField source="tratamiento.hemorragias" />
                         </Labeled>
                     </SectionCard>
 
-                    <SectionCard title="Vías Venosas" icon={<LocalPharmacyIcon />}>
+                    <SectionCard title="Vías Venosas y Solución" icon={<LocalPharmacyIcon />}>
                         <ArrayField source="tratamiento.vias_venosas">
                             <Datagrid bulkActionButtons={false} rowClick={false}>
-                                <TextField source="tipo_solucion" label="Tipo de Solución"/>
-                                <NumberField source="cateter_n" label="Catéter N°"/>
-                                <NumberField source="cantidad_ml" label="Cantidad (ml)"/>
+                                <TextField source="tipo" label="Tipo de Solución"/>
+                                <NumberField source="lineaIV" label="Línea IV #"/>
+                                <NumberField source="cateter" label="Catéter #"/>
+                                <NumberField source="cantidad" label="Cantidad"/>
                             </Datagrid>
                         </ArrayField>
                     </SectionCard>
 
-                    <SectionCard title="Otros Procedimientos" icon={<MedicalServicesIcon />}>
-                        <Box sx={{ mb: 2 }}>
-                            <Labeled label="Atención Básica">
-                                <TextField source="tratamiento.atencion_basica" />
-                            </Labeled>
-                        </Box>
-                        <Box sx={{ mb: 2 }}>
-                            <Labeled label="Observaciones/Pertenencias">
-                                <TextField source="tratamiento.observaciones_pertenencias" />
-                            </Labeled>
-                        </Box>
-                        <Box>
-                            <Labeled label="Ministerio Público">
-                                <TextField source="tratamiento.ministerio_publico" />
-                            </Labeled>
-                        </Box>
+                    <SectionCard title="Atención Básica" icon={<MedicalServicesIcon />}>
+                        <Labeled label="Atención Básica">
+                            <TextField source="tratamiento.atencion_basica" />
+                        </Labeled>
                     </SectionCard>
                 </TabbedShowLayout.Tab>
 
-                <TabbedShowLayout.Tab label="Datos Legales">
+                <TabbedShowLayout.Tab label="Otros">
+                    <SectionCard title="Observaciones" icon={<VisibilityIcon />}>
+                        <Labeled label="Pertenencias">
+                            <TextField source="observaciones.pertenencias" />
+                        </Labeled>
+                    </SectionCard>
+
                     <SectionCard title="Autoridades Presentes" icon={<GavelIcon />}>
-                        <ArrayField source="datos_legales.autoridades">
+                        <ArrayField source="legales.autoridades">
                             <Datagrid bulkActionButtons={false} rowClick={false}>
-                                <TextField source="dependencia" label="Dependencia"/>
-                                <TextField source="numero_unidad" label="Número de Unidad"/>
-                                <NumberField source="numero_oficiales" label="Número de Oficiales"/>
+                                <ReferenceField source="institucion" reference="instituciones" label="Dependencia" link={false}>
+                                    <TextField source="nombre"/>
+                                </ReferenceField>
+                                <TextField source="unidad" label="Unidad"/>
+                                <TextField source="oficiales" label="N° de oficiales"/>
                             </Datagrid>
                         </ArrayField>
                     </SectionCard>
 
                     <SectionCard title="Vehículos Involucrados" icon={<AirportShuttleIcon />}>
-                        <ArrayField source="datos_legales.vehiculos_involucrados">
+                        <ArrayField source="legales.vehiculos">
                             <Datagrid bulkActionButtons={false} rowClick={false}>
-                                <TextField source="tipo_marca" label="Tipo/Marca"/>
+                                <TextField source="tipo" label="Tipo y marca"/>
                                 <TextField source="placas" label="Placas"/>
                             </Datagrid>
                         </ArrayField>
                     </SectionCard>
+
                 </TabbedShowLayout.Tab>
 
-                <TabbedShowLayout.Tab label="Firmas y Adicionales">
-                    <SectionCard title="Firmas" icon={<DrawIcon />}>
-                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
-                            <Labeled label="Firma del Paciente">
-                                <TextField source="firmas.paciente" />
-                            </Labeled>
-                            <Labeled label="Firma del Testigo">
-                                <TextField source="firmas.testigo" />
-                            </Labeled>
-                        </Stack>
-                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
-                            <Labeled label="Firma del Paramédico">
-                                <TextField source="firmas.paramedico" />
-                            </Labeled>
-                            <Labeled label="Firma del Médico que Recibe">
-                                <TextField source="firmas.medico_recibe" />
-                            </Labeled>
-                        </Stack>
-                    </SectionCard>
-
-                    <SectionCard title="Información Adicional" icon={<LocalHospitalIcon />}>
-                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
-                            <Labeled label="Reporte Escaneado">
-                                <TextField source="adicionales.reporte_escaneado" />
-                            </Labeled>
-                            <Labeled label="Turno">
-                                <ReferenceField source="adicionales.turnoId" reference="turnos">
-                                    <TextField source="nombre"/>
-                                </ReferenceField>
-                            </Labeled>
-                        </Stack>
+                <TabbedShowLayout.Tab label="Documento PDF">
+                    <SectionCard title="PDF del Reporte" icon={<VisibilityIcon />}>
+                        <Labeled label="Documento PDF">
+                            <FileField source="documento_pdf.src" title="documento_pdf.title" target="_blank" />
+                        </Labeled>
                     </SectionCard>
                 </TabbedShowLayout.Tab>
             </TabbedShowLayout>

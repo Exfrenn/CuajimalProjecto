@@ -149,52 +149,52 @@ export const glasgowVerbalChoices = [
 ];
 
 export const viaAereaChoices = [
-    {id:1, name:"Aspiracion"},
-    {id:2, name:"Canula orofaringea"},
-    {id:3, name:"Canula nasofaringea"},
-    {id:4, name:"Intubacion orotraqueal"},
-    {id:5, name:"Combitubo"},
-    {id:6, name:"Intubacion nasotraqueal"},
-    {id:7, name:"Mascarilla laringea"},
-    {id:8, name:"Oricotiroidotomia por puncion"},
+    {id:"Aspiracion", name:"Aspiracion"},
+    {id:"Canula orofaringea", name:"Canula orofaringea"},
+    {id:"Canula nasofaringea", name:"Canula nasofaringea"},
+    {id:"Intubacion orotraqueal", name:"Intubacion orotraqueal"},
+    {id:"Combitubo", name:"Combitubo"},
+    {id:"Intubacion nasotraqueal", name:"Intubacion nasotraqueal"},
+    {id:"Mascarilla laringea", name:"Mascarilla laringea"},
+    {id:"Oricotiroidotomia por puncion", name:"Oricotiroidotomia por puncion"},
 ]
 
 export const asistenciaVentilatoriaChoices = [
-    { id: "balon_valvula_mascarilla", name: "Balón-válvula mascarilla" },
-    { id: "valvula_demanda", name: "Válvula de demanda" },
-    { id: "hiperventilacion", name: "Hiperventilación" },
-    { id: "puntas_nasales", name: "Puntas nasales" },
-    { id: "mascarilla_simple", name: "Mascarilla simple" },
-    { id: "ventilador_automatico", name: "Ventilador automático" },
-    { id: "hemitorax_derecho", name: "Hemitorax derecho" },
-    { id: "hemitorax_izquierdo", name: "Hemitorax izquierdo" },
-    { id: "descompresion_pleural_aguja", name: "Descompresión pleural con aguja" },
-    { id: "mascarilla_reservorio", name: "Mascarilla con reservorio" },
-    { id: "mascarilla_venturi", name: "Mascarilla venturi" },
+    { id: "Balón-válvula mascarilla", name: "Balón-válvula mascarilla" },
+    { id: "Válvula de demanda", name: "Válvula de demanda" },
+    { id: "Hiperventilación", name: "Hiperventilación" },
+    { id: "Puntas nasales", name: "Puntas nasales" },
+    { id: "Mascarilla simple", name: "Mascarilla simple" },
+    { id: "Ventilador automático", name: "Ventilador automático" },
+    { id: "Hemitorax derecho", name: "Hemitorax derecho" },
+    { id: "Hemitorax izquierdo", name: "Hemitorax izquierdo" },
+    { id: "Descompresión pleural con aguja", name: "Descompresión pleural con aguja" },
+    { id: "Mascarilla con reservorio", name: "Mascarilla con reservorio" },
+    { id: "Mascarilla venturi", name: "Mascarilla venturi" },
 ];
 
 export const controlHemorragiasChoices = [
-    { id: "presion_directa", name: "Presión directa" },
-    { id: "presion_indirecta", name: "Presión indirecta" },
-    { id: "gravedad", name: "Gravedad" },
-    { id: "vendaje_compresivo", name: "Vendaje compresivo" },
-    { id: "criotrapia", name: "Crioterapia" },
-    { id: "mast", name: "MAST" },
+    { id: "Presión directa", name: "Presión directa" },
+    { id: "Presión indirecta", name: "Presión indirecta" },
+    { id: "Gravedad", name: "Gravedad" },
+    { id: "Vendaje compresivo", name: "Vendaje compresivo" },
+    { id: "Crioterapia", name: "Crioterapia" },
+    { id: "MAST", name: "MAST" },
 ];
 
 export const viasVenosasChoices = [
-    { id: "hartmann", name: "Hartmann" },
-    { id: "nacl_09", name: "NaCl 0.9%" },
-    { id: "mixta", name: "Mixta" },
-    { id: "glucosa_5", name: "Glucosa 5%" },
-    { id: "otra", name: "Otra" },
+    { id: "Hartmann", name: "Hartmann" },
+    { id: "NaCl 0.9%", name: "NaCl 0.9%" },
+    { id: "Mixta", name: "Mixta" },
+    { id: "Glucosa 5%", name: "Glucosa 5%" },
+    { id: "Otra", name: "Otra" },
 ];
 
 export const atencionBasicaChoices = [
-    { id: "rcp_basica", name: "RCP básica" },
-    { id: "rcp_avanzada", name: "RCP avanzada" },
-    { id: "curacion", name: "Curación" },
-    { id: "empaquetamiento", name: "Empaquetamiento" },
-    { id: "inmovilizacion_extremidades", name: "Inmovilización de extremidades" },
-    { id: "vendaje", name: "Vendaje" },
+    { id: "RCP básica", name: "RCP básica" },
+    { id: "RCP avanzada", name: "RCP avanzada" },
+    { id: "Curación", name: "Curación" },
+    { id: "Empaquetamiento", name: "Empaquetamiento" },
+    { id: "Inmovilización de extremidades", name: "Inmovilización de extremidades" },
+    { id: "Vendaje", name: "Vendaje" },
 ];
