@@ -82,6 +82,49 @@ app.post('/api/upload', upload.array('images', 10), (req, res) => {
     }
 });
 
+// Configuración de multer para PDFs
+const pdfStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, 'pdf-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const uploadPDF = multer({ 
+    storage: pdfStorage,
+    limits: {
+        fileSize: 5000000 // 5MB
+    },
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype === 'application/pdf') {
+            cb(null, true);
+        } else {
+            cb(new Error('Solo se permiten archivos PDF'));
+        }
+    }
+});
+
+app.post('/api/upload-pdf', uploadPDF.single('pdf'), (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No se subió ningún archivo PDF' });
+        }
+
+        const fileInfo = {
+            src: `http://localhost:3000/uploads/${req.file.filename}`,
+            title: req.file.originalname
+        };
+        
+        res.json(fileInfo);
+    } catch (error) {
+        console.error('Error al subir PDF:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 //Turnos------------------------------------------------------------------------
 //getList
 app.get("/turnos", async (req,res)=>{
