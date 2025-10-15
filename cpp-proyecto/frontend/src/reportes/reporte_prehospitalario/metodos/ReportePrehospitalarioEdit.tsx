@@ -71,7 +71,6 @@ export const ReportePrehospitalarioEdit = () => {
             lg : { width : '70%' },
         }}>  
             <TabbedForm warnWhenUnsavedChanges tabs={<TabbedFormTabs variant="scrollable" scrollButtons="auto" />}>
-                <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: 2 }}>
 
                 {/* PREÁMBULO */}
                 <TabbedForm.Tab label="PREÁMBULO">
