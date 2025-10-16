@@ -65,13 +65,13 @@ const LoginPage = () => {
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             sx={{
-                                '& .MuiInputLabel-root': { color: 'white' },
+                                '& .MuiInputLabel-root': { color: 'black' },
                                 '& .MuiOutlinedInput-root': {
                                     borderRadius: '20px', 
-                                    '& fieldset': { borderColor: 'white' },
-                                    '&:hover fieldset': { borderColor: 'white' },
-                                    '&.Mui-focused fieldset': { borderColor: 'white' },
-                                    '& input': { color: 'white' }
+                                    '& fieldset': { borderColor: 'black' },
+                                    '&:hover fieldset': { borderColor: 'black' },
+                                    '&.Mui-focused fieldset': { borderColor: 'black' },
+                                    '& input': { color: 'black' }
                                 }
                             }}
                         />
@@ -84,13 +84,13 @@ const LoginPage = () => {
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                             sx={{
-                                '& .MuiInputLabel-root': { color: 'white' },
+                                '& .MuiInputLabel-root': { color: 'black' },
                                 '& .MuiOutlinedInput-root': {
                                     borderRadius: '20px',
-                                    '& fieldset': { borderColor: 'white' },
-                                    '&:hover fieldset': { borderColor: 'white' },
-                                    '&.Mui-focused fieldset': { borderColor: 'white' },
-                                    '& input': { color: 'white' }
+                                    '& fieldset': { borderColor: 'black' },
+                                    '&:hover fieldset': { borderColor: 'black' },
+                                    '&.Mui-focused fieldset': { borderColor: 'black' },
+                                    '& input': { color: 'black' }
                                 }
                             }}
                         />
@@ -107,7 +107,7 @@ const LoginPage = () => {
                                     border: 'none',
                                     fontSize: '0.75rem',
                                     backgroundColor: '#2596be',
-                                    color: 'white',
+                                    color: 'black',
                                     '&:hover': {
                                         backgroundColor: '#000000ff'
                                     }

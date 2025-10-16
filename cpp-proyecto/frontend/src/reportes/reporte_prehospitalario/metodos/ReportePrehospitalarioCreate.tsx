@@ -22,7 +22,7 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { GlasgowTotal } from "../misc/GlasgowTotal";
 
 export const ReportePrehospitalarioCreate = () => {
-    const { onEditSuccess } = useReporteNotifications();
+    const { onCreateSuccess } = useReporteNotifications();
 
     return (
         <Create mutationOptions={{ onSuccess: onCreateSuccess }} 

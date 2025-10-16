@@ -1,7 +1,8 @@
-import { Admin, CustomRoutes, Resource, nanoLightTheme, nanoDarkTheme } from "react-admin";
+import { Admin, CustomRoutes, nanoDarkTheme, nanoLightTheme, Resource } from "react-admin";
 import { Layout } from "./Layout";
 import { dataProvider} from "./dataProvider";
 import { i18nProvider } from "./i18nProvider";
+import { customTheme, customDarkTheme } from "./theme";
 
 import { UsuarioCreate, UsuarioEdit, UsuarioList, UsuarioShow } from "./usuarios/usuarios";
 import { TurnoCreate, TurnoEdit, TurnoList, TurnoShow } from "./usuarios/turnos";
@@ -24,7 +25,6 @@ import Registrarse from "./usuarios/registrarse";
 import authProvider from "./authProvider";
 import LoginPage from "./login/LoginPage";
 import { Dashboard } from "./Dashboard";
-
 
 export const App = () => (
     <Admin layout={Layout} loginPage={LoginPage} dashboard={Dashboard} authProvider={authProvider} dataProvider={dataProvider} i18nProvider={i18nProvider} theme={nanoLightTheme} darkTheme={nanoDarkTheme}
