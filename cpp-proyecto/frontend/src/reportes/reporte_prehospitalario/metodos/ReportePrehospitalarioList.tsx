@@ -11,7 +11,7 @@ import {
     SelectInput,
     DateInput,
     FunctionField,
-    ShowButton
+    ShowButton,
 } from "react-admin";
 
 const reporteFilters = [
@@ -41,17 +41,14 @@ const PrioridadField = ({ record }: { record?: any }) => {
 
 export const ReportePrehospitalarioList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
+    
+    // El backend ya filtra los reportes según el rol:
+    // - Paramédico (rol_id 3): ve solo sus reportes
+    // - Jefe (rol_id 2): ve reportes de sus paramédicos
+    // - Admin (rol_id 1): ve todos
 
     return (
-        <List sx = {{
-            display : 'flex',
-            flexDirection : 'collumn',
-            margin : '0 auto',
-            xs : { width : '100%' },
-            sm : { width : '100%' },
-            md : { width : '80%' },
-            lg : { width : '70%' },
-        }}>
+        <List filters={reporteFilters}>
             {isSmall ? (
                 <SimpleList
                     primaryText={(record) => `Folio: ${record.preambulo?.folio || "Sin folio"}`}

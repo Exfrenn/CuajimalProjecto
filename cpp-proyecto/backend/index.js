@@ -14,6 +14,67 @@ const PORT = 3000;
 let db;
 app.use(bodyParser.json());
 
+// Middleware de autenticación JWT
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+
+    if (token == null) return res.sendStatus(401);
+
+    jwt.verify(token, "secretKey", (err, user) => {
+        if (err) return res.sendStatus(403);
+        req.user = user; // Guarda la info del usuario en req.user
+        next();
+    });
+}
+
+// Middleware de permisos - Compatible con nueva estructura {action, resource}
+function checkPermissions(resource, action) {
+    return async (req, res, next) => {
+        try {
+            const userEmail = req.user.email;
+            const usuario = await db.collection("usuarios").findOne({ "email": userEmail });
+            
+            if (!usuario) {
+                return res.sendStatus(401);
+            }
+
+            const rol = await db.collection("roles").findOne({ "id": usuario.rol_id });
+            
+            if (!rol || !rol.permisos) {
+                return res.sendStatus(403);
+            }
+
+            // Soporte para ambos formatos de permisos:
+            // Nuevo formato: [{action: "list", resource: "usuarios"}, ...]
+            // Formato antiguo: ["usuarios", "list", ...]
+            let tienePermiso = false;
+
+            if (rol.permisos.length > 0 && typeof rol.permisos[0] === 'object') {
+                // Nuevo formato: verifica que exista el objeto con action y resource exactos
+                tienePermiso = rol.permisos.some(p => 
+                    p.resource === resource && p.action === action
+                );
+            } else {
+                // Formato antiguo (compatibilidad): verifica que existan ambos strings
+                tienePermiso = rol.permisos.includes(resource) && rol.permisos.includes(action);
+            }
+
+            if (tienePermiso) {
+                next();
+            } else {
+                res.status(403).json({ 
+                    error: "No tienes permisos para realizar esta acción",
+                    required: { resource, action }
+                });
+            }
+        } catch (error) {
+            console.error("Error verificando permisos:", error);
+            res.sendStatus(500);
+        }
+    };
+}
+
 async function crearUsuario({ nombre, apellido, usuario, email, password, rol_id, turno_id }) {
     const hash = await argon2.hash(password, { type: argon2.argon2id, memoryCost: 19*1024, timeCost:2, parallelism:1, saltLength:16 });
     // Calcula el siguiente id
@@ -127,51 +188,36 @@ app.post('/api/upload-pdf', uploadPDF.single('pdf'), (req, res) => {
 
 //Turnos------------------------------------------------------------------------
 //getList
-app.get("/turnos", async (req,res)=>{
-    try{
-        let token=req.get("Authentication");
-        let verifiedToken=await jwt.verify(token, "secretKey");
-        let user=verifiedToken.email; // Cambiado de .usuario a .email según tu login
+app.get("/turnos", authenticateToken, checkPermissions("turnos", "list"), async (req,res)=>{
+    try {
+        const userEmail = req.user.email;
+        const usuario = await db.collection("usuarios").findOne({ "email": userEmail });
         
-        if("_sort" in req.query){
-            let sortBy=req.query._sort;
-            let sortOrder=req.query._order=="ASC"?1:-1;
-            let inicio=Number(req.query._start);
-            let fin=Number(req.query._end);
-            let sorter={}
-            sorter[sortBy]=sortOrder;
-            let data= await db.collection("turnos").find({}).sort(sorter).project({_id:0}).toArray();
-            res.set("Access-Control-Expose-Headers", "X-Total-Count");
-            res.set("X-Total-Count", data.length);
-            data=data.slice(inicio,fin)
-            await log(user, "turnos", "leer");
-            res.json(data)
-        }else if("id" in req.query){
-            let data=[];
-            for(let index=0; index<req.query.id.length; index++){
-                let dataParcial=await db.collection("turnos").find({id: Number(req.query.id[index])}).project({_id:0}).toArray();
-                data= await data.concat(dataParcial);
-            }
-            res.json(data);
-        }else{
-            let data=await db.collection("turnos").find(req.query).project({_id:0}).toArray();
-            res.set("Access-Control-Expose-Headers", "X-Total-Count");
-            res.set("X-Total-Count", data.length);
-            res.json(data);
+        let filter = {};
+        
+        // Si no es admin, solo puede ver su propio turno
+        if (usuario.rol_id !== 1) {
+            filter = { id: usuario.turno_id };
         }
-    }catch{
-        res.sendStatus(401);
+        
+        let data = await db.collection("turnos").find(filter).project({_id:0}).toArray();
+        res.set("Access-Control-Expose-Headers", "X-Total-Count");
+        res.set("X-Total-Count", data.length);
+        res.json(data);
+    } catch (error) {
+        console.error("Error en GET /turnos:", error);
+        res.status(500).json({ error: error.message });
     }
-});
+})
 
 //getOne
-app.get("/turnos/:id", async (req,res)=>{
+app.get("/turnos/:id", authenticateToken, checkPermissions("turnos", "show"), async (req,res)=>{
 	let data=await db.collection("turnos").find({"id": Number(req.params.id)}).project({_id:0}).toArray();
 	res.json(data[0]);
 });
 
 //createOne
-app.post("/turnos", async (req,res)=>{
+app.post("/turnos", authenticateToken, checkPermissions("turnos", "create"), async (req,res)=>{
 	let valores=req.body
 	if (valores["id"] === undefined || valores["id"] === null) {
         const last = await db.collection("turnos").find().sort({ id: -1 }).limit(1).toArray();
@@ -184,13 +230,13 @@ app.post("/turnos", async (req,res)=>{
 });
 
 //deleteOne
-app.delete("/turnos/:id", async(req,res)=>{
+app.delete("/turnos/:id", authenticateToken, checkPermissions("turnos", "delete"), async(req,res)=>{
 	let data=await db.collection("turnos").deleteOne({"id": Number(req.params.id)});
 	res.json(data)
 })
 
 //updateOne
-app.put("/turnos/:id", async(req,res)=>{
+app.put("/turnos/:id", authenticateToken, checkPermissions("turnos", "edit"), async(req,res)=>{
 	let valores=req.body
 	valores["id"]=Number(valores["id"])
 	let data =await db.collection("turnos").updateOne({"id":valores["id"]}, {"$set":valores})
@@ -199,21 +245,36 @@ app.put("/turnos/:id", async(req,res)=>{
 })
 
 //Roles-------------------------------------------------------------------------
-app.get("/roles", async (req,res)=>{
-    let data = await db.collection("roles").find({}).project({_id:0}).toArray();
-    res.set("Access-Control-Expose-Headers", "X-Total-Count");
-    res.set("X-Total-Count", data.length);
-    res.json(data);
+app.get("/roles", authenticateToken, checkPermissions("roles", "list"), async (req,res)=>{
+    try {
+        const userEmail = req.user.email;
+        const usuario = await db.collection("usuarios").findOne({ "email": userEmail });
+        
+        let filter = {};
+        
+        // Si no es admin, solo puede ver su propio rol
+        if (usuario.rol_id !== 1) {
+            filter = { id: usuario.rol_id };
+        }
+        
+        let data = await db.collection("roles").find(filter).project({_id:0}).toArray();
+        res.set("Access-Control-Expose-Headers", "X-Total-Count");
+        res.set("X-Total-Count", data.length);
+        res.json(data);
+    } catch (error) {
+        console.error("Error en GET /roles:", error);
+        res.status(500).json({ error: error.message });
+    }
 })
 
 //getOne
-app.get("/roles/:id", async (req,res)=>{
+app.get("/roles/:id", authenticateToken, checkPermissions("roles", "show"), async (req,res)=>{
 	let data=await db.collection("roles").find({"id": Number(req.params.id)}).project({_id:0}).toArray();
 	res.json(data[0]);
 });
 
 //createOne
-app.post("/roles", async (req,res)=>{
+app.post("/roles", authenticateToken, checkPermissions("roles", "create"), async (req,res)=>{
 	let valores=req.body
 	if (valores["id"] === undefined || valores["id"] === null) {
         const last = await db.collection("roles").find().sort({ id: -1 }).limit(1).toArray();
@@ -226,13 +287,13 @@ app.post("/roles", async (req,res)=>{
 });
 
 //deleteOne
-app.delete("/roles/:id", async(req,res)=>{
+app.delete("/roles/:id", authenticateToken, checkPermissions("roles", "delete"), async(req,res)=>{
 	let data=await db.collection("roles").deleteOne({"id": Number(req.params.id)});
 	res.json(data)
 })
 
 //updateOne
-app.put("/roles/:id", async(req,res)=>{
+app.put("/roles/:id", authenticateToken, checkPermissions("roles", "edit"), async(req,res)=>{
 	let valores=req.body
 	valores["id"]=Number(valores["id"])
 	let data =await db.collection("roles").updateOne({"id":valores["id"]}, {"$set":valores})
@@ -241,21 +302,46 @@ app.put("/roles/:id", async(req,res)=>{
 })
 
 //Usuarios-------------------------------------------------------------------------
-app.get("/usuarios", async (req,res)=>{
-    let data = await db.collection("usuarios").find({}).project({_id:0}).toArray();
-    res.set("Access-Control-Expose-Headers", "X-Total-Count");
-    res.set("X-Total-Count", data.length);
-    res.json(data);
+app.get("/usuarios", authenticateToken, checkPermissions("usuarios", "list"), async (req,res)=>{
+    try {
+        // Obtener usuario actual
+        const userEmail = req.user.email;
+        const usuario = await db.collection("usuarios").findOne({ "email": userEmail });
+        
+        let filtro = {};
+        
+        if (usuario.rol_id === 3 || usuario.rol_id === 4) {
+            // Paramédico u Operador: solo pueden verse a sí mismos
+            filtro = { "id": usuario.id };
+        } else if (usuario.rol_id === 2) {
+            // Jefe de turno: ve a sus operadores asignados
+            if (usuario.operadores_id && usuario.operadores_id.length > 0) {
+                filtro = { "id": { $in: usuario.operadores_id } };
+            } else {
+                // Si no tiene operadores asignados, no ve a nadie
+                filtro = { "id": -1 }; // ID que no existe
+            }
+        }
+        // Admin (rol_id === 1): sin filtro, ve todos
+        
+        let data = await db.collection("usuarios").find(filtro).project({_id:0}).toArray();
+        res.set("Access-Control-Expose-Headers", "X-Total-Count");
+        res.set("X-Total-Count", data.length);
+        res.json(data);
+    } catch (error) {
+        console.error("Error en GET /usuarios:", error);
+        res.status(500).json({ error: error.message });
+    }
 })
 
 //getOne
-app.get("/usuarios/:id", async (req,res)=>{
+app.get("/usuarios/:id", authenticateToken, checkPermissions("usuarios", "show"), async (req,res)=>{
 	let data=await db.collection("usuarios").find({"id": Number(req.params.id)}).project({_id:0}).toArray();
 	res.json(data[0]);
 });
 
 //createOne
-app.post("/usuarios", async (req, res) => {
+app.post("/usuarios", authenticateToken, checkPermissions("usuarios", "create"), async (req, res) => {
     const { nombre, apellido, usuario, email, password, rol_id, turno_id } = req.body;
     let data = await db.collection("usuarios").findOne({ "usuario": usuario });
     if(data == null){
@@ -267,13 +353,13 @@ app.post("/usuarios", async (req, res) => {
 });
 
 //deleteOne
-app.delete("/usuarios/:id", async(req,res)=>{
+app.delete("/usuarios/:id", authenticateToken, checkPermissions("usuarios", "delete"), async(req,res)=>{
 	let data=await db.collection("usuarios").deleteOne({"id": Number(req.params.id)});
 	res.json(data)
 })
 
 //updateOne
-app.put("/usuarios/:id", async (req, res) => {
+app.put("/usuarios/:id", authenticateToken, checkPermissions("usuarios", "edit"), async (req, res) => {
     let valores = req.body;
     valores["id"] = Number(valores["id"]);
 
@@ -295,21 +381,50 @@ app.put("/usuarios/:id", async (req, res) => {
 });
 
 //Reporte Urbanoss--------------------------------------------------------------
-app.get("/reportes_urbanos", async (req,res)=>{
-    let data = await db.collection("reportes_urbanos").find({}).project({_id:0}).toArray();
+app.get("/reportes_urbanos", authenticateToken, checkPermissions("reportes_urbanos", "list"), async (req,res)=>{
+    // Obtener usuario actual
+    const userEmail = req.user.email;
+    const usuario = await db.collection("usuarios").findOne({ "email": userEmail });
+    
+    // Filtro base
+    let filtro = {};
+    
+    // Si es Jefe de turno (rol_id = 2), filtrar por operadores asignados
+    if (usuario.rol_id === 2) {
+        // Verificar tipo de servicio
+        if (usuario.tipo_servicio === 'urbano' && usuario.operadores_id && usuario.operadores_id.length > 0) {
+            // Solo mostrar reportes donde algún personal_a_cargo esté en operadores_id
+            filtro = {
+                "personal_y_activacion.personal_a_cargo": { 
+                    $in: usuario.operadores_id 
+                }
+            };
+        } else {
+            // Si no es urbano o no tiene operadores asignados, no muestra nada
+            filtro = { "_id": null };
+        }
+    }
+    // Si es Operador (rol_id = 4), solo sus propios reportes
+    else if (usuario.rol_id === 4) {
+        filtro = {
+            "personal_y_activacion.personal_a_cargo": usuario.id
+        };
+    }
+    
+    let data = await db.collection("reportes_urbanos").find(filtro).project({_id:0}).toArray();
     res.set("Access-Control-Expose-Headers", "X-Total-Count");
     res.set("X-Total-Count", data.length);
     res.json(data);
 })
 
 //getOne
-app.get("/reportes_urbanos/:id", async (req,res)=>{
+app.get("/reportes_urbanos/:id", authenticateToken, checkPermissions("reportes_urbanos", "show"), async (req,res)=>{
 	let data=await db.collection("reportes_urbanos").find({"id": Number(req.params.id)}).project({_id:0}).toArray();
 	res.json(data[0]);
 });
 
 //createOne
-app.post("/reportes_urbanos", async (req,res)=>{
+app.post("/reportes_urbanos", authenticateToken, checkPermissions("reportes_urbanos", "create"), async (req,res)=>{
 	let valores=req.body
 	if (valores["id"] === undefined || valores["id"] === null) {
         const last = await db.collection("reportes_urbanos").find().sort({ id: -1 }).limit(1).toArray();
@@ -322,13 +437,13 @@ app.post("/reportes_urbanos", async (req,res)=>{
 });
 
 //deleteOne
-app.delete("/reportes_urbanos/:id", async(req,res)=>{
+app.delete("/reportes_urbanos/:id", authenticateToken, checkPermissions("reportes_urbanos", "delete"), async(req,res)=>{
 	let data=await db.collection("reportes_urbanos").deleteOne({"id": Number(req.params.id)});
 	res.json(data)
 })
 
 //updateOne
-app.put("/reportes_urbanos/:id", async(req,res)=>{
+app.put("/reportes_urbanos/:id", authenticateToken, checkPermissions("reportes_urbanos", "edit"), async(req,res)=>{
 	let valores=req.body
 	valores["id"]=Number(valores["id"])
 	let data =await db.collection("reportes_urbanos").updateOne({"id":valores["id"]}, {"$set":valores})
@@ -337,21 +452,50 @@ app.put("/reportes_urbanos/:id", async(req,res)=>{
 })
 
 //Reporte Prehospitalarios------------------------------------------------------
-app.get("/reportes_prehospitalarios", async (req,res)=>{
-    let data = await db.collection("reportes_prehospitalarios").find({}).project({_id:0}).toArray();
+app.get("/reportes_prehospitalarios", authenticateToken, checkPermissions("reportes_prehospitalarios", "list"), async (req,res)=>{
+    // Obtener usuario actual
+    const userEmail = req.user.email;
+    const usuario = await db.collection("usuarios").findOne({ "email": userEmail });
+    
+    // Filtro base
+    let filtro = {};
+    
+    // Si es Jefe de turno (rol_id = 2), filtrar por operadores asignados
+    if (usuario.rol_id === 2) {
+        // Verificar tipo de servicio
+        if (usuario.tipo_servicio === 'prehospitalario' && usuario.operadores_id && usuario.operadores_id.length > 0) {
+            // Solo mostrar reportes donde algún operador esté en operadores_id
+            filtro = {
+                "control.operador": { 
+                    $in: usuario.operadores_id 
+                }
+            };
+        } else {
+            // Si no es prehospitalario o no tiene operadores asignados, no muestra nada
+            filtro = { "_id": null };
+        }
+    }
+    // Si es Paramédico (rol_id = 3), solo sus propios reportes
+    else if (usuario.rol_id === 3) {
+        filtro = {
+            "control.operador": usuario.id
+        };
+    }
+    
+    let data = await db.collection("reportes_prehospitalarios").find(filtro).project({_id:0}).toArray();
     res.set("Access-Control-Expose-Headers", "X-Total-Count");
     res.set("X-Total-Count", data.length);
     res.json(data);
 })
 
 //getOne
-app.get("/reportes_prehospitalarios/:id", async (req,res)=>{
+app.get("/reportes_prehospitalarios/:id", authenticateToken, checkPermissions("reportes_prehospitalarios", "show"), async (req,res)=>{
 	let data=await db.collection("reportes_prehospitalarios").find({"id": Number(req.params.id)}).project({_id:0}).toArray();
 	res.json(data[0]);
 });
 
 //createOne
-app.post("/reportes_prehospitalarios", async (req,res)=>{
+app.post("/reportes_prehospitalarios", authenticateToken, checkPermissions("reportes_prehospitalarios", "create"), async (req,res)=>{
 	let valores=req.body
 	if (valores["id"] === undefined || valores["id"] === null) {
         const last = await db.collection("reportes_prehospitalarios").find().sort({ id: -1 }).limit(1).toArray();
@@ -364,13 +508,13 @@ app.post("/reportes_prehospitalarios", async (req,res)=>{
 });
 
 //deleteOne
-app.delete("/reportes_prehospitalarios/:id", async(req,res)=>{
+app.delete("/reportes_prehospitalarios/:id", authenticateToken, checkPermissions("reportes_prehospitalarios", "delete"), async(req,res)=>{
 	let data=await db.collection("reportes_prehospitalarios").deleteOne({"id": Number(req.params.id)});
 	res.json(data)
 })
 
 //updateOne
-app.put("/reportes_prehospitalarios/:id", async(req,res)=>{
+app.put("/reportes_prehospitalarios/:id", authenticateToken, checkPermissions("reportes_prehospitalarios", "edit"), async(req,res)=>{
 	let valores=req.body
 	valores["id"]=Number(valores["id"])
 	let data =await db.collection("reportes_prehospitalarios").updateOne({"id":valores["id"]}, {"$set":valores})
@@ -567,14 +711,21 @@ app.post("/login", async (req, res) => {
     if (data == null) {
         res.sendStatus(401);
     } else if (await argon2.verify(data.password, pass)) {
+        // Obtener los permisos del rol
+        const rol = await db.collection("roles").findOne({ "id": data.rol_id });
+        const permisos = rol ? rol.permisos : [];
+        
         let token = jwt.sign({ "email": data.email, "rol_id": data.rol_id }, "secretKey", { expiresIn: 900 });
         res.json({ 
             "token": token, 
             "id": data.id,
-			"email": data.email, 
+            "email": data.email, 
             "nombre": data.nombre,
+            "apellido": data.apellido,
             "rol_id": data.rol_id,
-			"turno_id": data.turno_id
+            "turno_id": data.turno_id,
+            "tipo_servicio": data.tipo_servicio,
+            "permisos": permisos
         });
     } else {
         res.sendStatus(401);

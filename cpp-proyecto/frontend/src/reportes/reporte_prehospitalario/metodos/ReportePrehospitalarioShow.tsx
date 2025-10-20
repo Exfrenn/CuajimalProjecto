@@ -3,9 +3,11 @@ import {
     FunctionField, ArrayField, Datagrid, NumberField, Labeled,
     ReferenceArrayField,
     TabbedShowLayoutTabs,
-    FileField
+    FileField,
+    SimpleShowLayout
 } from "react-admin";
-import { Stack, Box, Chip, useMediaQuery, Theme } from "@mui/material";
+import { Stack, Box, Chip, useMediaQuery, Theme, Accordion, AccordionSummary, AccordionDetails, Typography } from "@mui/material";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
@@ -26,7 +28,632 @@ export const ReportePrehospitalarioShow = () => {
 
     return (
         <Show>
-            <TabbedShowLayout tabs={<TabbedShowLayoutTabs variant="scrollable" scrollButtons="auto" />}>
+            {isSmall ? (
+                <SimpleShowLayout>
+                    {/* Preámbulo */}
+                    <Accordion defaultExpanded>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography variant="h6">Preámbulo</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Stack spacing={2}>
+                                <Labeled label="Fecha">
+                                    <DateField source="preambulo.fecha" />
+                                </Labeled>
+                                <Labeled label="Folio">
+                                    <TextField source="preambulo.folio" />
+                                </Labeled>
+                            </Stack>
+                        </AccordionDetails>
+                    </Accordion>
+
+                    {/* Datos del Servicio */}
+                    <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography variant="h6">Datos del Servicio</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Stack spacing={2}>
+                                <SectionCard title="Cronometría" icon={<AccessTimeIcon />}>
+                                    <Stack spacing={2}>
+                                        <Labeled label="Hora de Llamada">
+                                            <DateField source="servicio.cronometro.hora_llamada" showTime showDate={false} />
+                                        </Labeled>
+                                        <Labeled label="Hora de Salida">
+                                            <DateField source="servicio.cronometro.hora_salida" showTime showDate={false} />
+                                        </Labeled>
+                                        <Labeled label="Hora de Llegada">
+                                            <DateField source="servicio.cronometro.hora_llegada" showTime showDate={false} />
+                                        </Labeled>
+                                        <Labeled label="Hora de Traslado">
+                                            <DateField source="servicio.cronometro.hora_traslado" showTime showDate={false} />
+                                        </Labeled>
+                                        <Labeled label="Hora Hospital">
+                                            <DateField source="servicio.cronometro.hora_hospital" showTime showDate={false} />
+                                        </Labeled>
+                                        <Labeled label="Salida Hospital">
+                                            <DateField source="servicio.cronometro.salida_hospital" showTime showDate={false} />
+                                        </Labeled>
+                                        <Labeled label="Hora Base">
+                                            <DateField source="servicio.cronometro.hora_base" showTime showDate={false} />
+                                        </Labeled>
+                                    </Stack>
+                                </SectionCard>
+
+                                <Labeled label="Motivo de Atención">
+                                    <TextField source="servicio.motivo" />
+                                </Labeled>
+
+                                <SectionCard title="Ubicación del Servicio" icon={<LocationOnIcon />}>
+                                    <Stack spacing={2}>
+                                        <Labeled label="Calle">
+                                            <TextField source="servicio.ubicacion.calle" />
+                                        </Labeled>
+                                        <Labeled label="Intersección 1">
+                                            <TextField source="servicio.ubicacion.interseccion1" />
+                                        </Labeled>
+                                        <Labeled label="Intersección 2">
+                                            <TextField source="servicio.ubicacion.interseccion2" />
+                                        </Labeled>
+                                        <Labeled label="Colonia">
+                                            <TextField source="servicio.ubicacion.colonia" />
+                                        </Labeled>
+                                        <Labeled label="Alcaldía">
+                                            <TextField source="servicio.ubicacion.alcaldia" />
+                                        </Labeled>
+                                        <Labeled label="Lugar de Ocurrencia">
+                                            <TextField source="servicio.ubicacion.lugar_ocurrencia" />
+                                        </Labeled>
+                                        <Labeled label="Longitud">
+                                            <TextField source="servicio.ubicacion.coordenadas.0" />
+                                        </Labeled>
+                                        <Labeled label="Latitud">
+                                            <TextField source="servicio.ubicacion.coordenadas.1" />
+                                        </Labeled>
+                                    </Stack>
+                                </SectionCard>
+                            </Stack>
+                        </AccordionDetails>
+                    </Accordion>
+
+                    {/* Control */}
+                    <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography variant="h6">Control</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <SectionCard title="Control de Unidad" icon={<LocalHospitalIcon />}>
+                                <Stack spacing={2}>
+                                    <Labeled label="Número de Ambulancia">
+                                        <TextField source="control.ambulancia_numero" />
+                                    </Labeled>
+                                    <Labeled label="Helicóptero Matrícula">
+                                        <TextField source="control.helicoptero" />
+                                    </Labeled>
+                                    <Labeled label="Operadores">
+                                        <ReferenceArrayField reference="usuarios" source="control.operador">
+                                            <Datagrid bulkActionButtons={false} rowClick="show">
+                                                <FunctionField
+                                                    label="Nombre completo"
+                                                    render={record => `${record.nombre} ${record.apellido}`}
+                                                />
+                                                <ReferenceField source="rol_id" reference="roles" label="Rol" link={false}>
+                                                    <TextField source="nombre"/>
+                                                </ReferenceField>
+                                            </Datagrid>
+                                        </ReferenceArrayField>
+                                    </Labeled>
+                                    <Labeled label="T.U.M">
+                                        <TextField source="control.tum" />
+                                    </Labeled>
+                                    <Labeled label="Socorrista">
+                                        <TextField source="control.socorrista" />
+                                    </Labeled>
+                                </Stack>
+                            </SectionCard>
+                        </AccordionDetails>
+                    </Accordion>
+
+                    {/* Datos del Paciente */}
+                    <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography variant="h6">Datos del Paciente</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <SectionCard title="Información del Paciente" icon={<PersonIcon />}>
+                                <Stack spacing={2}>
+                                    <Labeled label="Nombre del Paciente">
+                                        <TextField source="paciente.nombre" />
+                                    </Labeled>
+                                    <Labeled label="Sexo">
+                                        <TextField source="paciente.sexo" />
+                                    </Labeled>
+                                    <Labeled label="Edad (años)">
+                                        <NumberField source="paciente.edad.anos" />
+                                    </Labeled>
+                                    <Labeled label="Edad (meses)">
+                                        <NumberField source="paciente.edad.meses" />
+                                    </Labeled>
+                                    <Labeled label="Domicilio">
+                                        <TextField source="paciente.domicilio" />
+                                    </Labeled>
+                                    <Labeled label="Colonia/Comunidad">
+                                        <TextField source="paciente.colonia" />
+                                    </Labeled>
+                                    <Labeled label="Alcaldía/Municipio">
+                                        <TextField source="paciente.alcaldia" />
+                                    </Labeled>
+                                    <Labeled label="Teléfono">
+                                        <TextField source="paciente.telefono" />
+                                    </Labeled>
+                                    <Labeled label="Ocupación">
+                                        <TextField source="paciente.ocupacion" />
+                                    </Labeled>
+                                </Stack>
+                            </SectionCard>
+                        </AccordionDetails>
+                    </Accordion>
+
+                    {/* Parto */}
+                    <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography variant="h6">Parto</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Stack spacing={2}>
+                                <SectionCard title="Información de la Madre" icon={<PregnantWomanIcon />}>
+                                    <Stack spacing={2}>
+                                        <Labeled label="Semanas de gestación">
+                                            <NumberField source="parto.madre.semanas_gesta" />
+                                        </Labeled>
+                                        <Labeled label="Hora de inicio contracciones">
+                                            <DateField source="parto.madre.hora_inicio" showTime showDate={false} />
+                                        </Labeled>
+                                        <Labeled label="Frecuencia">
+                                            <TextField source="parto.madre.frecuencia" />
+                                        </Labeled>
+                                        <Labeled label="Duración">
+                                            <TextField source="parto.madre.duracion" />
+                                        </Labeled>
+                                    </Stack>
+                                </SectionCard>
+
+                                <SectionCard title="Información del Recién Nacido" icon={<LocalHospitalIcon />}>
+                                    <Stack spacing={2}>
+                                        <Labeled label="Hora de nacimiento">
+                                            <DateField source="parto.postparto.hora_nacimiento" showTime />
+                                        </Labeled>
+                                        <Labeled label="Placenta expulsada">
+                                            <TextField source="parto.postparto.placenta" />
+                                        </Labeled>
+                                        <Labeled label="Lugar">
+                                            <TextField source="parto.postparto.lugar" />
+                                        </Labeled>
+                                        <Labeled label="Producto">
+                                            <TextField source="parto.postparto.producto" />
+                                        </Labeled>
+                                        <Labeled label="Sexo del RN">
+                                            <TextField source="parto.postparto.sexo" />
+                                        </Labeled>
+                                        <Labeled label="Edad gestacional">
+                                            <TextField source="parto.edad_gestacional" />
+                                        </Labeled>
+                                    </Stack>
+                                </SectionCard>
+
+                                <SectionCard title="Evaluaciones APGAR" icon={<MonitorHeartIcon />}>
+                                    <ArrayField source="parto.evaluaciones_apgar">
+                                        <Datagrid bulkActionButtons={false} rowClick={false}>
+                                            <TextField source="tiempo" label="Tiempo"/>
+                                            <NumberField source="color" label="Color"/>
+                                            <NumberField source="fc" label="FC"/>
+                                            <NumberField source="irritabilidad" label="Irritabilidad"/>
+                                            <NumberField source="tono" label="Tono"/>
+                                            <NumberField source="respiracion" label="Respiración"/>
+                                            <NumberField source="puntaje_total" label="Puntaje Total"/>
+                                        </Datagrid>
+                                    </ArrayField>
+                                </SectionCard>
+                            </Stack>
+                        </AccordionDetails>
+                    </Accordion>
+
+                    {/* Causa Traumática */}
+                    <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography variant="h6">Causa Traumática</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Stack spacing={2}>
+                                <SectionCard title="Información del Trauma" icon={<WarningIcon />}>
+                                    <Stack spacing={2}>
+                                        <Labeled label="Agente causal">
+                                            <ReferenceField source="trauma.agente" reference="agentes_causal" link={false}>
+                                                <TextField source="nombre" />
+                                            </ReferenceField>
+                                        </Labeled>
+                                        <Labeled label="Accidente automovilístico">
+                                            <TextField source="trauma.accidente_auto" />
+                                        </Labeled>
+                                        <Labeled label="Impacto">
+                                            <TextField source="trauma.impacto" />
+                                        </Labeled>
+                                        <Labeled label="CMS">
+                                            <TextField source="trauma.cms" />
+                                        </Labeled>
+                                    </Stack>
+                                </SectionCard>
+
+                                <SectionCard title="Condiciones del Vehículo" icon={<DirectionsCarIcon />}>
+                                    <Stack spacing={2}>
+                                        <Labeled label="Parabrisas">
+                                            <TextField source="trauma.parabrisas" />
+                                        </Labeled>
+                                        <Labeled label="Volante">
+                                            <TextField source="trauma.volante" />
+                                        </Labeled>
+                                        <Labeled label="Bolsa de aire">
+                                            <TextField source="trauma.bolsa_aire" />
+                                        </Labeled>
+                                        <Labeled label="Cinturón de seguridad">
+                                            <TextField source="trauma.cinturon_seguridad" />
+                                        </Labeled>
+                                    </Stack>
+                                </SectionCard>
+
+                                <SectionCard title="Situación del Paciente" icon={<PersonIcon />}>
+                                    <Stack spacing={2}>
+                                        <Labeled label="Dentro del vehículo">
+                                            <TextField source="trauma.dentro_vehiculo" />
+                                        </Labeled>
+                                        <Labeled label="Atropellado">
+                                            <TextField source="trauma.atropellado" />
+                                        </Labeled>
+                                    </Stack>
+                                </SectionCard>
+                            </Stack>
+                        </AccordionDetails>
+                    </Accordion>
+
+                    {/* Causa Clínica */}
+                    <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography variant="h6">Causa Clínica</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <SectionCard title="Origen Clínico" icon={<MedicalServicesIcon />}>
+                                <Stack spacing={2}>
+                                    <Labeled label="Origen probable">
+                                        <ReferenceField source="clinica.origen" reference="origen_probable" link={false}>
+                                            <TextField source="nombre" />
+                                        </ReferenceField>
+                                    </Labeled>
+                                    <Labeled label="¿Primera vez?">
+                                        <TextField source="clinica.primera_vez" />
+                                    </Labeled>
+                                    <Labeled label="¿Subsecuente?">
+                                        <TextField source="clinica.subsecuente" />
+                                    </Labeled>
+                                </Stack>
+                            </SectionCard>
+                        </AccordionDetails>
+                    </Accordion>
+
+                    {/* Evaluación Inicial */}
+                    <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography variant="h6">Evaluación Inicial</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Stack spacing={2}>
+                                <SectionCard title="Nivel de Consciencia" icon={<WarningIcon />}>
+                                    <Stack spacing={2}>
+                                        <Labeled label="Nivel de consciencia">
+                                            <TextField source="evaluacion_inicial.nivel_consciencia" />
+                                        </Labeled>
+                                        <Labeled label="Deglución">
+                                            <TextField source="evaluacion_inicial.deglucion" />
+                                        </Labeled>
+                                    </Stack>
+                                </SectionCard>
+
+                                <SectionCard title="Vía Aérea y Ventilación" icon={<MedicalServicesIcon />}>
+                                    <Stack spacing={2}>
+                                        <Labeled label="Vía aérea">
+                                            <TextField source="evaluacion_inicial.via_aerea" />
+                                        </Labeled>
+                                        <Labeled label="Ventilación">
+                                            <TextField source="evaluacion_inicial.ventilacion" />
+                                        </Labeled>
+                                        <Labeled label="Auscultación">
+                                            <TextField source="evaluacion_inicial.auscultacion" />
+                                        </Labeled>
+                                        <Labeled label="Hemitórax">
+                                            <TextField source="evaluacion_inicial.hemitorax" />
+                                        </Labeled>
+                                        <Labeled label="Sitio">
+                                            <TextField source="evaluacion_inicial.sitio" />
+                                        </Labeled>
+                                    </Stack>
+                                </SectionCard>
+
+                                <SectionCard title="Pulsos y Perfusión" icon={<MonitorHeartIcon />}>
+                                    <Stack spacing={2}>
+                                        <Labeled label="Presencia de pulsos">
+                                            <TextField source="evaluacion_inicial.pulsos.presencia" />
+                                        </Labeled>
+                                        <Labeled label="Calidad">
+                                            <TextField source="evaluacion_inicial.pulsos.calidad" />
+                                        </Labeled>
+                                        <Labeled label="Piel">
+                                            <TextField source="evaluacion_inicial.piel" />
+                                        </Labeled>
+                                        <Labeled label="Características">
+                                            <TextField source="evaluacion_inicial.caracteristicas" />
+                                        </Labeled>
+                                        <Labeled label="Observaciones">
+                                            <TextField source="evaluacion_inicial.observaciones" />
+                                        </Labeled>
+                                    </Stack>
+                                </SectionCard>
+                            </Stack>
+                        </AccordionDetails>
+                    </Accordion>
+
+                    {/* Evaluación Secundaria */}
+                    <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography variant="h6">Evaluación Secundaria</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Stack spacing={2}>
+                                <SectionCard title="Zonas de Lesión" icon={<WarningIcon />}>
+                                    <ArrayField source="evaluacion_secundaria.zonas_lesion">
+                                        <Datagrid bulkActionButtons={false} rowClick={false}>
+                                            <TextField source="zona" label="Zona anatómica"/>
+                                            <TextField source="hallazgo" label="Hallazgo físico"/>
+                                            <DateField source="fecha" label="Fecha"/>
+                                        </Datagrid>
+                                    </ArrayField>
+                                </SectionCard>
+
+                                <SectionCard title="Evaluación Neurológica" icon={<MonitorHeartIcon />}>
+                                    <Labeled label="Pupilas">
+                                        <TextField source="evaluacion_secundaria.pupilas" />
+                                    </Labeled>
+                                </SectionCard>
+
+                                <SectionCard title="Signos Vitales y Monitoreo" icon={<MonitorHeartIcon />}>
+                                    <ArrayField source="evaluacion_secundaria.signos_vitales">
+                                        <Datagrid bulkActionButtons={false} rowClick={false}>
+                                            <TextField source="hora" label="Hora"/>
+                                            <TextField source="fr" label="FR"/>
+                                            <TextField source="fc" label="FC"/>
+                                            <TextField source="tas" label="TAS"/>
+                                            <TextField source="tad" label="TAD"/>
+                                            <TextField source="sao2" label="SaO2"/>
+                                            <TextField source="gluc" label="Glucosa"/>
+                                            <TextField source="neuro" label="Neuro Test"/>
+                                        </Datagrid>
+                                    </ArrayField>
+                                </SectionCard>
+
+                                <SectionCard title="Escala de Glasgow" icon={<MonitorHeartIcon />}>
+                                    <Stack spacing={2}>
+                                        <Labeled label="Apertura ocular">
+                                            <TextField source="evaluacion_secundaria.glasgow_ocular" />
+                                        </Labeled>
+                                        <Labeled label="Respuesta motora">
+                                            <TextField source="evaluacion_secundaria.glasgow_motora" />
+                                        </Labeled>
+                                        <Labeled label="Respuesta verbal">
+                                            <TextField source="evaluacion_secundaria.glasgow_verbal" />
+                                        </Labeled>
+                                        <Labeled label="Puntaje Total Glasgow">
+                                            <NumberField source="evaluacion_secundaria.glasgow"/>
+                                        </Labeled>
+                                    </Stack>
+                                </SectionCard>
+
+                                <SectionCard title="Historial Médico (SAMPLE)" icon={<MedicalServicesIcon />}>
+                                    <Stack spacing={2}>
+                                        <Labeled label="Alergias">
+                                            <TextField source="evaluacion_secundaria.alergias" />
+                                        </Labeled>
+                                        <Labeled label="Medicamentos">
+                                            <TextField source="evaluacion_secundaria.medicamentos" />
+                                        </Labeled>
+                                        <Labeled label="Padecimientos/Cirugías">
+                                            <TextField source="evaluacion_secundaria.padecimientos" />
+                                        </Labeled>
+                                        <Labeled label="Última Comida">
+                                            <TextField source="evaluacion_secundaria.ultima_comida" />
+                                        </Labeled>
+                                        <Labeled label="Eventos Previos">
+                                            <TextField source="evaluacion_secundaria.eventos_previos" />
+                                        </Labeled>
+                                    </Stack>
+                                </SectionCard>
+
+                                <SectionCard title="Condición General" icon={<MonitorHeartIcon />}>
+                                    <Stack spacing={2}>
+                                        <Labeled label="Condición del Paciente">
+                                            <TextField source="evaluacion_secundaria.condicion" />
+                                        </Labeled>
+                                        <Labeled label="Prioridad">
+                                            <FunctionField
+                                                source="evaluacion_secundaria.prioridad"
+                                                render={(record: any) => {
+                                                    const prioridad = record?.evaluacion_secundaria?.prioridad;
+                                                    const colorMap: Record<string, 'error' | 'warning' | 'success' | 'default'> = {
+                                                        'Rojo': 'error',
+                                                        'Amarillo': 'warning',
+                                                        'Verde': 'success',
+                                                        'Negra': 'default'
+                                                    };
+                                                    return prioridad ? (
+                                                        <Chip 
+                                                            label={prioridad} 
+                                                            color={colorMap[prioridad] || 'default'}
+                                                            size="small"
+                                                        />
+                                                    ) : null;
+                                                }}
+                                            />
+                                        </Labeled>
+                                    </Stack>
+                                </SectionCard>
+                            </Stack>
+                        </AccordionDetails>
+                    </Accordion>
+
+                    {/* Traslado */}
+                    <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography variant="h6">Traslado</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <SectionCard title="Institución de Destino" icon={<AirportShuttleIcon />}>
+                                <Stack spacing={2}>
+                                    <Labeled label="Hospital">
+                                        <TextField source="traslado.hospital" />
+                                    </Labeled>
+                                    <Labeled label="Doctor que Recibe">
+                                        <TextField source="traslado.dr" />
+                                    </Labeled>
+                                    <Labeled label="Folio CRU">
+                                        <TextField source="traslado.folio_cru" />
+                                    </Labeled>
+                                    <Labeled label="Negativa a recibir atención/ser trasladado">
+                                        <TextField source="traslado.negativa" />
+                                    </Labeled>
+                                </Stack>
+                            </SectionCard>
+                        </AccordionDetails>
+                    </Accordion>
+
+                    {/* Tratamiento */}
+                    <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography variant="h6">Tratamiento</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Stack spacing={2}>
+                                <SectionCard title="Manejo de Vía Aérea" icon={<MedicalServicesIcon />}>
+                                    <Stack spacing={2}>
+                                        <Labeled label="Vía aérea">
+                                            <TextField source="tratamiento.via_aerea" />
+                                        </Labeled>
+                                        <Labeled label="Control Cervical">
+                                            <TextField source="tratamiento.control_cervical" />
+                                        </Labeled>
+                                    </Stack>
+                                </SectionCard>
+
+                                <SectionCard title="Asistencia Ventilatoria" icon={<MonitorHeartIcon />}>
+                                    <Stack spacing={2}>
+                                        <Labeled label="Tipo de Asistencia Ventilatoria">
+                                            <TextField source="tratamiento.asistencia_ventilatoria.tipo" />
+                                        </Labeled>
+                                        <Labeled label="Lts/min">
+                                            <NumberField source="tratamiento.asistencia_ventilatoria.ltsxmin" />
+                                        </Labeled>
+                                    </Stack>
+                                </SectionCard>
+
+                                <SectionCard title="Medicación Administrada" icon={<LocalPharmacyIcon />}>
+                                    <ArrayField source="tratamiento.asistencia_ventilatoria.medicacion">
+                                        <Datagrid bulkActionButtons={false} rowClick={false}>
+                                            <DateField source="hora" label="Hora" showTime showDate={false} />
+                                            <TextField source="medicamento" label="Medicamento"/>
+                                            <TextField source="dosis" label="Dosis"/>
+                                            <TextField source="via" label="Vía"/>
+                                        </Datagrid>
+                                    </ArrayField>
+                                    <Labeled label="Dr. tratante">
+                                        <TextField source="tratamiento.dr_tratante" />
+                                    </Labeled>
+                                </SectionCard>
+
+                                <SectionCard title="Control de Hemorragias" icon={<MedicalServicesIcon />}>
+                                    <Labeled label="Control de Hemorragias">
+                                        <TextField source="tratamiento.hemorragias" />
+                                    </Labeled>
+                                </SectionCard>
+
+                                <SectionCard title="Vías Venosas y Solución" icon={<LocalPharmacyIcon />}>
+                                    <ArrayField source="tratamiento.vias_venosas">
+                                        <Datagrid bulkActionButtons={false} rowClick={false}>
+                                            <TextField source="tipo" label="Tipo de Solución"/>
+                                            <NumberField source="lineaIV" label="Línea IV #"/>
+                                            <NumberField source="cateter" label="Catéter #"/>
+                                            <NumberField source="cantidad" label="Cantidad"/>
+                                        </Datagrid>
+                                    </ArrayField>
+                                </SectionCard>
+
+                                <SectionCard title="Atención Básica" icon={<MedicalServicesIcon />}>
+                                    <Labeled label="Atención Básica">
+                                        <TextField source="tratamiento.atencion_basica" />
+                                    </Labeled>
+                                </SectionCard>
+                            </Stack>
+                        </AccordionDetails>
+                    </Accordion>
+
+                    {/* Otros */}
+                    <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography variant="h6">Otros</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Stack spacing={2}>
+                                <SectionCard title="Observaciones" icon={<VisibilityIcon />}>
+                                    <Labeled label="Pertenencias">
+                                        <TextField source="observaciones.pertenencias" />
+                                    </Labeled>
+                                </SectionCard>
+
+                                <SectionCard title="Autoridades Presentes" icon={<GavelIcon />}>
+                                    <ArrayField source="legales.autoridades">
+                                        <Datagrid bulkActionButtons={false} rowClick={false}>
+                                            <ReferenceField source="institucion" reference="instituciones" label="Dependencia" link={false}>
+                                                <TextField source="nombre"/>
+                                            </ReferenceField>
+                                            <TextField source="unidad" label="Unidad"/>
+                                            <TextField source="oficiales" label="N° de oficiales"/>
+                                        </Datagrid>
+                                    </ArrayField>
+                                </SectionCard>
+
+                                <SectionCard title="Vehículos Involucrados" icon={<AirportShuttleIcon />}>
+                                    <ArrayField source="legales.vehiculos">
+                                        <Datagrid bulkActionButtons={false} rowClick={false}>
+                                            <TextField source="tipo" label="Tipo y marca"/>
+                                            <TextField source="placas" label="Placas"/>
+                                        </Datagrid>
+                                    </ArrayField>
+                                </SectionCard>
+                            </Stack>
+                        </AccordionDetails>
+                    </Accordion>
+
+                    {/* Documento PDF */}
+                    <Accordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography variant="h6">Documento PDF</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <SectionCard title="PDF del Reporte" icon={<VisibilityIcon />}>
+                                <Labeled label="Documento PDF">
+                                    <FileField source="documento_pdf.src" title="documento_pdf.title" target="_blank" />
+                                </Labeled>
+                            </SectionCard>
+                        </AccordionDetails>
+                    </Accordion>
+                </SimpleShowLayout>
+            ) : (
+                <TabbedShowLayout tabs={<TabbedShowLayoutTabs variant="scrollable" scrollButtons="auto" />}>
                 <TabbedShowLayout.Tab label="Preámbulo">
                     <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
                         <Labeled label="Fecha">
@@ -614,7 +1241,8 @@ export const ReportePrehospitalarioShow = () => {
                         </Labeled>
                     </SectionCard>
                 </TabbedShowLayout.Tab>
-            </TabbedShowLayout>
+                </TabbedShowLayout>
+            )}
         </Show>
     );
 };

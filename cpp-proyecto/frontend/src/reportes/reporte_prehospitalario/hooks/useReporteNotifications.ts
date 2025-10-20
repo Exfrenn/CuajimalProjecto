@@ -8,7 +8,7 @@ export const useReporteNotifications = () => {
 
     const onEditSuccess = () => {
         notify('Cambios guardados', { undoable: true, autoHideDuration: 5000 });
-        redirect('/reportes_urbanos');
+        redirect('/reportes_prehospitalarios');
         refresh();
     };
 
@@ -18,7 +18,7 @@ export const useReporteNotifications = () => {
             undoable: true, 
             autoHideDuration: 5000 
         });
-        redirect('/reportes_urbanos');
+        redirect('/reportes_prehospitalarios');
         refresh();
     };
 

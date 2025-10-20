@@ -1,11 +1,16 @@
 import { useMediaQuery, Theme } from "@mui/material";
-import { List, SimpleList, DataTable, Show, SimpleShowLayout, TextField, Create, SimpleForm, TextInput, useNotify, useRedirect, useRefresh, Edit, EditButton, FunctionField, SelectArrayInput } from "react-admin";
-import { permisosChoices } from "./choices";
+import { List, SimpleList, DataTable, Show, SimpleShowLayout, TextField, Create, SimpleForm, TextInput, useNotify, useRedirect, useRefresh, Edit, EditButton, FunctionField, useGetIdentity } from "react-admin";
+import { PermisosInput } from "./PermisosInput";
 
 export const RolList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
+    const { data: identity } = useGetIdentity();
+    
+    // Filtrar: solo mostrar su propio rol si no es admin
+    const filter = identity?.rol_id !== 1 ? { id: identity?.rol_id } : {};
+    
     return (
-        <List>
+        <List filter={filter}>
             {isSmall ? (
                 <SimpleList
                     primaryText={(record) => record.nombre}
@@ -30,7 +35,19 @@ export const RolShow = () => (
             <TextField source="nombre" label="Rol"/>
             <FunctionField
                 label="Permisos"
-                render={record => Array.isArray(record.permisos) ? record.permisos.join(', ') : record.permisos}
+                render={(record: any) => {
+                    if (Array.isArray(record.permisos)) {
+                        // Si son objetos {action, resource}
+                        if (record.permisos.length > 0 && typeof record.permisos[0] === 'object') {
+                            return record.permisos
+                                .map((p: any) => `${p.action} en ${p.resource}`)
+                                .join(', ');
+                        }
+                        // Si son strings (formato antiguo)
+                        return record.permisos.join(', ');
+                    }
+                    return record.permisos;
+                }}
             />
 
         </SimpleShowLayout>
@@ -55,7 +72,7 @@ export const RolEdit = () => {
             <SimpleForm warnWhenUnsavedChanges>
                 <TextInput source="id" label="Id" InputProps={{ disabled: true }} />
                 <TextInput source="nombre" label="Rol"/>
-                <SelectArrayInput source="permisos" choices={permisosChoices}/>
+                <PermisosInput source="permisos" />
             </SimpleForm>
         </Edit>
     )
@@ -77,7 +94,7 @@ export const RolCreate = () => {
         <Create mutationOptions={{onSuccess}}>
             <SimpleForm warnWhenUnsavedChanges>
                 <TextInput source="nombre" label="Rol"/>
-                <SelectArrayInput source="permisos" choices={permisosChoices}/>
+                <PermisosInput source="permisos" />
             </SimpleForm>
         </Create>
     )

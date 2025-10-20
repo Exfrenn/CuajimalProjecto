@@ -10,7 +10,6 @@ import {
     SearchInput,
     TextInput,
     SelectInput,
-    ShowButton,
 } from "react-admin";
 
 const reporteFilters = [
@@ -25,8 +24,14 @@ const reporteFilters = [
 
 export const ReporteUrbanoList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
+    
+    // El backend ya filtra los reportes según el rol:
+    // - Operador (rol_id 4): ve solo sus reportes
+    // - Jefe (rol_id 2): ve reportes de sus operadores
+    // - Admin (rol_id 1): ve todos
+    
     return (
-        <List filters={reporteFilters} sort={{ field: 'datos_generales.fecha', order: 'DESC' }}>
+        <List filters={reporteFilters}>
             {isSmall ? (
                 <SimpleList
                     primaryText={(record) => `Folio: ${record.datos_generales?.folio}`}
@@ -44,7 +49,6 @@ export const ReporteUrbanoList = () => {
                     <ReferenceField source="datos_generales.turno_id" reference="turnos" label="Turno" link={false}>
                         <TextField source="nombre" />
                     </ReferenceField>
-                    <ShowButton />
                     <EditButton/>
                 </Datagrid>
             )}

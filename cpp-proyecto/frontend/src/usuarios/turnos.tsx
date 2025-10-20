@@ -1,10 +1,15 @@
 import { useMediaQuery, Theme } from "@mui/material";
-import { List, SimpleList, DataTable, Show, SimpleShowLayout, TextField, FunctionField, Create, SimpleForm, TextInput, SelectArrayInput, TimeInput, useNotify, useRedirect, useRefresh, Edit, EditButton } from "react-admin";
+import { List, SimpleList, DataTable, Show, SimpleShowLayout, TextField, FunctionField, Create, SimpleForm, TextInput, SelectArrayInput, TimeInput, useNotify, useRedirect, useRefresh, Edit, EditButton, useGetIdentity } from "react-admin";
 
 export const TurnoList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
+    const { data: identity } = useGetIdentity();
+    
+    // Filtrar: solo mostrar su propio turno si no es admin
+    const filter = identity?.rol_id !== 1 ? { id: identity?.turno_id } : {};
+    
     return (
-        <List>
+        <List filter={filter}>
             {isSmall ? (
                 <SimpleList
                     primaryText={(record) => record.nombre}
