@@ -128,41 +128,11 @@ app.post('/api/upload-pdf', uploadPDF.single('pdf'), (req, res) => {
 //Turnos------------------------------------------------------------------------
 //getList
 app.get("/turnos", async (req,res)=>{
-    try{
-        let token=req.get("Authentication");
-        let verifiedToken=await jwt.verify(token, "secretKey");
-        let user=verifiedToken.email; // Cambiado de .usuario a .email según tu login
-        
-        if("_sort" in req.query){
-            let sortBy=req.query._sort;
-            let sortOrder=req.query._order=="ASC"?1:-1;
-            let inicio=Number(req.query._start);
-            let fin=Number(req.query._end);
-            let sorter={}
-            sorter[sortBy]=sortOrder;
-            let data= await db.collection("turnos").find({}).sort(sorter).project({_id:0}).toArray();
-            res.set("Access-Control-Expose-Headers", "X-Total-Count");
-            res.set("X-Total-Count", data.length);
-            data=data.slice(inicio,fin)
-            await log(user, "turnos", "leer");
-            res.json(data)
-        }else if("id" in req.query){
-            let data=[];
-            for(let index=0; index<req.query.id.length; index++){
-                let dataParcial=await db.collection("turnos").find({id: Number(req.query.id[index])}).project({_id:0}).toArray();
-                data= await data.concat(dataParcial);
-            }
-            res.json(data);
-        }else{
-            let data=await db.collection("turnos").find(req.query).project({_id:0}).toArray();
-            res.set("Access-Control-Expose-Headers", "X-Total-Count");
-            res.set("X-Total-Count", data.length);
-            res.json(data);
-        }
-    }catch{
-        res.sendStatus(401);
-    }
-});
+    let data = await db.collection("turnos").find({}).project({_id:0}).toArray();
+    res.set("Access-Control-Expose-Headers", "X-Total-Count");
+    res.set("X-Total-Count", data.length);
+    res.json(data);
+})
 
 //getOne
 app.get("/turnos/:id", async (req,res)=>{

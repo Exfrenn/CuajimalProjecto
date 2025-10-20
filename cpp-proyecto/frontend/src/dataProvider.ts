@@ -35,7 +35,7 @@ const uploadFile = async (file: File): Promise<{ src: string, title: string }> =
 };
 
 // Función para subir PDFs al servidor
-const uploadPDF = async (file: File): Promise<string> => {
+const uploadPDF = async (file: File): Promise<{ src: string, title: string }> => {
     const formData = new FormData();
     formData.append('pdf', file);
 
@@ -49,7 +49,7 @@ const uploadPDF = async (file: File): Promise<string> => {
     }
 
     const result = await response.json();
-    return result.path; // Devuelve la ruta del PDF
+    return result; // Devuelve el objeto completo con src y title
 };
 
 // Función para procesar archivos
@@ -60,14 +60,20 @@ const addUploadFeature = (requestHandler: DataProvider): DataProvider => {
             // Procesar PDF si existe
             if (params.data.documento_pdf?.rawFile instanceof File) {
                 try {
-                    const pdfPath = await uploadPDF(params.data.documento_pdf.rawFile);
+                    const pdfInfo = await uploadPDF(params.data.documento_pdf.rawFile);
                     params.data = {
                         ...params.data,
-                        documento_pdf: pdfPath,
+                        documento_pdf: pdfInfo, // Guardar objeto completo {src, title}
                     };
                 } catch (error) {
                     console.error('Error al subir PDF:', error);
                 }
+            } else if (params.data.documento_pdf && typeof params.data.documento_pdf === 'object' && params.data.documento_pdf.src) {
+                // Si ya existe el PDF, mantenerlo como está
+                params.data.documento_pdf = {
+                    src: params.data.documento_pdf.src,
+                    title: params.data.documento_pdf.title
+                };
             }
 
             // Procesar archivos en observaciones antes de enviar
@@ -122,10 +128,10 @@ const addUploadFeature = (requestHandler: DataProvider): DataProvider => {
             // Procesar PDF si existe
             if (params.data.documento_pdf?.rawFile instanceof File) {
                 try {
-                    const pdfPath = await uploadPDF(params.data.documento_pdf.rawFile);
+                    const pdfInfo = await uploadPDF(params.data.documento_pdf.rawFile);
                     params.data = {
                         ...params.data,
-                        documento_pdf: pdfPath,
+                        documento_pdf: pdfInfo, // Guardar objeto completo {src, title}
                     };
                 } catch (error) {
                     console.error('Error al subir PDF:', error);

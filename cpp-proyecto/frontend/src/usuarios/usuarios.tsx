@@ -6,16 +6,7 @@ import { List, SimpleList, DataTable, EditButton, ReferenceField, TextField, use
 export const UsuarioList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
     return (
-        <List
-        sx = {{
-            display : 'flex',
-            flexDirection : 'collumn',
-            margin : '0 auto',
-            xs : { width : '100%' },
-            sm : { width : '100%' },
-            md : { width : '80%' },
-            lg : { width : '70%' },
-        }}>     
+        <List>     
             {isSmall ? (
                 <SimpleList
                     primaryText={(record) => `${record.nombre} ${record.apellido}`}
@@ -111,7 +102,7 @@ export const UsuarioEdit = () => {
                 <TextInput source="apellido" label="Apellido"/>
                 <TextInput source="usuario" label="Nombre de Usuario"/>
                 <TextInput source="email" label="Email"/>
-                <PasswordInput source="password" label="Nueva contraseña" />
+                {/* <PasswordInput source="password" label="Nueva contraseña" /> */}
                 <ReferenceInput label="Rol" source="rol_id" reference="roles">
                     <SelectInput optionText="nombre" validate={required()} />
                 </ReferenceInput>

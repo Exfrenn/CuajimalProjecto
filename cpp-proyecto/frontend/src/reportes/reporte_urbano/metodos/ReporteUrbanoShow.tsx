@@ -1,10 +1,13 @@
 // reportes/reporte_urbano/components/ReporteUrbanoShow.tsx
 import { 
     Show, TabbedShowLayout, TextField, ReferenceField, DateField, 
-    FunctionField, ArrayField, Datagrid, NumberField, ImageField, 
-    ReferenceArrayField, Labeled
+    FunctionField, ArrayField, Datagrid, NumberField,
+    ReferenceArrayField, Labeled,
+    TabbedShowLayoutTabs,
+    SimpleList
 } from "react-admin";
-import { Stack, Box, Chip, useMediaQuery, Theme } from "@mui/material";
+
+import { Stack, Box, useMediaQuery, Theme, Divider, ImageList, ImageListItem } from "@mui/material";
 import { SectionCard } from "../../components/SectionCard";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -13,13 +16,33 @@ import BuildIcon from '@mui/icons-material/Build';
 import GavelIcon from '@mui/icons-material/Gavel';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
+import ClickableImage from "./ClickableImage";
+
+
+const FotosField = () => {
+    const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
+
+    return (
+        <ArrayField source="fotos" label="Fotos">
+            <ImageList cols={isSmall ? 2 : 4} gap={8}>
+                <FunctionField
+                    render={(record: any) => record.fotos.map((foto: any, index: number) => (
+                        <ImageListItem key={index}>
+                           <ClickableImage src={foto.src} title={foto.title || 'Foto'} />
+                        </ImageListItem>
+                    ))}
+                />
+            </ImageList>
+        </ArrayField>
+    );
+};
 
 export const ReporteUrbanoShow = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
 
     return (
         <Show>
-            <TabbedShowLayout>
+            <TabbedShowLayout spacing={2} divider={<Divider flexItem />} tabs={<TabbedShowLayoutTabs variant="scrollable" scrollButtons="auto" />}>
                 <TabbedShowLayout.Tab label="Datos Generales">
                     <SectionCard title="Información del Reporte" icon={<AccessTimeIcon />}>
                         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
@@ -48,19 +71,21 @@ export const ReporteUrbanoShow = () => {
 
                 <TabbedShowLayout.Tab label="Personal y Activación">
                     <SectionCard title="Personal a Cargo" icon={<GroupIcon />}>
-                        <ReferenceArrayField
-                            reference="usuarios"
-                            source="personal_y_activacion.personal_a_cargo"
-                        >
-                            <Datagrid bulkActionButtons={false} rowClick="show">
-                                <FunctionField
-                                    label="Nombre completo"
-                                    render={record => `${record.nombre} ${record.apellido}`}
+                        <ReferenceArrayField reference="usuarios" source="personal_y_activacion.personal_a_cargo">
+                            {isSmall ? (
+                                <SimpleList
+                                    primaryText={record => `${record.nombre} ${record.apellido}`}
+                                    secondaryText={record => record.rol?.nombre || ''}
+                                    linkType="show"
                                 />
-                                <ReferenceField source="rol_id" reference="roles" label="Rol" link={false}>
-                                    <TextField source="nombre"/>
-                                </ReferenceField>
-                            </Datagrid>
+                            ) : (
+                                <Datagrid bulkActionButtons={false} rowClick="show" optimized>
+                                    <FunctionField label="Nombre completo" render={record => `${record.nombre} ${record.apellido}`} />
+                                    <ReferenceField source="rol_id" reference="roles" label="Rol" link={false}>
+                                        <TextField source="nombre"/>
+                                    </ReferenceField>
+                                </Datagrid>
+                            )}
                         </ReferenceArrayField>
                     </SectionCard>
 
@@ -163,14 +188,18 @@ export const ReporteUrbanoShow = () => {
                     
                     <SectionCard title="Observaciones y Fotografías" icon={<CameraAltIcon />}>
                         <ArrayField source="acciones_realizadas.observaciones">
-                            <Datagrid bulkActionButtons={false} rowClick={false}>
-                                <TextField source="texto" label="Observación"/>
-                                <ArrayField source="fotos" label="Fotos">
-                                    <Datagrid bulkActionButtons={false} rowClick={false}>
-                                        <ImageField source="src" title="title" label=""/>
-                                    </Datagrid>
-                                </ArrayField>
-                            </Datagrid>
+                            {isSmall ? (
+                                <SimpleList
+                                    primaryText={record => record.texto}
+                                    secondaryText={() => <FotosField />} // Usamos el componente personalizado aquí
+                                    linkType={false}
+                                />
+                            ) : (
+                                <Datagrid bulkActionButtons={false} rowClick={false} optimized>
+                                    <TextField source="texto" label="Observación"/>
+                                    <FotosField />
+                                </Datagrid>
+                            )}
                         </ArrayField>
                     </SectionCard>
                 </TabbedShowLayout.Tab>
@@ -178,26 +207,51 @@ export const ReporteUrbanoShow = () => {
                 <TabbedShowLayout.Tab label="Responsables y Autoridades">
                     <SectionCard title="Responsables" icon={<GroupIcon />}>
                         <ArrayField source="responsables_y_autoridades.responsables">
-                            <Datagrid bulkActionButtons={false} rowClick={false}>
-                                <TextField source="relacion" label="Relación"/>
-                                <TextField source="nombre" label="Nombre"/>
-                                <TextField source="telefono" label="Teléfono"/>
-                                <TextField source="direccion" label="Dirección"/>
-                                <TextField source="identificacion" label="Identificación"/>
-                            </Datagrid>
+                            {isSmall ? (
+                                <SimpleList
+                                    primaryText={record => record.nombre}
+                                    secondaryText={record => `Relación: ${record.relacion}`}
+                                    tertiaryText={record => `Tel: ${record.telefono}`}
+                                    linkType={false}
+                                />
+                            ) : (
+                                <Datagrid bulkActionButtons={false} rowClick={false} optimized>
+                                    <TextField source="relacion" label="Relación"/>
+                                    <TextField source="nombre" label="Nombre"/>
+                                    <TextField source="telefono" label="Teléfono"/>
+                                    <TextField source="direccion" label="Dirección"/>
+                                    <TextField source="identificacion" label="Identificación"/>
+                                </Datagrid>
+                            )}
                         </ArrayField>
                     </SectionCard>
 
                     <SectionCard title="Autoridades Participantes" icon={<GavelIcon />}>
                         <ArrayField source="responsables_y_autoridades.autoridades_participantes">
-                            <Datagrid bulkActionButtons={false} rowClick={false}>
-                                <TextField source="institucion" label="Institución"/>
-                                <TextField source="unidad" label="Unidad"/>
-                                <TextField source="responsable" label="Responsable"/>
-                                <TextField source="matricula" label="Matrícula"/>
-                            </Datagrid>
+                            {isSmall ? (
+                                <SimpleList
+                                    primaryText={record => record.responsable}
+                                    secondaryText={record => (
+                                        <ReferenceField record={record} source="institucion" reference="instituciones" link={false}>
+                                            <TextField source="nombre" />
+                                        </ReferenceField>
+                                    )}
+                                    tertiaryText={record => `Unidad: ${record.unidad} - Matrícula: ${record.matricula}`}
+                                    linkType={false}
+                                />
+                            ) : (
+                                <Datagrid bulkActionButtons={false} rowClick={false} optimized>
+                                    <ReferenceField source="institucion" reference="instituciones">
+                                        <TextField source="nombre" label="Institución"/>
+                                    </ReferenceField>
+                                    <TextField source="unidad" label="Unidad"/>
+                                    <TextField source="responsable" label="Responsable"/>
+                                    <TextField source="matricula" label="Matrícula"/>
+                                </Datagrid>
+                            )}
                         </ArrayField>
                     </SectionCard>
+
                 </TabbedShowLayout.Tab>
             </TabbedShowLayout>
         </Show>

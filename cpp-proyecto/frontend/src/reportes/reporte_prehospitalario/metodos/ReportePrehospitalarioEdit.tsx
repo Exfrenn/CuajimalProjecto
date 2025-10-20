@@ -16,14 +16,13 @@ import {
     ReferenceInput, 
     FileInput, 
     FileField, 
-    TabbedFormTabs,
-    ImageInput,
-    ImageField
+    TabbedFormTabs
 } from "react-admin";
+
 import { useReporteNotifications } from "../hooks/useReporteNotifications";
 import BotonSoloCoordenadas from "../misc/BotonSoloCoordenadas";
 import TablaApgar from "../misc/TablaApgar";
-import { Stack, Box } from "@mui/material";
+import { Stack, Box, useMediaQuery, Theme } from "@mui/material";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
@@ -32,10 +31,6 @@ import PregnantWomanIcon from '@mui/icons-material/PregnantWoman';
 import WarningIcon from '@mui/icons-material/Warning';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
-import LocalPharmacyIcon from '@mui/icons-material/LocalPharmacy';
-import AirportShuttleIcon from '@mui/icons-material/AirportShuttle';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { SectionCard } from "../../components/SectionCard";
 import { GlasgowTotal } from "../misc/GlasgowTotal";
@@ -55,31 +50,46 @@ import {
     viasVenosasChoices,
     atencionBasicaChoices
 } from "../../data/choices";
+import { ReportePrehospitalarioEditMobile } from "./ReportePrehospitalarioEditMobile";
 
 export const ReportePrehospitalarioEdit = () => {
     const { onEditSuccess } = useReporteNotifications();
+    const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
 
     return (
-        <Edit mutationOptions={{ onSuccess: onEditSuccess }} 
-        sx = {{
-            display : 'flex',
-            flexDirection : 'collumn',
-            margin : '0 auto',
-            xs : { width : '100%' },
-            sm : { width : '100%' },
-            md : { width : '80%' },
-            lg : { width : '70%' },
-        }}>  
-            <TabbedForm warnWhenUnsavedChanges tabs={<TabbedFormTabs variant="scrollable" scrollButtons="auto" />}>
+        <Edit mutationOptions={{ onSuccess: onEditSuccess }}>  
+            {isSmall ? 
+                (<ReportePrehospitalarioEditMobile/>)
+            : (
+                <TabbedForm 
+                    warnWhenUnsavedChanges 
+                    tabs={<TabbedFormTabs 
+                        variant="scrollable" 
+                        scrollButtons="auto"
+                        allowScrollButtonsMobile
+                        sx={{
+                            '& .MuiTabs-scrollButtons': {
+                                width: isSmall ? '30px' : '48px',
+                            },
+                            '& .MuiTab-root': {
+                                minWidth: isSmall ? '60px' : 'auto',
+                                fontSize: isSmall ? '0.7rem' : '0.875rem',
+                                padding: isSmall ? '8px 6px' : '12px 16px',
+                            }
+                    }}
+                />}
+            >
 
                 {/* PREÁMBULO */}
-                <TabbedForm.Tab label="PREÁMBULO">
-                    <DateTimeInput source="preambulo.fecha" label="Fecha" />
-                    <TextInput source="preambulo.folio" label="Folio" fullWidth validate={required()} />
+                <TabbedForm.Tab label="Preambulo">
+                    <SectionCard title="Información del Preámbulo" icon={<AccessTimeIcon />}>
+                        <DateTimeInput source="preambulo.fecha" label="Fecha" fullWidth />
+                        <TextInput source="preambulo.folio" label="Folio" fullWidth validate={required()} />
+                    </SectionCard>
                 </TabbedForm.Tab>
 
                 {/* I. DATOS DEL SERVICIO */}
-                <TabbedForm.Tab label="I. DATOS DEL SERVICIO">
+                <TabbedForm.Tab label="Datos del Servicio">
                     <SectionCard title="Cronometría" icon={<AccessTimeIcon />}>
                         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
                             <TimeInput source="servicio.cronometro.hora_llamada" label="Hora de llamada" sx={{ flex: 1 }} />
@@ -120,7 +130,7 @@ export const ReportePrehospitalarioEdit = () => {
                 </TabbedForm.Tab>
 
                 {/* II. CONTROL */}
-                <TabbedForm.Tab label="II. CONTROL">
+                <TabbedForm.Tab label="Control">
                     <TextInput source="control.ambulancia_numero" label="Número de Ambulancia" />
 
                     <ReferenceArrayInput
@@ -141,7 +151,7 @@ export const ReportePrehospitalarioEdit = () => {
                 </TabbedForm.Tab>
 
                 {/* III. DATOS DEL PACIENTE */}
-                <TabbedForm.Tab label="III. DATOS DEL PACIENTE">
+                <TabbedForm.Tab label="Datos del Paciente">
                     <SectionCard title="Información del Paciente" icon={<PersonIcon />}>
                         <TextInput source="paciente.nombre" label="Nombre del paciente" fullWidth />
                         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
@@ -171,7 +181,7 @@ export const ReportePrehospitalarioEdit = () => {
                 </TabbedForm.Tab>
 
                 {/* IV. PARTO */}
-                <TabbedForm.Tab label="IV. PARTO">
+                <TabbedForm.Tab label="Parto">
                     <SectionCard title="Información de la Madre" icon={<PregnantWomanIcon />}>
                         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
                             <NumberInput source="parto.madre.semanas_gesta" label="Semanas de gesta" sx={{ flex: 1 }} />
@@ -217,7 +227,7 @@ export const ReportePrehospitalarioEdit = () => {
                 </TabbedForm.Tab>
 
                 {/* V. CAUSA TRAUMÁTICA */}
-                <TabbedForm.Tab label="V. CAUSA TRAUMÁTICA">
+                <TabbedForm.Tab label="Causa Traumatica">
                     <SectionCard title="Información del Trauma" icon={<WarningIcon />}>
                         <AgenteCausalInput/>
                         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
@@ -316,7 +326,7 @@ export const ReportePrehospitalarioEdit = () => {
                 </TabbedForm.Tab>
 
                 {/* VI. CAUSA CLÍNICA */}
-                <TabbedForm.Tab label="VI. CAUSA CLÍNICA">
+                <TabbedForm.Tab label="Causa Clinica">
                     <SectionCard title="Origen Clínico" icon={<MedicalServicesIcon />}>
                         <OrigenProbableInput/>
                         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
@@ -343,7 +353,7 @@ export const ReportePrehospitalarioEdit = () => {
                 </TabbedForm.Tab>
 
                 {/* VII. EVALUACIÓN INICIAL */}
-                <TabbedForm.Tab label="VII. EVALUACIÓN INICIAL">
+                <TabbedForm.Tab label="Evaluacion Inicial">
                     <SelectInput source="evaluacion_inicial.nivel_consciencia" label="Nivel de consciencia" 
                         choices={[
                             {id:"Alerta",name: "Alerta"},
@@ -431,7 +441,7 @@ export const ReportePrehospitalarioEdit = () => {
                 </TabbedForm.Tab>
 
                 {/* VIII. EVALUACIÓN SECUNDARIA */}
-                <TabbedForm.Tab label="VIII. EVALUACIÓN SECUNDARIA">
+                <TabbedForm.Tab label="Evaluacion Secundaria">
                     <ArrayInput source="evaluacion_secundaria.zonas_lesion" label="Zonas de lesión">
                         <SimpleFormIterator>
                             <TextInput source="zona" label="Zona anatómica" />
@@ -502,7 +512,7 @@ export const ReportePrehospitalarioEdit = () => {
                 </TabbedForm.Tab>
 
                 {/* IX. TRASLADO */}
-                <TabbedForm.Tab label="IX. TRASLADO">
+                <TabbedForm.Tab label="Traslados">
                     <TextInput source="traslado.hospital" label="Hospital" />
                     <TextInput source="traslado.dr" label="Doctor" />
                     <TextInput source="traslado.folio_cru" label="Folio CRU" />
@@ -513,7 +523,7 @@ export const ReportePrehospitalarioEdit = () => {
                 </TabbedForm.Tab>
 
                 {/* X. TRATAMIENTO */}
-                <TabbedForm.Tab label="X. TRATAMIENTO">
+                <TabbedForm.Tab label="Tratamiento">
                     <SelectInput source="tratamiento.via_aerea" label="Vía aérea" choices={viaAereaChoices}/>
                     <SelectInput source="tratamiento.control_cervical" label="Control cervical" choices={[
                         { id: "Manual", name: "Manual" },
@@ -550,7 +560,7 @@ export const ReportePrehospitalarioEdit = () => {
                 </TabbedForm.Tab>
 
                 {/* XI–XVI */}
-                <TabbedForm.Tab label="XI–XVI OTROS">
+                <TabbedForm.Tab label="Otros">
                     <TextInput source="observaciones.pertenencias" label="Pertenencias" fullWidth />
                     <ArrayInput source="legales.autoridades" label="Autoridades">
                         <SimpleFormIterator>
@@ -565,27 +575,22 @@ export const ReportePrehospitalarioEdit = () => {
                             <TextInput source="placas" label="Placas" />
                         </SimpleFormIterator>
                     </ArrayInput>
-
-                    <TextInput source="modificaciones.usuario" label="Usuario modificación" />
-                    <NumberInput source="modificaciones.fecha.ano" label="Año modificación" />
-                    <NumberInput source="modificaciones.fecha.mes" label="Mes modificación" />
-                    <NumberInput source="modificaciones.fecha.dia" label="Día modificación" />
-                    <TextInput source="adicionales.reporte_escaneado" label="Reporte escaneado" />
-                    <TextInput source="adicionales.turno" label="Turno" />
+                    
                 </TabbedForm.Tab>
-                <TabbedForm.Tab label="Scan">
+                <TabbedForm.Tab label="Documento PDF">
                     <FileInput
                         source="documento_pdf"
                         label="Subir PDF"
                         removeIcon={RemoveCircleIcon}
                         accept={{ 'application/pdf': ['.pdf'] }}
                         multiple={false}
-                        maxSize={5000000} // opcional: 5MB
+                        maxSize={5000000} // máximo permitido: 5MB (maxSize establece el límite de tamaño de archivo en bytes)
                     >
                         <FileField source="src" title="title" />
                     </FileInput>
                 </TabbedForm.Tab>
             </TabbedForm>
+            )}
         </Edit>
     );
 };

@@ -13,6 +13,7 @@ import {
     ShowButton,
 } from "react-admin";
 
+import { ReporteFilterSidebar } from './ReporteFilter';
 const reporteFilters = [
     <SearchInput source="q" alwaysOn placeholder="Buscar por folio" />,
     <TextInput source="datos_generales.dia" label="Día" />,
@@ -26,7 +27,7 @@ const reporteFilters = [
 export const ReporteUrbanoList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
     return (
-        <List filters={reporteFilters} sort={{ field: 'datos_generales.fecha', order: 'DESC' }}>
+        <List filters={reporteFilters}>
             {isSmall ? (
                 <SimpleList
                     primaryText={(record) => `Folio: ${record.datos_generales?.folio}`}
@@ -44,7 +45,6 @@ export const ReporteUrbanoList = () => {
                     <ReferenceField source="datos_generales.turno_id" reference="turnos" label="Turno" link={false}>
                         <TextField source="nombre" />
                     </ReferenceField>
-                    <ShowButton />
                     <EditButton/>
                 </Datagrid>
             )}
