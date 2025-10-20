@@ -1,0 +1,65 @@
+/* SIDEBAR */
+.RaSidebar-root, .MuiDrawer-root {
+    height: 100% !important;
+}
+
+.RaSidebar-root .MuiDrawer-paper, .MuiDrawer-root .MuiDrawer-paper, div.MuiDrawer-paper {
+    background: url(/img/fu.jpg) repeat !important;
+    background-size: 140px auto !important;
+    background-position: top left !important;
+    color: #ffffff !important;
+    min-height: 152vh auto !important;
+    height: 100% !important;
+    position: relative !important;
+    background-image: url(/img/fu.jpg) !important;
+    background-repeat: no-repeat !important;
+    transition: all 0.3s ease-in-out !important;
+}
+
+.RaSidebar-docked .MuiDrawer-paper {
+    width: 210px !important;
+    background-size: cover !important;
+}
+
+.RaSidebar-closed .MuiDrawer-paper {
+    width: 55px !important;
+}
+
+/* Separación entre items del menú */
+.MuiDrawer-paper .MuiList-root .MuiListItem-root, 
+.MuiDrawer-paper .MuiMenuItem-root, 
+.RaMenuItemLink-root {
+    margin-bottom: 8px !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+}
+
+/* Estilo para sidebar cerrado - ÍCONO ARRIBA, NOMBRE ABAJO */
+.RaSidebar-closed .MuiDrawer-paper .MuiListItem-root,
+.RaSidebar-closed .MuiDrawer-paper .RaMenuItemLink-root {
+    flex-direction: column !important;
+    align-items: center !important;
+    padding: 8px 4px !important;
+}
+
+.RaSidebar-closed .MuiDrawer-paper .MuiListItemIcon-root {
+    min-width: auto !important;
+    margin: 0 0 4px 0 !important;
+}
+
+.RaSidebar-closed .MuiDrawer-paper .MuiListItemText-root {
+    margin: 0 !important;
+}
+
+/* TAMAÑO DE LETRA DEL MENÚ CERRADO */
+.RaSidebar-closed .MuiDrawer-paper .MuiListItemText-root span,
+.RaSidebar-closed .MuiDrawer-paper .MuiListItemText-primary,
+.RaSidebar-closed .MuiDrawer-paper .MuiTypography-root {
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    max-width: 50px !important;
+    display: block !important;
+}
