@@ -1,11 +1,12 @@
-import { Card, CardContent, Typography, Box, Chip } from '@mui/material';
-import { useGetList } from 'react-admin';
+import { Card, CardContent, Typography, Box, Chip, Alert, AlertTitle } from '@mui/material';
+import { useGetList, useGetIdentity } from 'react-admin';
 import { 
     People as PeopleIcon, 
     Report as ReportIcon,
     Schedule as ScheduleIcon,
     AdminPanelSettings as RoleIcon,
-    LocalHospital as HospitalIcon
+    LocalHospital as HospitalIcon,
+    Block as BlockIcon
 } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 
@@ -63,27 +64,93 @@ const StatCard = ({ title, value, icon, color, subtitle }: StatCardProps) => {
 
 export const Dashboard = () => {
     const theme = useTheme();
+    const { data: identity } = useGetIdentity();
     
+    // Control de acceso: Solo Admin (1) y Jefe de Turno (2) pueden ver el dashboard completo
+    const rolesPermitidos = [1, 2]; // Admin y Jefe de Turno
+    const tieneAcceso = identity && rolesPermitidos.includes(identity.rol_id);
+    
+    // Solo hacer las consultas si el usuario tiene acceso
     const { data: usuarios, isLoading: loadingUsuarios } = useGetList('usuarios', {
         pagination: { page: 1, perPage: 1000 }
+    }, {
+        enabled: tieneAcceso // Solo consultar si tiene acceso
     });
     
     const { data: reportesUrbanos, isLoading: loadingReportesUrbanos } = useGetList('reportes_urbanos', {
         pagination: { page: 1, perPage: 1000 }
+    }, {
+        enabled: tieneAcceso
     });
     
     const { data: reportesPrehospitalarios, isLoading: loadingReportesPrehospitalarios } = useGetList('reportes_prehospitalarios', {
         pagination: { page: 1, perPage: 1000 }
+    }, {
+        enabled: tieneAcceso
     });
     
     const { data: turnos, isLoading: loadingTurnos } = useGetList('turnos', {
         pagination: { page: 1, perPage: 1000 }
+    }, {
+        enabled: tieneAcceso
     });
     
     const { data: roles, isLoading: loadingRoles } = useGetList('roles', {
         pagination: { page: 1, perPage: 1000 }
+    }, {
+        enabled: tieneAcceso
     });
 
+    // Mostrar pantalla de carga solo si está cargando la identidad
+    if (!identity) {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+                <Typography>Cargando...</Typography>
+            </Box>
+        );
+    }
+
+    // Pantalla de acceso denegado para operadores y paramédicos (mostrar inmediatamente)
+    if (!tieneAcceso) {
+        return (
+            <Box sx={{ p: 3 }}>
+                <Alert 
+                    severity="error" 
+                    icon={<BlockIcon fontSize="large" />}
+                    sx={{ 
+                        maxWidth: 600, 
+                        mx: 'auto', 
+                        mt: 8,
+                        '& .MuiAlert-message': {
+                            width: '100%'
+                        }
+                    }}
+                >
+                    <AlertTitle sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+                        Acceso Denegado al Dashboard
+                    </AlertTitle>
+                    <Typography variant="body1" sx={{ mt: 2, mb: 2 }}>
+                        No tienes permisos para acceder al tablero de estadísticas.
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        Solo los <strong>Administradores</strong> y <strong>Jefes de Turno</strong> pueden visualizar esta información.
+                    </Typography>
+                    <Box sx={{ mt: 3 }}>
+                        <Typography variant="body2">
+                            Puedes acceder a:
+                        </Typography>
+                        <Box component="ul" sx={{ mt: 1 }}>
+                            <li>Crear y editar reportes</li>
+                            <li>Ver tus reportes asignados</li>
+                            <li>Actualizar tu perfil</li>
+                        </Box>
+                    </Box>
+                </Alert>
+            </Box>
+        );
+    }
+
+    // Mostrar pantalla de carga mientras se cargan los datos (solo si tiene acceso)
     if (loadingUsuarios || loadingReportesUrbanos || loadingReportesPrehospitalarios || loadingTurnos || loadingRoles) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
