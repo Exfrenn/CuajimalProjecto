@@ -8,14 +8,12 @@ import {
     required, 
     DateTimeInput, 
     TimeInput, 
-    ReferenceArrayInput, 
-    SelectArrayInput, 
-    useCreate, 
-    ReferenceInput, 
     FileInput, 
     FileField,
     SimpleForm
 } from "react-admin";
+import { OperadorPrehospitalario } from "../../componentes/OperadorPrehospitalario";
+import { TurnoInput } from "../../componentes/TurnoInput";
 import BotonSoloCoordenadas from "../misc/BotonSoloCoordenadas";
 import TablaApgar from "../misc/TablaApgar";
 import { Stack, Accordion, AccordionSummary, AccordionDetails, Typography } from "@mui/material";
@@ -48,6 +46,8 @@ import {
     atencionBasicaChoices
 } from "../../data/choices";
 
+import { LugarOcurrenciaInput, AgenteCausalInput, OrigenProbableInput, InstitucionInput } from "./customInputs";
+
 
 export const ReportePrehospitalarioEditMobile = () => {
     return (
@@ -59,7 +59,8 @@ export const ReportePrehospitalarioEditMobile = () => {
                         </AccordionSummary>
                         <AccordionDetails>
                             <Stack spacing={2}>
-                                <DateTimeInput source="preambulo.fecha" label="Fecha" />
+                                <DateTimeInput source="preambulo.fecha" label="Fecha" fullWidth />
+                                <TurnoInput source="preambulo.turno_id" label="Turno" />
                                 <TextInput source="preambulo.folio" label="Folio" fullWidth validate={required()} />
                             </Stack>
                         </AccordionDetails>
@@ -107,9 +108,7 @@ export const ReportePrehospitalarioEditMobile = () => {
                         <AccordionDetails>
                             <Stack spacing={2}>
                                 <TextInput source="control.ambulancia_numero" label="Número de Ambulancia" fullWidth />
-                                <ReferenceArrayInput label="Operadores" source="control.operador" reference="usuarios">
-                                    <SelectArrayInput optionText={record => `${record.nombre} ${record.apellido}`} optionValue="id" helperText="Selecciona a las personas a cargo" validate={required()} fullWidth />
-                                </ReferenceArrayInput>
+                                <OperadorPrehospitalario />
                                 <TextInput source="control.tum" label="T.U.M" fullWidth />
                                 <TextInput source="control.socorrista" label="Socorrista" fullWidth />
                                 <TextInput source="control.helicoptero" label="Helicóptero Matrícula" fullWidth />
@@ -367,115 +366,5 @@ export const ReportePrehospitalarioEditMobile = () => {
                         </AccordionDetails>
                     </Accordion>
                 </SimpleForm>
-    );
-};
-
-const LugarOcurrenciaInput = () => {
-    const [create] = useCreate();
-    return (
-        <ReferenceInput
-            source="servicio.ubicacion.lugar_ocurrencia"
-            reference="lugares_ocurrencia"
-            >
-            <SelectInput
-                validate={required()}
-                label = "Lugar de ocurrencia"
-                optionText="nombre"
-                onCreate={async ()=>{
-                const newNombreLugarOcurrencia = prompt("Ingresa el nuevo lugar de ocurrencia");
-                if (newNombreLugarOcurrencia){
-                    const newLugarOcurrencia = await create(
-                        "lugares_ocurrencia",
-                        {data: {nombre: newNombreLugarOcurrencia}},
-                        {returnPromise : true}
-                    );
-                    return newLugarOcurrencia;
-                }
-            }}/>
-
-        </ReferenceInput>
-    );
-};
-
-const AgenteCausalInput = () => {
-    const [create] = useCreate();
-    return (
-        <ReferenceInput
-            source="trauma.agente"
-            reference="agentes_causal"
-            >
-            <SelectInput
-                validate={required()}
-                label = "Agente causal"
-                optionText="nombre"
-                onCreate={async ()=>{
-                const newNombreAgenteCausal = prompt("Ingresa el nuevo agente causal");
-                if (newNombreAgenteCausal){
-                    const newAgenteCausal = await create(
-                        "agentes_causal",
-                        {data: {nombre: newNombreAgenteCausal}},
-                        {returnPromise : true}
-                    );
-                    return newAgenteCausal;
-                }
-            }}/>
-
-        </ReferenceInput>
-    );
-};
-
-const OrigenProbableInput = () => {
-    const [create] = useCreate();
-    return (
-        <ReferenceInput
-            source="clinica.origen"
-            reference="origen_probable"
-            >
-            <SelectInput
-                validate={required()}
-                label = "Origen probable"
-                optionText="nombre"
-                onCreate={async ()=>{
-                const newNombreOrigenProbable = prompt("Ingresa el nuevo origen probable");
-                if (newNombreOrigenProbable){
-                    const newOrigenProbable = await create(
-                        "agentes_causal",
-                        {data: {nombre: newNombreOrigenProbable}},
-                        {returnPromise : true}
-                    );
-                    return newOrigenProbable;
-                }
-            }}/>
-
-        </ReferenceInput>
-    );
-};
-
-const InstitucionInput = () => {
-    const [create] = useCreate();
-    return (
-        <ReferenceInput
-            source="institucion"
-            reference="instituciones"
-            sort={{field: "nombre", order: "ASC"}}
-        >
-            <SelectInput
-                validate={required()}
-                label="Dependencia"
-                optionText="nombre"
-                fullWidth
-                onCreate={async ()=>{
-                    const newNombreInstitucion = prompt("Ingresa el nombre de la nueva institución");
-                    if (newNombreInstitucion){
-                        const newInstitucion = await create(
-                            "instituciones",
-                            {data: {nombre: newNombreInstitucion}},
-                            {returnPromise : true}
-                        );
-                        return newInstitucion;
-                    }
-                }}
-            />
-        </ReferenceInput>
     );
 };

@@ -11,3 +11,13 @@ export const permisosChoices= [
 { id: 'create', name: 'Crear'},
 { id: 'delete', name: 'Eliminar'}
 ];
+
+export const generosChoices = [
+    { id: "Masc", name: "Masculino" },
+    { id: "Fem", name: "Femenino" },
+]
+
+export const tipoServicioChoices = [
+    { id: 'urbano', name: 'Urbano' },
+    { id: 'prehospitalario', name: 'Prehospitalario' },
+];

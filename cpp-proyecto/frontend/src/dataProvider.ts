@@ -6,7 +6,13 @@ export const fetchJsonUtil = (url: string, options: fetchUtils.Options = {}) => 
     if (!options.headers) {
         options.headers = new Headers({ Accept: "application/json" });
     }
-    options.headers.set("Authentication", sessionStorage.getItem("auth"));
+    
+    // Obtener el token del sessionStorage y agregarlo como Bearer token
+    const token = sessionStorage.getItem("auth");
+    if (token && options.headers instanceof Headers) {
+        options.headers.set("Authorization", `Bearer ${token}`);
+    }
+    
     return fetchUtils.fetchJson(url, options);
 };
 

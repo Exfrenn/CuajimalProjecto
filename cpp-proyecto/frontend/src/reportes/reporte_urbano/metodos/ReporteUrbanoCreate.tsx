@@ -3,11 +3,9 @@ import {
     TabbedForm, 
     TextInput, 
     DateTimeInput, 
-    ReferenceInput, 
+    ReferenceInput,
     SelectInput, 
     required, 
-    SelectArrayInput, 
-    ReferenceArrayInput, 
     NumberInput, 
     SimpleFormIterator, 
     ArrayInput, 
@@ -18,6 +16,8 @@ import {
     Create
 } from "react-admin";
 import { useReporteNotifications } from "../hooks/useReporteNotifications";
+import { PersonalACargo } from "../../componentes/PersonalACargo";
+import { TurnoInput } from "../../componentes/TurnoInput";
 import { SubtipoServicioInput } from "../misc/SubtipoServicioInput";
 import BotonSoloCoordenadas from "../misc/BotonSoloCoordenadas";
 import { 
@@ -44,28 +44,11 @@ export const ReporteUrbanoCreate = () => {
                         label="Folio" 
                         validate={required()} 
                     />
-                    <ReferenceInput 
-                        label="Turno" 
-                        source="datos_generales.turno_id" 
-                        reference="turnos"
-                    >
-                        <SelectInput optionText="nombre" validate={required()} />
-                    </ReferenceInput>
+                    <TurnoInput source="datos_generales.turno_id" label="Turno" />
                 </TabbedForm.Tab>
 
                 <TabbedForm.Tab label="Personal y Activación">
-                    <ReferenceArrayInput
-                        label="Personal a Cargo"
-                        source="personal_y_activacion.personal_a_cargo"
-                        reference="usuarios"
-                    >
-                        <SelectArrayInput
-                            optionText={record => `${record.nombre} ${record.apellido}`}
-                            optionValue="id"
-                            helperText="selecciona a las personas a cargo"
-                            validate={required()}
-                        />
-                    </ReferenceArrayInput>
+                    <PersonalACargo />
                     
                     <SelectInput 
                         source="personal_y_activacion.modo_activacion"

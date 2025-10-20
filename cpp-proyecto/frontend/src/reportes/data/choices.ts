@@ -185,3 +185,173 @@ export const atencionBasicaChoices = [
     { id: "Inmovilización de extremidades", name: "Inmovilización de extremidades" },
     { id: "Vendaje", name: "Vendaje" },
 ];
+
+export const sexoChoices=[
+    { id: "Masc", name: "Masculino" },
+    { id: "Fem", name: "Femenino" },
+];
+
+export const productoChoices = [
+    { id: "vivo", name: "Vivo" },
+    { id: "muerto", name: "Muerto" },
+];
+
+export const parabrisasChoices = [
+    
+                                    {id: "Integro", name: "Íntegro"},
+                                    {id: "Estrellado", name: "Estrellado" },
+                                
+]
+
+export const volanteChoices=[
+                                    {id: "Integro", name: "Íntegro"},
+                                    {id: "Doblado", name: "Doblado"},
+                                ];
+
+
+export const booleanChoices=[
+                                    {id: "Si", name: "Sí"},
+                                    {id: "No", name: "No"},
+                                ]
+
+export const cinturonChoices=[
+                                    {id: "Colocado", name: "Colocado"},
+                                    {id: "No colocado", name: "No colocado"},
+                                ]
+
+export const vehiculoChoices =[
+                                    {id: "Si", name: "Sí"},
+                                    {id: "No", name: "No"},
+                                    {id: "Eyectado", name: "Eyectado"},
+                                ]
+
+
+export const atropelladoChoices = [
+                                    {id: "Automotor", name: "Automotor"},
+                                    {id: "Motocicleta", name: "Motocicleta"},
+                                    {id: "Bicicleta", name: "Bicicleta"},
+                                    {id: "Maquinaria", name: "Maquinaria"},
+                                ]
+
+
+export const nivelConscienciaChoices = [
+                            {id:"Alerta",name: "Alerta"},
+                            {id:"Dolor",name: "Dolor"},
+                            {id:"Verbal",name: "Verbal"},
+                            {id:"Inconsciente",name: "Inconsciente"},
+                        ]
+
+export const deglucionChoices = [
+                            {id:"Ausente",name: "Ausente"},
+                            {id:"Presente",name: "Presente"},
+                        ]
+
+export const viaAereaDisponibilidadChoices = [
+                                                    {id:"Permeable",name: "Permeable"},
+                                                    {id:"Comprometida",name: "Comprometida"},
+                                                ]
+
+                                                 export const ventilacionChoices = [
+                                                                            {id:"Automatismo regular",name: "Automatismo regular"},
+                                                                            {id:"Automatismo irregular",name: "Automatismo irregular"},
+                                                                            {id:"Automatismo rapido",name: "Automatismo rapido"},
+                                                                            {id:"Automatismo superficial",name: "Automatismo superficial"},
+                                                                            {id:"Apnea",name: "Apnea"},
+                                                                        ]
+
+export const auscultacionChoices = [
+                            {id:"Ruidos respiratorios normales",name: "Ruidos respiratorios normales"},
+                            {id:"Ruidos respiratorios disminuidos",name: "Ruidos respiratorios disminuidos"},
+                            {id:"Ruidos respiratorios ausentes",name: "Ruidos respiratorios ausentes"},
+                        ]
+
+
+export const hemitoraxChoices = [
+                            {id:"Derecho",name: "Derecho"},
+                            {id:"Izquierdo",name: "Izquierdo"},
+                        ]
+
+                        export const sitioChoices = [
+                            {id:"Apical",name: "Apical"},
+                            {id:"Base",name: "Base"},
+                        ]
+
+
+
+export const pulsoChoices =
+                        [
+                                                    {id:"Carotideo",name: "Carotideo"},
+                                                    {id:"Radial",name: "Radial"},
+                                                    {id:"Paro cardiorespiratorio",name: "Paro cardiorespiratorio"},
+                                                ]
+
+
+export const calidadChoices =
+
+                                                [
+                                                                            {id:"Rapido",name: "Rapido"},
+                                                                            {id:"Lento",name: "Lento"},
+                                                                            {id:"Ritmico",name: "Ritmico"},
+                                                                            {id:"Arritmico",name: "Arritmico"},
+                                                                        ]
+
+export const pielChoices =
+
+[
+                            {id:"Normal",name: "Normal"},
+                            {id:"Palida",name: "Palida"},
+                            {id:"Cianotica",name: "Cianotica"},
+                        ]
+
+                        export const caracteristicasChoices =
+
+[
+                            {id:"Caliente",name: "Caliente"},
+                            {id:"Fria",name: "Fria"},
+                            {id:"Diaforesis",name: "Diaforesis"},
+                            {id:"Normotermico",name: "Normotermico"},
+                        ]
+
+export const pupilasChoices = [
+                            {id:"Derecha",name: "Derecha"},
+                            {id:"Izquierda",name: "Izquierda"},
+                        ]
+
+                        export const neuroChoices = [
+                                                    {id:"A",name: "A"},
+                                                    {id:"V",name: "V"},
+                                                    {id:"D",name: "D"},
+                                                    {id:"I",name: "I"},
+                                                ]
+
+
+
+ export const condicionPacienteChoices = 
+                                                [
+                                                                            { id: "Critico", name: "Critico" },
+                                                                            { id: "No critico", name: "No critico" },
+                                                                            { id: "Estable", name: "Estable" },
+                                                                            { id: "Inestable", name: "Inestable" },
+                                                                    ]
+
+
+
+
+
+
+ export const prioridadChoices = 
+
+                                        [
+                                                                    { id: "Rojo", name: "Rojo" },
+                                                                    { id: "Amarillo", name: "Amarillo" },
+                                                                    { id: "Verde", name: "Verde" },
+                                                                    { id: "Negra", name: "Negra" },
+                                                            ]
+
+
+
+export const controlCervicalChoices = [
+                            { id: "Manual", name: "Manual" },
+                            { id: "Collarin rigido", name: "Collarin rigido" },
+                            { id: "Collarin blando", name: "Collarin blando" },
+                    ]

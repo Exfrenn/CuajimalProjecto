@@ -7,8 +7,6 @@ import {
     ReferenceInput, 
     SelectInput, 
     required, 
-    SelectArrayInput, 
-    ReferenceArrayInput, 
     NumberInput, 
     SimpleFormIterator, 
     ArrayInput, 
@@ -17,8 +15,10 @@ import {
     useCreate,
     TabbedFormTabs
 } from "react-admin";
-import { Stack, useMediaQuery, Theme } from "@mui/material";
+import { Stack } from "@mui/material";
 import { useReporteNotifications } from "../hooks/useReporteNotifications";
+import { PersonalACargo } from "../../componentes/PersonalACargo";
+import { TurnoInput } from "../../componentes/TurnoInput";
 import { SubtipoServicioInput } from "../misc/SubtipoServicioInput";
 import BotonSoloCoordenadas from "../misc/BotonSoloCoordenadas";
 import { SectionCard } from "../../components/SectionCard";
@@ -38,7 +38,6 @@ import {
 
 export const ReporteUrbanoEdit = () => {
     const { onEditSuccess } = useReporteNotifications();
-    const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
     
     return (
         <Edit mutationOptions={{ onSuccess: onEditSuccess }}>
@@ -59,31 +58,13 @@ export const ReporteUrbanoEdit = () => {
                                 fullWidth
                             />
                         </Stack>
-                        <ReferenceInput 
-                            label="Turno" 
-                            source="datos_generales.turno_id" 
-                            reference="turnos"
-                        >
-                            <SelectInput optionText="nombre" validate={required()} fullWidth />
-                        </ReferenceInput>
+                        <TurnoInput source="datos_generales.turno_id" label="Turno" />
                     </SectionCard>
                 </TabbedForm.Tab>
 
                 <TabbedForm.Tab label="Personal y Activación">
                     <SectionCard title="Personal a Cargo" icon={<GroupIcon />}>
-                        <ReferenceArrayInput
-                            label="Personal a Cargo"
-                            source="personal_y_activacion.personal_a_cargo"
-                            reference="usuarios"
-                        >
-                            <SelectArrayInput
-                                optionText={record => `${record.nombre} ${record.apellido}`}
-                                optionValue="id"
-                                helperText="selecciona a las personas a cargo"
-                                validate={required()}
-                                fullWidth
-                            />
-                        </ReferenceArrayInput>
+                        <PersonalACargo />
                     </SectionCard>
                     
                     <SectionCard title="Activación del Servicio" icon={<LocalFireDepartmentIcon />}>

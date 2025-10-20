@@ -1,25 +1,8 @@
-import { 
-    Edit, 
-    TabbedForm, 
-    TextInput, 
-    DateInput, 
-    NumberInput, 
-    SelectInput, 
-    ArrayInput, 
-    SimpleFormIterator, 
-    required, 
-    DateTimeInput, 
-    TimeInput, 
-    ReferenceArrayInput, 
-    SelectArrayInput, 
-    useCreate, 
-    ReferenceInput, 
-    FileInput, 
-    FileField, 
-    TabbedFormTabs
-} from "react-admin";
+import { Edit, TabbedForm, TextInput, DateInput, NumberInput, SelectInput, ArrayInput, SimpleFormIterator, required, DateTimeInput, TimeInput, FileInput, FileField, TabbedFormTabs } from "react-admin";
 
 import { useReporteNotifications } from "../hooks/useReporteNotifications";
+import { OperadorPrehospitalario } from "../../componentes/OperadorPrehospitalario";
+import { TurnoInput } from "../../componentes/TurnoInput";
 import BotonSoloCoordenadas from "../misc/BotonSoloCoordenadas";
 import TablaApgar from "../misc/TablaApgar";
 import { Stack, Box, useMediaQuery, Theme } from "@mui/material";
@@ -35,22 +18,10 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { SectionCard } from "../../components/SectionCard";
 import { GlasgowTotal } from "../misc/GlasgowTotal";
 
-import { 
-    atencionChoices,
-    alcaldiasCDMX,
-    accidentesChoices,
-    impactoChoices,
-    exploracionFisicaChoices,
-    glasgowMotoraChoices,
-    glasgowOcularChoices,
-    glasgowVerbalChoices,
-    viaAereaChoices,
-    asistenciaVentilatoriaChoices,
-    controlHemorragiasChoices,
-    viasVenosasChoices,
-    atencionBasicaChoices
-} from "../../data/choices";
+import { atencionChoices, alcaldiasCDMX, accidentesChoices, impactoChoices, exploracionFisicaChoices, glasgowMotoraChoices, glasgowOcularChoices, glasgowVerbalChoices, viaAereaChoices, asistenciaVentilatoriaChoices, controlHemorragiasChoices, viasVenosasChoices, atencionBasicaChoices, sexoChoices, productoChoices, parabrisasChoices, volanteChoices, booleanChoices, cinturonChoices, vehiculoChoices, atropelladoChoices, nivelConscienciaChoices, deglucionChoices, viaAereaDisponibilidadChoices, ventilacionChoices, auscultacionChoices, hemitoraxChoices, sitioChoices, pulsoChoices, calidadChoices, pielChoices, caracteristicasChoices, pupilasChoices, neuroChoices, condicionPacienteChoices, prioridadChoices, controlCervicalChoices } from "../../data/choices";
 import { ReportePrehospitalarioEditMobile } from "./ReportePrehospitalarioEditMobile";
+import { LugarOcurrenciaInput, AgenteCausalInput, OrigenProbableInput, InstitucionInput } from "./customInputs";
+
 
 export const ReportePrehospitalarioEdit = () => {
     const { onEditSuccess } = useReporteNotifications();
@@ -61,31 +32,13 @@ export const ReportePrehospitalarioEdit = () => {
             {isSmall ? 
                 (<ReportePrehospitalarioEditMobile/>)
             : (
-                <TabbedForm 
-                    warnWhenUnsavedChanges 
-                    tabs={<TabbedFormTabs 
-                        variant="scrollable" 
-                        scrollButtons="auto"
-                        allowScrollButtonsMobile
-                        sx={{
-                            '& .MuiTabs-scrollButtons': {
-                                width: isSmall ? '30px' : '48px',
-                            },
-                            '& .MuiTab-root': {
-                                minWidth: isSmall ? '60px' : 'auto',
-                                fontSize: isSmall ? '0.7rem' : '0.875rem',
-                                padding: isSmall ? '8px 6px' : '12px 16px',
-                            }
-                    }}
-                />}
-            >
+                                <TabbedForm warnWhenUnsavedChanges tabs={<TabbedFormTabs variant="scrollable" scrollButtons="auto" />}>
 
                 {/* PREÁMBULO */}
                 <TabbedForm.Tab label="Preambulo">
-                    <SectionCard title="Información del Preámbulo" icon={<AccessTimeIcon />}>
-                        <DateTimeInput source="preambulo.fecha" label="Fecha" fullWidth />
-                        <TextInput source="preambulo.folio" label="Folio" fullWidth validate={required()} />
-                    </SectionCard>
+                    <DateTimeInput source="preambulo.fecha" label="Fecha" />
+                    <TurnoInput source="preambulo.turno_id" label="Turno" />
+                    <TextInput source="preambulo.folio" label="Folio" fullWidth validate={required()} />
                 </TabbedForm.Tab>
 
                 {/* I. DATOS DEL SERVICIO */}
@@ -133,18 +86,7 @@ export const ReportePrehospitalarioEdit = () => {
                 <TabbedForm.Tab label="Control">
                     <TextInput source="control.ambulancia_numero" label="Número de Ambulancia" />
 
-                    <ReferenceArrayInput
-                        label="Operadores"
-                        source="control.operador"
-                        reference="usuarios"
-                        >
-                        <SelectArrayInput
-                            optionText={record => `${record.nombre} ${record.apellido}`}
-                            optionValue="id"
-                            helperText="selecciona a las personas a cargo"
-                            validate={required()}
-                            />
-                    </ReferenceArrayInput>
+                    <OperadorPrehospitalario />
                     <TextInput source="control.tum" label="T.U.M" />
                     <TextInput source="control.socorrista" label="Socorrista" />
                     <TextInput source="control.helicoptero" label="Helicóptero Matrícula" />
@@ -158,10 +100,7 @@ export const ReportePrehospitalarioEdit = () => {
                             <SelectInput
                                 source="paciente.sexo"
                                 label="Sexo"
-                                choices={[
-                                    { id: "Masc", name: "Masculino" },
-                                    { id: "Fem", name: "Femenino" },
-                                ]}
+                                choices={sexoChoices}
                                 sx={{ flex: 1 }}
                             />
                             <NumberInput source="paciente.edad.anos" label="Edad (años)" sx={{ flex: 1 }} />
@@ -203,20 +142,14 @@ export const ReportePrehospitalarioEdit = () => {
                             <SelectInput
                                 source="parto.postparto.producto"
                                 label="Producto"
-                                choices={[
-                                    { id: "vivo", name: "Vivo" },
-                                    { id: "muerto", name: "Muerto" },
-                                ]}
+                                choices={productoChoices}
                                 sx={{ flex: 1 }}
                             />
                         </Stack>
                         <SelectInput
                             source="parto.postparto.sexo"
                             label="Sexo del RN"
-                            choices={[
-                                { id: "Masc", name: "Masculino" },
-                                { id: "Fem", name: "Femenino" },
-                            ]}
+                            choices={sexoChoices}
                             sx={{ mt: 2 }}
                         />
                         <TextInput source="parto.edad_gestacional" label="Edad gestacional" fullWidth sx={{ mt: 2 }} />
@@ -255,20 +188,14 @@ export const ReportePrehospitalarioEdit = () => {
                                 source="trauma.parabrisas" 
                                 label="Parabrisas" 
                                 validate={required()}
-                                choices={[
-                                    {id: "Integro", name: "Íntegro"},
-                                    {id: "Estrellado", name: "Estrellado" },
-                                ]}
+                                choices={parabrisasChoices}
                                 fullWidth
                             />
                             <SelectInput 
                                 source="trauma.volante" 
                                 label="Volante" 
                                 validate={required()}
-                                choices={[
-                                    {id: "Integro", name: "Íntegro"},
-                                    {id: "Doblado", name: "Doblado"},
-                                ]}
+                                choices={volanteChoices}
                                 fullWidth
                             />
                         </Stack>
@@ -277,20 +204,14 @@ export const ReportePrehospitalarioEdit = () => {
                                 source="trauma.bolsa_aire" 
                                 label="Bolsa de aire" 
                                 validate={required()}
-                                choices={[
-                                    {id: "Si", name: "Sí"},
-                                    {id: "No", name: "No"},
-                                ]}
+                                choices={booleanChoices}
                                 fullWidth
                             />
                             <SelectInput 
                                 source="trauma.cinturon_seguridad" 
                                 label="Cinturón de seguridad" 
                                 validate={required()}
-                                choices={[
-                                    {id: "Colocado", name: "Colocado"},
-                                    {id: "No colocado", name: "No colocado"},
-                                ]}
+                                choices={cinturonChoices}
                                 fullWidth
                             />
                         </Stack>
@@ -302,23 +223,14 @@ export const ReportePrehospitalarioEdit = () => {
                                 source="trauma.dentro_vehiculo" 
                                 label="Dentro del vehículo" 
                                 validate={required()}
-                                choices={[
-                                    {id: "Si", name: "Sí"},
-                                    {id: "No", name: "No"},
-                                    {id: "Eyectado", name: "Eyectado"},
-                                ]}
+                                choices={vehiculoChoices}
                                 fullWidth
                             />
                             <SelectInput 
                                 source="trauma.atropellado" 
                                 label="Atropellado" 
                                 validate={required()}
-                                choices={[
-                                    {id: "Automotor", name: "Automotor"},
-                                    {id: "Motocicleta", name: "Motocicleta"},
-                                    {id: "Bicicleta", name: "Bicicleta"},
-                                    {id: "Maquinaria", name: "Maquinaria"},
-                                ]}
+                                choices={atropelladoChoices}
                                 fullWidth
                             />
                         </Stack>
@@ -333,19 +245,13 @@ export const ReportePrehospitalarioEdit = () => {
                             <SelectInput
                                 source="clinica.primera_vez"
                                 label="¿Primera vez?"
-                                choices={[
-                                    { id: "sí", name: "Sí" },
-                                    { id: "no", name: "No" },
-                                ]}
+                                choices={booleanChoices}
                                 fullWidth
                             />
                             <SelectInput
                                 source="clinica.subsecuente"
                                 label="¿Subsecuente?"
-                                choices={[
-                                    { id: "sí", name: "Sí" },
-                                    { id: "no", name: "No" },
-                                ]}
+                                choices={booleanChoices}
                                 fullWidth
                             />
                         </Stack>
@@ -355,93 +261,48 @@ export const ReportePrehospitalarioEdit = () => {
                 {/* VII. EVALUACIÓN INICIAL */}
                 <TabbedForm.Tab label="Evaluacion Inicial">
                     <SelectInput source="evaluacion_inicial.nivel_consciencia" label="Nivel de consciencia" 
-                        choices={[
-                            {id:"Alerta",name: "Alerta"},
-                            {id:"Dolor",name: "Dolor"},
-                            {id:"Verbal",name: "Verbal"},
-                            {id:"Inconsciente",name: "Inconsciente"},
-                        ]}
+                        choices={nivelConscienciaChoices}
 
                     />
                     <SelectInput source="evaluacion_inicial.deglucion" label="Deglución" 
-                        choices={[
-                            {id:"Ausente",name: "Ausente"},
-                            {id:"Presente",name: "Presente"},
-                        ]}
+                        choices={deglucionChoices}
                     />
                     <SelectInput source="evaluacion_inicial.via_aerea" label="Vía aérea" 
-                        choices={[
-                            {id:"Permeable",name: "Permeable"},
-                            {id:"Comprometida",name: "Comprometida"},
-                        ]}
+                        choices={viaAereaDisponibilidadChoices}
                     />
                     <SelectInput source="evaluacion_inicial.ventilacion" label="Ventilación" 
-                        choices={[
-                            {id:"Automatismo regular",name: "Automatismo regular"},
-                            {id:"Automatismo irregular",name: "Automatismo irregular"},
-                            {id:"Automatismo rapido",name: "Automatismo rapido"},
-                            {id:"Automatismo superficial",name: "Automatismo superficial"},
-                            {id:"Apnea",name: "Apnea"},
-                        ]}
+                        choices={ventilacionChoices}
                     
                     />
                     <SelectInput source="evaluacion_inicial.auscultacion" label="Auscultación" 
-                        choices={[
-                            {id:"Ruidos respiratorios normales",name: "Ruidos respiratorios normales"},
-                            {id:"Ruidos respiratorios disminuidos",name: "Ruidos respiratorios disminuidos"},
-                            {id:"Ruidos respiratorios ausentes",name: "Ruidos respiratorios ausentes"},
-                        ]}
+                        choices={auscultacionChoices}
                     />
                     <SelectInput source="evaluacion_inicial.hemitorax" label="Hemitórax" 
-                    choices={[
-                            {id:"Derecho",name: "Derecho"},
-                            {id:"Izquierdo",name: "Izquierdo"},
-                        ]}
+                    choices={hemitoraxChoices}
                     
                     />
                     <SelectInput source="evaluacion_inicial.sitio" label="Sitio" 
-                    choices={[
-                            {id:"Apical",name: "Apical"},
-                            {id:"Base",name: "Base"},
-                        ]}
+                    choices={sitioChoices}
                     
                     />
                     <SelectInput source="evaluacion_inicial.pulsos.presencia" label="Presencia de pulsos" 
-                    choices={[
-                            {id:"Carotideo",name: "Carotideo"},
-                            {id:"Radial",name: "Radial"},
-                            {id:"Paro cardiorespiratorio",name: "Paro cardiorespiratorio"},
-                        ]}
+                    choices={pulsoChoices}
                     />
                     <SelectInput source="evaluacion_inicial.pulsos.calidad" label="Calidad" 
-                    choices={[
-                            {id:"Rapido",name: "Rapido"},
-                            {id:"Lento",name: "Lento"},
-                            {id:"Ritmico",name: "Ritmico"},
-                            {id:"Arritmico",name: "Arritmico"},
-                        ]}
+                    choices={calidadChoices}
                     />
                     <SelectInput source="evaluacion_inicial.piel" label="Piel" 
-                    choices={[
-                            {id:"Normal",name: "Normal"},
-                            {id:"Palida",name: "Palida"},
-                            {id:"Cianotica",name: "Cianotica"},
-                        ]}
+                    choices={pielChoices}
                     
                     />
                     <SelectInput source="evaluacion_inicial.caracteristicas" label="Características" 
-                    choices={[
-                            {id:"Caliente",name: "Caliente"},
-                            {id:"Fria",name: "Fria"},
-                            {id:"Diaforesis",name: "Diaforesis"},
-                            {id:"Normotermico",name: "Normotermico"},
-                        ]}
+                    choices={caracteristicasChoices}
                     />
                     <TextInput source="evaluacion_inicial.observaciones" label="Observaciones adicionales" fullWidth />
                 </TabbedForm.Tab>
 
                 {/* VIII. EVALUACIÓN SECUNDARIA */}
-                <TabbedForm.Tab label="Evaluacion Secundaria">
+                <TabbedForm.Tab label="Evaluacion Secundaria    ">
                     <ArrayInput source="evaluacion_secundaria.zonas_lesion" label="Zonas de lesión">
                         <SimpleFormIterator>
                             <TextInput source="zona" label="Zona anatómica" />
@@ -454,10 +315,7 @@ export const ReportePrehospitalarioEdit = () => {
                             <DateInput source="fecha" label="Fecha" />
                         </SimpleFormIterator>
                     </ArrayInput>
-                    <SelectInput source="evaluacion_secundaria.pupilas" label="Pupilas" choices={[
-                            {id:"Derecha",name: "Derecha"},
-                            {id:"Izquierda",name: "Izquierda"},
-                        ]}/>
+                    <SelectInput source="evaluacion_secundaria.pupilas" label="Pupilas" choices={pupilasChoices}/>
                     <ArrayInput source="evaluacion_secundaria.signos_vitales" label="Signos vitales y monitoreo">
                         <SimpleFormIterator>
                             <TimeInput source="hora" label="Hora" />
@@ -467,12 +325,7 @@ export const ReportePrehospitalarioEdit = () => {
                             <TextInput source="tad" label="TAD" />
                             <TextInput source="sao2" label="SaO₂" />
                             <TextInput source="gluc" label="Glucosa" />
-                            <SelectInput source="neuro" label="Neuro Test" choices={[
-                            {id:"A",name: "A"},
-                            {id:"V",name: "V"},
-                            {id:"D",name: "D"},
-                            {id:"I",name: "I"},
-                        ]}/>
+                            <SelectInput source="neuro" label="Neuro Test" choices={neuroChoices}/>
                         </SimpleFormIterator>
                     </ArrayInput>
                         <SelectInput
@@ -497,18 +350,8 @@ export const ReportePrehospitalarioEdit = () => {
                     <TextInput source="evaluacion_secundaria.padecimientos" label="Padecimientos / Cirugías" />
                     <TextInput source="evaluacion_secundaria.ultima_comida" label="Última comida" />
                     <TextInput source="evaluacion_secundaria.eventos_previos" label="Eventos previos" />
-                    <SelectInput source="evaluacion_secundaria.condicion" label="Condición del paciente" choices={[
-                            { id: "Critico", name: "Critico" },
-                            { id: "No critico", name: "No critico" },
-                            { id: "Estable", name: "Estable" },
-                            { id: "Inestable", name: "Inestable" },
-                    ]}/>
-                    <SelectInput source="evaluacion_secundaria.prioridad" label="Prioridad" choices={[
-                            { id: "Rojo", name: "Rojo" },
-                            { id: "Amarillo", name: "Amarillo" },
-                            { id: "Verde", name: "Verde" },
-                            { id: "Negra", name: "Negra" },
-                    ]}/>
+                    <SelectInput source="evaluacion_secundaria.condicion" label="Condición del paciente" choices={condicionPacienteChoices}/>
+                    <SelectInput source="evaluacion_secundaria.prioridad" label="Prioridad" choices={prioridadChoices}/>
                 </TabbedForm.Tab>
 
                 {/* IX. TRASLADO */}
@@ -516,20 +359,13 @@ export const ReportePrehospitalarioEdit = () => {
                     <TextInput source="traslado.hospital" label="Hospital" />
                     <TextInput source="traslado.dr" label="Doctor" />
                     <TextInput source="traslado.folio_cru" label="Folio CRU" />
-                    <SelectInput source="traslado.negativa" label="Negativa a recibir atencion/ser trasladado" choices={[
-                            { id: "sí", name: "Sí" },
-                            { id: "no", name: "No" },
-                    ]}/>
+                    <SelectInput source="traslado.negativa" label="Negativa a recibir atencion/ser trasladado" choices={booleanChoices}/>
                 </TabbedForm.Tab>
 
                 {/* X. TRATAMIENTO */}
                 <TabbedForm.Tab label="Tratamiento">
                     <SelectInput source="tratamiento.via_aerea" label="Vía aérea" choices={viaAereaChoices}/>
-                    <SelectInput source="tratamiento.control_cervical" label="Control cervical" choices={[
-                        { id: "Manual", name: "Manual" },
-                            { id: "Collarin rigido", name: "Collarin rigido" },
-                            { id: "Collarin blando", name: "Collarin blando" },
-                    ]}/>
+                    <SelectInput source="tratamiento.control_cervical" label="Control cervical" choices={controlCervicalChoices}/>
 
                     <SelectInput
                         source="tratamiento.asistencia_ventilatoria.tipo"
@@ -584,7 +420,7 @@ export const ReportePrehospitalarioEdit = () => {
                         removeIcon={RemoveCircleIcon}
                         accept={{ 'application/pdf': ['.pdf'] }}
                         multiple={false}
-                        maxSize={5000000} // máximo permitido: 5MB (maxSize establece el límite de tamaño de archivo en bytes)
+                        maxSize={5000000} // opcional: 5MB
                     >
                         <FileField source="src" title="title" />
                     </FileInput>
@@ -592,115 +428,5 @@ export const ReportePrehospitalarioEdit = () => {
             </TabbedForm>
             )}
         </Edit>
-    );
-};
-
-const LugarOcurrenciaInput = () => {
-    const [create] = useCreate();
-    return (
-        <ReferenceInput
-            source="servicio.ubicacion.lugar_ocurrencia"
-            reference="lugares_ocurrencia"
-            >
-            <SelectInput
-                validate={required()}
-                label = "Lugar de ocurrencia"
-                optionText="nombre"
-                onCreate={async ()=>{
-                const newNombreLugarOcurrencia = prompt("Ingresa el nuevo lugar de ocurrencia");
-                if (newNombreLugarOcurrencia){
-                    const newLugarOcurrencia = await create(
-                        "lugares_ocurrencia",
-                        {data: {nombre: newNombreLugarOcurrencia}},
-                        {returnPromise : true}
-                    );
-                    return newLugarOcurrencia;
-                }
-            }}/>
-
-        </ReferenceInput>
-    );
-};
-
-const AgenteCausalInput = () => {
-    const [create] = useCreate();
-    return (
-        <ReferenceInput
-            source="trauma.agente"
-            reference="agentes_causal"
-            >
-            <SelectInput
-                validate={required()}
-                label = "Agente causal"
-                optionText="nombre"
-                onCreate={async ()=>{
-                const newNombreAgenteCausal = prompt("Ingresa el nuevo agente causal");
-                if (newNombreAgenteCausal){
-                    const newAgenteCausal = await create(
-                        "agentes_causal",
-                        {data: {nombre: newNombreAgenteCausal}},
-                        {returnPromise : true}
-                    );
-                    return newAgenteCausal;
-                }
-            }}/>
-
-        </ReferenceInput>
-    );
-};
-
-const OrigenProbableInput = () => {
-    const [create] = useCreate();
-    return (
-        <ReferenceInput
-            source="clinica.origen"
-            reference="origen_probable"
-            >
-            <SelectInput
-                validate={required()}
-                label = "Origen probable"
-                optionText="nombre"
-                onCreate={async ()=>{
-                const newNombreOrigenProbable = prompt("Ingresa el nuevo origen probable");
-                if (newNombreOrigenProbable){
-                    const newOrigenProbable = await create(
-                        "agentes_causal",
-                        {data: {nombre: newNombreOrigenProbable}},
-                        {returnPromise : true}
-                    );
-                    return newOrigenProbable;
-                }
-            }}/>
-
-        </ReferenceInput>
-    );
-};
-
-const InstitucionInput = () => {
-    const [create] = useCreate();
-    return (
-        <ReferenceInput
-            source="institucion"
-            reference="instituciones"
-            sort={{field: "nombre", order: "ASC"}}
-        >
-            <SelectInput
-                validate={required()}
-                label="Dependencia"
-                optionText="nombre"
-                fullWidth
-                onCreate={async ()=>{
-                    const newNombreInstitucion = prompt("Ingresa el nombre de la nueva institución");
-                    if (newNombreInstitucion){
-                        const newInstitucion = await create(
-                            "instituciones",
-                            {data: {nombre: newNombreInstitucion}},
-                            {returnPromise : true}
-                        );
-                        return newInstitucion;
-                    }
-                }}
-            />
-        </ReferenceInput>
     );
 };

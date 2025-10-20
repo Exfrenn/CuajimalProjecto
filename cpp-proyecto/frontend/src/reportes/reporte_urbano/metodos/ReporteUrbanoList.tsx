@@ -10,10 +10,8 @@ import {
     SearchInput,
     TextInput,
     SelectInput,
-    ShowButton,
 } from "react-admin";
 
-import { ReporteFilterSidebar } from './ReporteFilter';
 const reporteFilters = [
     <SearchInput source="q" alwaysOn placeholder="Buscar por folio" />,
     <TextInput source="datos_generales.dia" label="Día" />,
@@ -26,6 +24,12 @@ const reporteFilters = [
 
 export const ReporteUrbanoList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
+    
+    // El backend ya filtra los reportes según el rol:
+    // - Operador (rol_id 4): ve solo sus reportes
+    // - Jefe (rol_id 2): ve reportes de sus operadores
+    // - Admin (rol_id 1): ve todos
+    
     return (
         <List filters={reporteFilters}>
             {isSmall ? (
