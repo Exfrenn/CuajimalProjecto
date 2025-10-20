@@ -1,15 +1,23 @@
-import { Card, CardContent, Grid, Typography, Box, Chip } from '@mui/material';
-import { Title, useGetList } from 'react-admin';
+import { Card, CardContent, Typography, Box, Chip } from '@mui/material';
+import { useGetList } from 'react-admin';
 import { 
-    TrendingUp as TrendingUpIcon, 
     People as PeopleIcon, 
     Report as ReportIcon,
     Schedule as ScheduleIcon,
-    AdminPanelSettings as RoleIcon 
+    AdminPanelSettings as RoleIcon,
+    LocalHospital as HospitalIcon
 } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 
-const StatCard = ({ title, value, icon, color, subtitle }) => {
+interface StatCardProps {
+    title: string;
+    value: number;
+    icon: React.ReactNode;
+    color: string;
+    subtitle?: string;
+}
+
+const StatCard = ({ title, value, icon, color, subtitle }: StatCardProps) => {
     const theme = useTheme();
     
     return (
@@ -60,7 +68,11 @@ export const Dashboard = () => {
         pagination: { page: 1, perPage: 1000 }
     });
     
-    const { data: reportes, isLoading: loadingReportes } = useGetList('reportes_urbanos', {
+    const { data: reportesUrbanos, isLoading: loadingReportesUrbanos } = useGetList('reportes_urbanos', {
+        pagination: { page: 1, perPage: 1000 }
+    });
+    
+    const { data: reportesPrehospitalarios, isLoading: loadingReportesPrehospitalarios } = useGetList('reportes_prehospitalarios', {
         pagination: { page: 1, perPage: 1000 }
     });
     
@@ -72,7 +84,7 @@ export const Dashboard = () => {
         pagination: { page: 1, perPage: 1000 }
     });
 
-    if (loadingUsuarios || loadingReportes || loadingTurnos || loadingRoles) {
+    if (loadingUsuarios || loadingReportesUrbanos || loadingReportesPrehospitalarios || loadingTurnos || loadingRoles) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
                 <Typography>Cargando estadísticas...</Typography>
@@ -80,8 +92,8 @@ export const Dashboard = () => {
         );
     }
 
-    const reportesPendientes = reportes?.filter(r => r.estado === 'pendiente')?.length || 0;
-    const reportesEnProceso = reportes?.filter(r => r.estado === 'en_proceso')?.length || 0;
+    const reportesUrbanosPendientes = reportesUrbanos?.filter(r => r.estado === 'pendiente')?.length || 0;
+    const reportesUrbanosEnProceso = reportesUrbanos?.filter(r => r.estado === 'en_proceso')?.length || 0;
 
     return (
         <Box sx={{ p: 3 }}>
@@ -89,68 +101,83 @@ export const Dashboard = () => {
                 Dashboard - Sistema de Gestión
             </Typography>
             
-            <Grid container spacing={3} sx={{ mb: 4 }}>
-                <Grid item xs={12} sm={6} md={3}>
-                    <StatCard
-                        title="Usuarios Registrados"
-                        value={usuarios?.length || 0}
-                        icon={<PeopleIcon sx={{ fontSize: 40 }} />}
-                        color={theme.palette.primary.main}
-                        subtitle="Total activos"
-                    />
-                </Grid>
+            {/* Stats Cards */}
+            <Box sx={{ 
+                display: 'grid', 
+                gridTemplateColumns: { 
+                    xs: '1fr', 
+                    sm: 'repeat(2, 1fr)', 
+                    md: 'repeat(3, 1fr)',
+                    lg: 'repeat(5, 1fr)'
+                }, 
+                gap: 3, 
+                mb: 4 
+            }}>
+                <StatCard
+                    title="Usuarios"
+                    value={usuarios?.length || 0}
+                    icon={<PeopleIcon sx={{ fontSize: 40 }} />}
+                    color={theme.palette.primary.main}
+                    subtitle="Registrados"
+                />
                 
-                <Grid item xs={12} sm={6} md={3}>
-                    <StatCard
-                        title="Reportes Urbanos"
-                        value={reportes?.length || 0}
-                        icon={<ReportIcon sx={{ fontSize: 40 }} />}
-                        color={theme.palette.secondary.main}
-                        subtitle={`${reportesPendientes} pendientes`}
-                    />
-                </Grid>
+                <StatCard
+                    title="R. Urbanos"
+                    value={reportesUrbanos?.length || 0}
+                    icon={<ReportIcon sx={{ fontSize: 40 }} />}
+                    color={theme.palette.secondary.main}
+                    subtitle={`${reportesUrbanosPendientes} pend.`}
+                />
                 
-                <Grid item xs={12} sm={6} md={3}>
-                    <StatCard
-                        title="Turnos Disponibles"
-                        value={turnos?.length || 0}
-                        icon={<ScheduleIcon sx={{ fontSize: 40 }} />}
-                        color={theme.palette.success.main}
-                        subtitle="Gestión de horarios"
-                    />
-                </Grid>
+                <StatCard
+                    title="R. Prehospital"
+                    value={reportesPrehospitalarios?.length || 0}
+                    icon={<HospitalIcon sx={{ fontSize: 40 }} />}
+                    color={theme.palette.error.main}
+                    subtitle="Atenciones"
+                />
                 
-                <Grid item xs={12} sm={6} md={3}>
-                    <StatCard
-                        title="Roles del Sistema"
-                        value={roles?.length || 0}
-                        icon={<RoleIcon sx={{ fontSize: 40 }} />}
-                        color={theme.palette.warning.main}
-                        subtitle="Permisos activos"
-                    />
-                </Grid>
-            </Grid>
+                <StatCard
+                    title="Turnos"
+                    value={turnos?.length || 0}
+                    icon={<ScheduleIcon sx={{ fontSize: 40 }} />}
+                    color={theme.palette.success.main}
+                    subtitle="Activos"
+                />
+                
+                <StatCard
+                    title="Roles"
+                    value={roles?.length || 0}
+                    icon={<RoleIcon sx={{ fontSize: 40 }} />}
+                    color={theme.palette.warning.main}
+                    subtitle="Sistema"
+                />
+            </Box>
 
-            <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
-                    <Card>
+            {/* Detail Cards */}
+            <Box sx={{ 
+                display: 'grid', 
+                gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, 
+                gap: 3 
+            }}>
+                <Card>
                         <CardContent>
                             <Typography variant="h5" gutterBottom>
-                                Estado de Reportes
+                                Reportes Urbanos
                             </Typography>
                             <Box sx={{ mt: 2 }}>
                                 <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
                                     <Typography>Pendientes</Typography>
-                                    <Chip label={reportesPendientes} color="warning" size="small" />
+                                    <Chip label={reportesUrbanosPendientes} color="warning" size="small" />
                                 </Box>
                                 <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
                                     <Typography>En Proceso</Typography>
-                                    <Chip label={reportesEnProceso} color="info" size="small" />
+                                    <Chip label={reportesUrbanosEnProceso} color="info" size="small" />
                                 </Box>
                                 <Box display="flex" justifyContent="space-between" alignItems="center">
                                     <Typography>Completados</Typography>
                                     <Chip 
-                                        label={(reportes?.length || 0) - reportesPendientes - reportesEnProceso} 
+                                        label={(reportesUrbanos?.length || 0) - reportesUrbanosPendientes - reportesUrbanosEnProceso} 
                                         color="success" 
                                         size="small" 
                                     />
@@ -158,38 +185,71 @@ export const Dashboard = () => {
                             </Box>
                         </CardContent>
                     </Card>
-                </Grid>
                 
-                <Grid item xs={12} md={6}>
-                    <Card>
-                        <CardContent>
-                            <Typography variant="h5" gutterBottom>
-                                Acciones Rápidas
-                            </Typography>
-                            <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                <Card>
+                    <CardContent>
+                        <Typography variant="h5" gutterBottom>
+                            Reportes Prehospitalarios
+                        </Typography>
+                        <Box sx={{ mt: 2 }}>
+                            <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+                                <Typography>Total Atenciones</Typography>
+                                <Chip label={reportesPrehospitalarios?.length || 0} color="primary" size="small" />
+                            </Box>
+                            <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+                                <Typography>Prioridad Alta</Typography>
                                 <Chip 
-                                    label="Ver Mapa de Reportes" 
-                                    clickable 
-                                    color="primary" 
-                                    onClick={() => window.location.href = '#/mapa'}
-                                />
-                                <Chip 
-                                    label="Crear Nuevo Reporte" 
-                                    clickable 
-                                    color="secondary" 
-                                    onClick={() => window.location.href = '#/reportes_urbanos/create'}
-                                />
-                                <Chip 
-                                    label="Gestionar Usuarios" 
-                                    clickable 
-                                    variant="outlined" 
-                                    onClick={() => window.location.href = '#/usuarios'}
+                                    label={reportesPrehospitalarios?.filter(r => r.evaluacion_secundaria?.prioridad === 'Rojo')?.length || 0} 
+                                    color="error" 
+                                    size="small" 
                                 />
                             </Box>
-                        </CardContent>
-                    </Card>
-                </Grid>
-            </Grid>
+                            <Box display="flex" justifyContent="space-between" alignItems="center">
+                                <Typography>Con Traslado</Typography>
+                                <Chip 
+                                    label={reportesPrehospitalarios?.filter(r => r.traslado?.hospital)?.length || 0} 
+                                    color="success" 
+                                    size="small" 
+                                />
+                            </Box>
+                        </Box>
+                    </CardContent>
+                </Card>
+                
+                <Card>
+                    <CardContent>
+                        <Typography variant="h5" gutterBottom>
+                            Acciones Rápidas
+                        </Typography>
+                        <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                            <Chip 
+                                label="Ver Estadísticas" 
+                                clickable 
+                                color="primary" 
+                                onClick={() => window.location.href = '#/estadisticas'}
+                            />
+                            <Chip 
+                                label="Crear Reporte Urbano" 
+                                clickable 
+                                color="secondary" 
+                                onClick={() => window.location.href = '#/reportes_urbanos/create'}
+                            />
+                            <Chip 
+                                label="Crear Reporte Prehospitalario" 
+                                clickable 
+                                color="error" 
+                                onClick={() => window.location.href = '#/reportes_prehospitalarios/create'}
+                            />
+                            <Chip 
+                                label="Gestionar Usuarios" 
+                                clickable 
+                                variant="outlined" 
+                                onClick={() => window.location.href = '#/usuarios'}
+                            />
+                        </Box>
+                    </CardContent>
+                </Card>
+            </Box>
         </Box>
     );
 };

@@ -10,7 +10,7 @@ import { RolCreate, RolEdit, RolList, RolShow } from "./usuarios/roles";
 import { Perfil } from "./usuarios/perfil";
 import { ReporteUrbanoCreate, ReporteUrbanoEdit, ReporteUrbanoList, ReporteUrbanoShow} from "./reportes/reporte_urbano/reportes_urbanos";
 import { ReportePrehospitalarioCreate, ReportePrehospitalarioEdit, ReportePrehospitalarioList, ReportePrehospitalarioShow} from "./reportes/reporte_prehospitalario/reportes_prehospitalarios";
-
+import { Estadisticas } from "./estadisticas/Estadisticas";
 
 import ClusteredMapWrapper from "./leaflet/ClusteredMapWrapper";
 
@@ -21,6 +21,7 @@ import IconoTurno from '@mui/icons-material/Schedule';
 import IconoRol from '@mui/icons-material/AdminPanelSettings';
 import IconoReporteUrbano from '@mui/icons-material/LocationCity';
 import IconoMapa from '@mui/icons-material/Map';
+import IconoEstadisticas from '@mui/icons-material/BarChart';
 import { Route } from "react-router";
 import Registrarse from "./usuarios/registrarse";
 import authProvider from "./authProvider";
@@ -39,6 +40,7 @@ export const App = () => (
         <CustomRoutes>
             <Route path="registrarse" element={<Registrarse />}/>
             <Route path="perfil" element={<Perfil />}/>
+            <Route path="estadisticas" element={<Estadisticas />}/>
         </CustomRoutes>
     </Admin>
 );
