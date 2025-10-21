@@ -28,7 +28,7 @@ const FotosField = () => {
                 <FunctionField
                     render={(record: any) => record.fotos.map((foto: any, index: number) => (
                         <ImageListItem key={index}>
-                           <ClickableImage src={foto.src} title={foto.title || 'Foto'} />
+                            <ClickableImage src={foto.src} title={foto.title || 'Foto'} />
                         </ImageListItem>
                     ))}
                 />

@@ -84,13 +84,12 @@ export const Dashboard = () => {
     const reportesEnProceso = reportes?.filter(r => r.estado === 'en_proceso')?.length || 0;
 
     return (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: 3, xs: { 12: 3 }, sm: { 6: 3 }, md: { 3: 3 } }}>
             <Typography variant="h3" gutterBottom sx={{ mb: 4, color: 'text.primary' }}>
                 Dashboard - Sistema de Gestión
             </Typography>
             
             <Grid container spacing={3} sx={{ mb: 4 }}>
-                <Grid item xs={12} sm={6} md={3}>
                     <StatCard
                         title="Usuarios Registrados"
                         value={usuarios?.length || 0}
@@ -98,9 +97,6 @@ export const Dashboard = () => {
                         color={theme.palette.primary.main}
                         subtitle="Total activos"
                     />
-                </Grid>
-                
-                <Grid item xs={12} sm={6} md={3}>
                     <StatCard
                         title="Reportes Urbanos"
                         value={reportes?.length || 0}
@@ -108,9 +104,6 @@ export const Dashboard = () => {
                         color={theme.palette.secondary.main}
                         subtitle={`${reportesPendientes} pendientes`}
                     />
-                </Grid>
-                
-                <Grid item xs={12} sm={6} md={3}>
                     <StatCard
                         title="Turnos Disponibles"
                         value={turnos?.length || 0}
@@ -118,9 +111,6 @@ export const Dashboard = () => {
                         color={theme.palette.success.main}
                         subtitle="Gestión de horarios"
                     />
-                </Grid>
-                
-                <Grid item xs={12} sm={6} md={3}>
                     <StatCard
                         title="Roles del Sistema"
                         value={roles?.length || 0}
@@ -128,7 +118,6 @@ export const Dashboard = () => {
                         color={theme.palette.warning.main}
                         subtitle="Permisos activos"
                     />
-                </Grid>
             </Grid>
 
             <Grid container spacing={3}>

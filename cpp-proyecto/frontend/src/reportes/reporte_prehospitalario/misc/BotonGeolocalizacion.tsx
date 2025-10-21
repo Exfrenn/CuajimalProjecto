@@ -7,7 +7,7 @@ import { useNotify } from "react-admin";
 const alcaldiasCDMX = [
     "Álvaro Obregón",
     "Cuajimalpa de Morelos",
-    ,"Miguel Hidalgo"
+    "Miguel Hidalgo"
 ];
 
 // Reemplaza esto con tu API KEY de Google
@@ -26,13 +26,13 @@ async function obtenerDireccionGoogle(lat: number, lng: number) {
     return {
         calle: get(["route"]),
         colonia: get(["sublocality", "political"]) ||
-                 get(["neighborhood", "political"]) ||
-                 get(["sublocality_level_1", "sublocality", "political"]) ||
-                 get(["sublocality_level_2", "sublocality", "political"]) ||
-                 get(["sublocality_level_3", "sublocality", "political"]),
+                    get(["neighborhood", "political"]) ||
+                    get(["sublocality_level_1", "sublocality", "political"]) ||
+                    get(["sublocality_level_2", "sublocality", "political"]) ||
+                    get(["sublocality_level_3", "sublocality", "political"]),
         alcaldia: get(["locality", "political"]) ||
-                  get(["administrative_area_level_2", "political"]) ||
-                  get(["sublocality", "political"]),
+                    get(["administrative_area_level_2", "political"]) ||
+                    get(["sublocality", "political"]),
         estado: get(["administrative_area_level_1", "political"]),
         municipio: get(["administrative_area_level_2", "political"]),
         pais: get(["country", "political"]),
@@ -66,7 +66,7 @@ const BotonGeolocalizacion = () => {
 
                     // Validar alcaldía
                     const alcaldiaValida = alcaldiasCDMX.find(
-                        a => a.toLowerCase() === (direccion.alcaldia || "").toLowerCase()
+                        a => (a?.toLowerCase() === (direccion.alcaldia || "").toLowerCase())
                     );
                     setValue(
                         "atencion_emergencia.ubicacion.alcaldia",
@@ -82,7 +82,7 @@ const BotonGeolocalizacion = () => {
                     notify("No se pudo obtener la dirección automáticamente", { type: "warning" });
                 }
             },
-            (error) => {
+            (_error) => {
                 notify("No se pudo obtener la ubicación", { type: "warning" });
             }
         );

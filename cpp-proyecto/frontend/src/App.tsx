@@ -29,7 +29,7 @@ import { Dashboard } from "./Dashboard";
 import { CustomLayout } from "./custom_layout/CustomLayout";
 
 export const App = () => (
-    <Admin layout={CustomLayout} loginPage={LoginPage} dashboard={Dashboard} authProvider={authProvider} dataProvider={dataProvider} i18nProvider={i18nProvider} theme={nanoLightTheme} darkTheme={nanoDarkTheme}
+    <Admin layout={CustomLayout} /* loginPage={LoginPage} */ dashboard={Dashboard} /* authProvider={authProvider} */ dataProvider={dataProvider} i18nProvider={i18nProvider} theme={nanoLightTheme} darkTheme={nanoDarkTheme}
     >
         <Resource name="turnos" list={TurnoList} show={TurnoShow} create={TurnoCreate} edit={TurnoEdit} icon={IconoTurno}/>
         <Resource name="roles" list={RolList} show={RolShow} create={RolCreate} edit={RolEdit} icon={IconoRol}/>

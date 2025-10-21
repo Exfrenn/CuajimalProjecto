@@ -12,13 +12,15 @@ import {
     ReferenceInput, 
     FileInput, 
     FileField,
-    SimpleForm
+    SimpleForm,
+    SimpleList
 } from "react-admin";
+import { Stack, Box, useMediaQuery, Theme, Card } from "@mui/material";
 import { OperadorPrehospitalario } from "../../componentes/OperadorPrehospitalario";
 import { TurnoInput } from "../../componentes/TurnoInput";
 import BotonSoloCoordenadas from "../misc/BotonSoloCoordenadas";
 import TablaApgar from "../misc/TablaApgar";
-import { Stack, Accordion, AccordionSummary, AccordionDetails, Typography } from "@mui/material";
+import { Accordion, AccordionSummary, AccordionDetails, Typography } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -55,9 +57,10 @@ import { LugarOcurrenciaInput, AgenteCausalInput, OrigenProbableInput, Instituci
 export const ReportePrehospitalarioCreateMobile = () => {
     return (
         <SimpleForm warnWhenUnsavedChanges>
-                    {/* PREÁMBULO */}
-                    <Accordion defaultExpanded>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Stack spacing={2}>
+                        {/* PREÁMBULO */}
+                        <Accordion defaultExpanded>
+                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                             <Typography variant="h6">Preámbulo</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
@@ -368,6 +371,7 @@ export const ReportePrehospitalarioCreateMobile = () => {
                             </FileInput>
                         </AccordionDetails>
                     </Accordion>
-                </SimpleForm>
+                </Stack>
+        </SimpleForm>
     );
 };
