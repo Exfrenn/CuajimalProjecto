@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import { useLogin, useNotify } from 'react-admin';
-import { Card, CardContent, TextField, Button, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Card, CardContent, TextField, Button, Box, Typography, Divider } from '@mui/material';
+import { PersonAdd } from '@mui/icons-material';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const login = useLogin();
     const notify = useNotify();
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
         login({ email, password }).catch(() =>
@@ -116,6 +119,41 @@ const LoginPage = () => {
                                 Acceso
                             </Button>
                         </Box>
+                        
+                        <Divider sx={{ my: 3 }}>
+                            <Typography variant="body2" color="text.secondary">
+                                o
+                            </Typography>
+                        </Divider>
+
+                        <Box display="flex" justifyContent="center">
+                            <Button
+                                variant="outlined"
+                                startIcon={<PersonAdd />}
+                                onClick={() => navigate('/registrarse')}
+                                sx={{
+                                    width: '200px',
+                                    borderRadius: '20px',
+                                    borderColor: '#2596be',
+                                    color: 'black',
+                                    '&:hover': {
+                                        borderColor: '#000000',
+                                        backgroundColor: 'rgba(37, 150, 190, 0.1)'
+                                    }
+                                }}
+                            >
+                                Crear Cuenta
+                            </Button>
+                        </Box>
+
+                        <Typography 
+                            variant="caption" 
+                            display="block" 
+                            textAlign="center" 
+                            sx={{ mt: 2, color: 'text.secondary' }}
+                        >
+                            ¿No tienes cuenta? Regístrate para acceder
+                        </Typography>
                     </form>
                 </CardContent>
             </Card>

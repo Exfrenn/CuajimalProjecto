@@ -1,10 +1,12 @@
 import { forwardRef } from 'react';
 import { AppBar, Layout, UserMenu, useLogout, Sidebar } from 'react-admin';
-import { MenuItem, Box, IconButton } from '@mui/material';
+import { MenuItem, Box, IconButton, ListItemIcon, ListItemText, } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import './styles/sidebar.css';
 import './styles/acc.css';
+import PersonIcon from '@mui/icons-material/Person';
+import { useNavigate } from 'react-router-dom';
 
 const MyLogoutButton = forwardRef<any, any>((props, ref) => {
     const logout = useLogout();
@@ -20,11 +22,23 @@ const MyLogoutButton = forwardRef<any, any>((props, ref) => {
     );
 });
 
-const MyUserMenu = () => (
-    <UserMenu>
+
+
+const CustomUserMenu = () => {
+    const navigate = useNavigate();
+
+    return (
+        <UserMenu>
+            <MenuItem onClick={() => navigate('/perfil')}>
+                <ListItemIcon>
+                    <PersonIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Mi Perfil</ListItemText>
+            </MenuItem>
         <MyLogoutButton />
-    </UserMenu>
-);
+        </UserMenu>
+    );
+};
 
 const MyAppBar = () => {
     const handleAccessibilityToggle = () => {
@@ -32,7 +46,7 @@ const MyAppBar = () => {
     };
 
     return (
-        <AppBar userMenu={<MyUserMenu />}>
+        <AppBar userMenu={<CustomUserMenu />}>
             <Box sx={{ marginLeft: 'auto', marginRight: 2 }}>
                 <IconButton 
                     color="inherit"
