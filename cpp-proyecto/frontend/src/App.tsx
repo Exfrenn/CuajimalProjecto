@@ -1,4 +1,4 @@
-import { Admin, CustomRoutes, defaultTheme, Resource } from "react-admin";
+import { Admin, CustomRoutes, defaultTheme, Resource, nanoLightTheme, nanoDarkTheme } from "react-admin";
 import { dataProvider } from "./dataProvider";
 import { i18nProvider } from "./i18nProvider";
 import MyLayout from './MyLayout';

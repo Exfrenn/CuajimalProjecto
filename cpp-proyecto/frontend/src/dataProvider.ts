@@ -18,7 +18,7 @@ export const fetchJsonUtil = (url: string, options: fetchUtils.Options = {}) => 
 
 // Usa fetchJsonUtil en el dataProvider
 const baseDataProvider = jsonServerProvider(
-    import.meta.env.VITE_JSON_SERVER_URL,
+    import.meta.env.VITE_BACKEND,
     fetchJsonUtil
 );
 
@@ -27,7 +27,7 @@ const uploadFile = async (file: File): Promise<{ src: string, title: string }> =
     const formData = new FormData();
     formData.append('images', file);
 
-    const response = await fetch('http://localhost:3000/api/upload', {
+    const response = await fetch(import.meta.env.VITE_BACKEND+'/api/upload', {
         method: 'POST',
         body: formData,
     });
@@ -45,7 +45,7 @@ const uploadPDF = async (file: File): Promise<{ src: string, title: string }> =>
     const formData = new FormData();
     formData.append('pdf', file);
 
-    const response = await fetch('http://localhost:3000/api/upload-pdf', {
+    const response = await fetch( import.meta.env.VITE_BACKEND+'/api/upload-pdf', {
         method: 'POST',
         body: formData,
     });

@@ -16,6 +16,7 @@
     "@mui/material": "^7.0.1",
     "leaflet": "^1.9.4",
     "leaflet.markercluster": "^1.5.3",
+    "package.json": "^2.0.1",
     "ra-data-json-server": "^5.11.3",
     "ra-i18n-polyglot": "^5.11.3",
     "react": "^19.0.0",
