@@ -163,63 +163,41 @@ export const Dashboard = () => {
     const reportesUrbanosEnProceso = reportesUrbanos?.filter(r => r.estado === 'en_proceso')?.length || 0;
 
     return (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: 3, xs: { 12: 3 }, sm: { 6: 3 }, md: { 3: 3 } }}>
             <Typography variant="h3" gutterBottom sx={{ mb: 4, color: 'text.primary' }}>
                 Dashboard - Sistema de Gestión
             </Typography>
             
-            {/* Stats Cards */}
-            <Box sx={{ 
-                display: 'grid', 
-                gridTemplateColumns: { 
-                    xs: '1fr', 
-                    sm: 'repeat(2, 1fr)', 
-                    md: 'repeat(3, 1fr)',
-                    lg: 'repeat(5, 1fr)'
-                }, 
-                gap: 3, 
-                mb: 4 
-            }}>
-                <StatCard
-                    title="Usuarios"
-                    value={usuarios?.length || 0}
-                    icon={<PeopleIcon sx={{ fontSize: 40 }} />}
-                    color={theme.palette.primary.main}
-                    subtitle="Registrados"
-                />
-                
-                <StatCard
-                    title="R. Urbanos"
-                    value={reportesUrbanos?.length || 0}
-                    icon={<ReportIcon sx={{ fontSize: 40 }} />}
-                    color={theme.palette.secondary.main}
-                    subtitle={`${reportesUrbanosPendientes} pend.`}
-                />
-                
-                <StatCard
-                    title="R. Prehospital"
-                    value={reportesPrehospitalarios?.length || 0}
-                    icon={<HospitalIcon sx={{ fontSize: 40 }} />}
-                    color={theme.palette.error.main}
-                    subtitle="Atenciones"
-                />
-                
-                <StatCard
-                    title="Turnos"
-                    value={turnos?.length || 0}
-                    icon={<ScheduleIcon sx={{ fontSize: 40 }} />}
-                    color={theme.palette.success.main}
-                    subtitle="Activos"
-                />
-                
-                <StatCard
-                    title="Roles"
-                    value={roles?.length || 0}
-                    icon={<RoleIcon sx={{ fontSize: 40 }} />}
-                    color={theme.palette.warning.main}
-                    subtitle="Sistema"
-                />
-            </Box>
+            <Grid container spacing={3} sx={{ mb: 4 }}>
+                    <StatCard
+                        title="Usuarios Registrados"
+                        value={usuarios?.length || 0}
+                        icon={<PeopleIcon sx={{ fontSize: 40 }} />}
+                        color={theme.palette.primary.main}
+                        subtitle="Total activos"
+                    />
+                    <StatCard
+                        title="Reportes Urbanos"
+                        value={reportes?.length || 0}
+                        icon={<ReportIcon sx={{ fontSize: 40 }} />}
+                        color={theme.palette.secondary.main}
+                        subtitle={`${reportesPendientes} pendientes`}
+                    />
+                    <StatCard
+                        title="Turnos Disponibles"
+                        value={turnos?.length || 0}
+                        icon={<ScheduleIcon sx={{ fontSize: 40 }} />}
+                        color={theme.palette.success.main}
+                        subtitle="Gestión de horarios"
+                    />
+                    <StatCard
+                        title="Roles del Sistema"
+                        value={roles?.length || 0}
+                        icon={<RoleIcon sx={{ fontSize: 40 }} />}
+                        color={theme.palette.warning.main}
+                        subtitle="Permisos activos"
+                    />
+            </Grid>
 
             {/* Detail Cards */}
             <Box sx={{ 

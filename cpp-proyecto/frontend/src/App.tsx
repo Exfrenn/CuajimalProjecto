@@ -47,25 +47,16 @@ const customTheme = {
 };
 
 export const App = () => (
-  <Admin 
-    layout={MyLayout} 
-    loginPage={LoginPage} 
-    dashboard={Dashboard} 
-    authProvider={authProvider} 
-    dataProvider={dataProvider} 
-    i18nProvider={i18nProvider} 
-    theme={customTheme}
-    darkTheme={null}
-  >
-    <Resource name="turnos" list={TurnoList} show={TurnoShow} create={TurnoCreate} edit={TurnoEdit} icon={IconoTurno} />
-    <Resource name="roles" list={RolList} show={RolShow} create={RolCreate} edit={RolEdit} icon={IconoRol} />
-    <Resource name="usuarios" list={UsuarioList} show={UsuarioShow} create={UsuarioCreate} edit={UsuarioEdit} icon={IconoUsuario} />
-    <Resource name="reportes_urbanos" list={ReporteUrbanoList} show={ReporteUrbanoShow} edit={ReporteUrbanoEdit} create={ReporteUrbanoCreate} icon={IconoReporteUrbano} />
-    <Resource name="reportes_prehospitalarios" list={ReportePrehospitalarioList} show={ReportePrehospitalarioShow} edit={ReportePrehospitalarioEdit} create={ReportePrehospitalarioCreate} icon={IconoHospital} />
-    <CustomRoutes>
-      <Route path="registrarse" element={<Registrarse />} />
-      <Route path="perfil" element={<Perfil />} />
-      <Route path="estadisticas" element={<Estadisticas />} />
-    </CustomRoutes>
-  </Admin>
+    <Admin layout={CustomLayout}  loginPage={LoginPage}  dashboard={Dashboard}  authProvider={authProvider}  dataProvider={dataProvider} i18nProvider={i18nProvider} theme={nanoLightTheme} darkTheme={nanoDarkTheme}
+    >
+        <Resource name="turnos" list={TurnoList} show={TurnoShow} create={TurnoCreate} edit={TurnoEdit} icon={IconoTurno}/>
+        <Resource name="roles" list={RolList} show={RolShow} create={RolCreate} edit={RolEdit} icon={IconoRol}/>
+        <Resource name="usuarios" list={UsuarioList} show={UsuarioShow} create={UsuarioCreate} edit={UsuarioEdit} icon={IconoUsuario}/>
+        <Resource name="reportes_urbanos" list={ReporteUrbanoList} show={ReporteUrbanoShow} edit={ReporteUrbanoEdit} create={ReporteUrbanoCreate} icon={IconoReporteUrbano}/>
+        <Resource name="reportes_prehospitalarios" list={ReportePrehospitalarioList} show={ReportePrehospitalarioShow} edit={ReportePrehospitalarioEdit} create={ReportePrehospitalarioCreate} icon={IconoHospital}/>
+        <CustomRoutes>
+            <Route path="registrarse" element={<Registrarse />}/>
+            <Route path="perfil" element={<Perfil />}/>
+        </CustomRoutes>
+    </Admin>
 );
