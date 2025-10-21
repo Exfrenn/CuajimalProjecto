@@ -122,7 +122,7 @@ const Registrarse: React.FC = () => {
         try {
             const { confirmPassword, ...dataToSend } = datos;
             
-            const res = await fetch('http://localhost:3000/registrarse', {
+            const res = await fetch(import.meta.env.VITE_BACKEND+'/registrarse', {
                 method: 'POST',
                 body: JSON.stringify(dataToSend),
                 headers: { 'Content-Type': 'application/json' }
