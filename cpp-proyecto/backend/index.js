@@ -16,21 +16,19 @@ const PORT = 3000;
 let db;
 app.use(bodyParser.json());
 
-// Middleware de autenticación JWT
 async function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+    const token = authHeader && authHeader.split(' ')[1]; 
 
     if (token == null) return res.sendStatus(401);
 
     jwt.verify(token, await process.env.JWTKEY, (err, user) => {
         if (err) return res.sendStatus(403);
-        req.user = user; // Guarda la info del usuario en req.user
+        req.user = user;
         next();
     });
 }
 
-// Middleware de permisos - Compatible con nueva estructura {action, resource}
 function checkPermissions(resource, action) {
     return async (req, res, next) => {
         try {
@@ -47,18 +45,14 @@ function checkPermissions(resource, action) {
                 return res.sendStatus(403);
             }
 
-            // Soporte para ambos formatos de permisos:
-            // Nuevo formato: [{action: "list", resource: "usuarios"}, ...]
-            // Formato antiguo: ["usuarios", "list", ...]
+
             let tienePermiso = false;
 
             if (rol.permisos.length > 0 && typeof rol.permisos[0] === 'object') {
-                // Nuevo formato: verifica que exista el objeto con action y resource exactos
                 tienePermiso = rol.permisos.some(p => 
                     p.resource === resource && p.action === action
                 );
             } else {
-                // Formato antiguo (compatibilidad): verifica que existan ambos strings
                 tienePermiso = rol.permisos.includes(resource) && rol.permisos.includes(action);
             }
 
@@ -79,7 +73,6 @@ function checkPermissions(resource, action) {
 
 async function crearUsuario({ nombre, apellido, usuario, email, password, rol_id, turno_id }) {
     const hash = await argon2.hash(password, { type: argon2.argon2id, memoryCost: 19*1024, timeCost:2, parallelism:1, saltLength:16 });
-    // Calcula el siguiente id
     const last = await db.collection("usuarios").find().sort({ id: -1 }).limit(1).toArray();
     const id = last.length > 0 ? last[0].id + 1 : 1;
     const usuarioAgregar = { id, nombre, apellido, usuario, email, password: hash, rol_id, turno_id };
@@ -114,7 +107,7 @@ const storage = multer.diskStorage({
 const upload = multer({ 
     storage: storage,
     limits: {
-        fileSize: 5000000 // 5MB
+        fileSize: 5000000 
     },
     fileFilter: (req, file, cb) => {
         if (file.mimetype.startsWith('image/')) {
@@ -145,7 +138,6 @@ app.post('/api/upload', upload.array('images', 10), (req, res) => {
     }
 });
 
-// Configuración de multer para PDFs
 const pdfStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/');
@@ -159,7 +151,7 @@ const pdfStorage = multer.diskStorage({
 const uploadPDF = multer({ 
     storage: pdfStorage,
     limits: {
-        fileSize: 5000000 // 5MB
+        fileSize: 5000000 
     },
     fileFilter: (req, file, cb) => {
         if (file.mimetype === 'application/pdf') {
@@ -254,7 +246,6 @@ app.get("/roles", authenticateToken, checkPermissions("roles", "list"), async (r
         
         let filter = {};
         
-        // Si no es admin, solo puede ver su propio rol
         if (usuario.rol_id !== 1) {
             filter = { id: usuario.rol_id };
         }
@@ -306,25 +297,20 @@ app.put("/roles/:id", authenticateToken, checkPermissions("roles", "edit"), asyn
 //Usuarios-------------------------------------------------------------------------
 app.get("/usuarios", authenticateToken, checkPermissions("usuarios", "list"), async (req,res)=>{
     try {
-        // Obtener usuario actual
         const userEmail = req.user.email;
         const usuario = await db.collection("usuarios").findOne({ "email": userEmail });
         
         let filtro = {};
         
         if (usuario.rol_id === 3 || usuario.rol_id === 4) {
-            // Paramédico u Operador: solo pueden verse a sí mismos
             filtro = { "id": usuario.id };
         } else if (usuario.rol_id === 2) {
-            // Jefe de turno: ve a sus operadores asignados
             if (usuario.operadores_id && usuario.operadores_id.length > 0) {
                 filtro = { "id": { $in: usuario.operadores_id } };
             } else {
-                // Si no tiene operadores asignados, no ve a nadie
                 filtro = { "id": -1 }; // ID que no existe
             }
         }
-        // Admin (rol_id === 1): sin filtro, ve todos
         
         let data = await db.collection("usuarios").find(filtro).project({_id:0}).toArray();
         res.set("Access-Control-Expose-Headers", "X-Total-Count");
@@ -384,29 +370,22 @@ app.put("/usuarios/:id", authenticateToken, checkPermissions("usuarios", "edit")
 
 //Reporte Urbanoss--------------------------------------------------------------
 app.get("/reportes_urbanos", authenticateToken, checkPermissions("reportes_urbanos", "list"), async (req,res)=>{
-    // Obtener usuario actual
     const userEmail = req.user.email;
     const usuario = await db.collection("usuarios").findOne({ "email": userEmail });
     
-    // Filtro base
     let filtro = {};
     
-    // Si es Jefe de turno (rol_id = 2), filtrar por operadores asignados
     if (usuario.rol_id === 2) {
-        // Verificar tipo de servicio
         if (usuario.tipo_servicio === 'urbano' && usuario.operadores_id && usuario.operadores_id.length > 0) {
-            // Solo mostrar reportes donde algún personal_a_cargo esté en operadores_id
             filtro = {
                 "personal_y_activacion.personal_a_cargo": { 
                     $in: usuario.operadores_id 
                 }
             };
         } else {
-            // Si no es urbano o no tiene operadores asignados, no muestra nada
             filtro = { "_id": null };
         }
     }
-    // Si es Operador (rol_id = 4), solo sus propios reportes
     else if (usuario.rol_id === 4) {
         filtro = {
             "personal_y_activacion.personal_a_cargo": usuario.id
@@ -459,25 +438,19 @@ app.get("/reportes_prehospitalarios", authenticateToken, checkPermissions("repor
     const userEmail = req.user.email;
     const usuario = await db.collection("usuarios").findOne({ "email": userEmail });
     
-    // Filtro base
     let filtro = {};
     
-    // Si es Jefe de turno (rol_id = 2), filtrar por operadores asignados
     if (usuario.rol_id === 2) {
-        // Verificar tipo de servicio
         if (usuario.tipo_servicio === 'prehospitalario' && usuario.operadores_id && usuario.operadores_id.length > 0) {
-            // Solo mostrar reportes donde algún operador esté en operadores_id
             filtro = {
                 "control.operador": { 
                     $in: usuario.operadores_id 
                 }
             };
         } else {
-            // Si no es prehospitalario o no tiene operadores asignados, no muestra nada
             filtro = { "_id": null };
         }
     }
-    // Si es Paramédico (rol_id = 3), solo sus propios reportes
     else if (usuario.rol_id === 3) {
         filtro = {
             "control.operador": usuario.id
@@ -713,7 +686,6 @@ app.post("/login", async (req, res) => {
     if (data == null) {
         res.sendStatus(401);
     } else if (await argon2.verify(data.password, pass)) {
-        // Obtener los permisos del rol
         const rol = await db.collection("roles").findOne({ "id": data.rol_id });
         const permisos = rol ? rol.permisos : [];
         
@@ -751,7 +723,6 @@ https.createServer(options, app).listen(PORT, async () => {
     try {
         await process.loadEnvFile(".env");
         
-        // Espera a que la conexión a la BD sea exitosa
         await connectToDB(); 
         
         console.log('✅ HTTPS Server running on port 3000');
@@ -759,12 +730,6 @@ https.createServer(options, app).listen(PORT, async () => {
 
     } catch (error) {
         console.error('❌ Failed to start server:', error);
-        process.exit(1); // Detiene el proceso si no se puede conectar a la BD
+        process.exit(1); 
     }
 });
-
-/*app.listen(PORT, async ()=>{
-	await process.loadEnvFile(".env");
-	connectToDB();
-	console.log("aplicacion corriendo en puerto 3000");
-});*/
