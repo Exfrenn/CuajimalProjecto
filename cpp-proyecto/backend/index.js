@@ -16,7 +16,6 @@ const PORT = 3000;
 let db;
 app.use(bodyParser.json());
 
-// Middleware de autenticación JWT
 async function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
@@ -30,7 +29,6 @@ async function authenticateToken(req, res, next) {
     });
 }
 
-// Middleware de permisos - Compatible con nueva estructura {action, resource}
 function checkPermissions(resource, action) {
     return async (req, res, next) => {
         try {
@@ -47,9 +45,6 @@ function checkPermissions(resource, action) {
                 return res.sendStatus(403);
             }
 
-            // Soporte para ambos formatos de permisos:
-            // Nuevo formato: [{action: "list", resource: "usuarios"}, ...]
-            // Formato antiguo: ["usuarios", "list", ...]
             let tienePermiso = false;
 
             if (rol.permisos.length > 0 && typeof rol.permisos[0] === 'object') {
@@ -58,7 +53,6 @@ function checkPermissions(resource, action) {
                     p.resource === resource && p.action === action
                 );
             } else {
-                // Formato antiguo (compatibilidad): verifica que existan ambos strings
                 tienePermiso = rol.permisos.includes(resource) && rol.permisos.includes(action);
             }
 
@@ -79,7 +73,6 @@ function checkPermissions(resource, action) {
 
 async function crearUsuario({ nombre, apellido, usuario, email, password, rol_id, turno_id }) {
     const hash = await argon2.hash(password, { type: argon2.argon2id, memoryCost: 19*1024, timeCost:2, parallelism:1, saltLength:16 });
-    // Calcula el siguiente id
     const last = await db.collection("usuarios").find().sort({ id: -1 }).limit(1).toArray();
     const id = last.length > 0 ? last[0].id + 1 : 1;
     const usuarioAgregar = { id, nombre, apellido, usuario, email, password: hash, rol_id, turno_id };
@@ -145,7 +138,6 @@ app.post('/api/upload', upload.array('images', 10), (req, res) => {
     }
 });
 
-// Configuración de multer para PDFs
 const pdfStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/');
