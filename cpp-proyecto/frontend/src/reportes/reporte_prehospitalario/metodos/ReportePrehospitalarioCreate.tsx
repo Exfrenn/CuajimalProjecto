@@ -1,4 +1,6 @@
-import { TabbedForm, TextInput, DateInput, NumberInput, SelectInput, ArrayInput, SimpleFormIterator, required, DateTimeInput, TimeInput, FileInput, FileField, TabbedFormTabs,Create,
+import { TabbedForm, TextInput, DateInput, NumberInput, SelectInput, ArrayInput, 
+    SimpleFormIterator, required, minLength, maxLength, regex, DateTimeInput, TimeInput, 
+    FileInput, FileField, TabbedFormTabs, Create,
 } from "react-admin";
 import { Theme } from '@mui/material/styles';
 
@@ -29,6 +31,12 @@ import { LugarOcurrenciaInput, AgenteCausalInput, OrigenProbableInput, Instituci
 export const ReportePrehospitalarioCreate = () => {
     const { onEditSuccess } = useReporteNotifications();
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
+    const validateLimit = (max: number) => [
+        required('El nombre es obligatorio'),
+        minLength(2, 'El nombre debe tener al menos 2 caracteres'),
+        maxLength(max, `El nombre no puede exceder ${max} caracteres`),
+        regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, 'El nombre solo puede contener letras'),
+    ];
 
     return (
         <Create mutationOptions={{ onSuccess: onEditSuccess }} 
@@ -64,13 +72,13 @@ export const ReportePrehospitalarioCreate = () => {
                     <SelectInput source="servicio.motivo" label="Motivo de atención" choices={atencionChoices} validate={required()} fullWidth />
 
                     <SectionCard title="Ubicación del Servicio" icon={<LocationOnIcon />}>
-                        <TextInput source="servicio.ubicacion.calle" label="Calle" fullWidth />
+                        <TextInput source="servicio.ubicacion.calle" label="Calle" fullWidth helperText= {"Maximo de 50 caracteres"} validate={validateLimit(50)} />
                         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
-                            <TextInput source="servicio.ubicacion.interseccion1" label="Intersección 1" sx={{ flex: 1 }} />
-                            <TextInput source="servicio.ubicacion.interseccion2" label="Intersección 2" sx={{ flex: 1 }} />
+                            <TextInput source="servicio.ubicacion.interseccion1" label="Intersección 1" sx={{ flex: 1 }} helperText= {"Maximo de 40 caracteres"} validate={validateLimit(40)} />
+                            <TextInput source="servicio.ubicacion.interseccion2" label="Intersección 2" sx={{ flex: 1 }} helperText= {"Maximo de 50 caracteres"} validate={validateLimit(50)} />
                         </Stack>
                         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
-                            <TextInput source="servicio.ubicacion.colonia" label="Colonia/Comunidad" sx={{ flex: 1 }} />
+                            <TextInput source="servicio.ubicacion.colonia" label="Colonia/Comunidad" sx={{ flex: 1 }} helperText= {"Maximo de 60 caracteres"} validate={validateLimit(60)} />
                             <SelectInput source="servicio.ubicacion.alcaldia" label="Alcaldía" choices={alcaldiasCDMX} validate={required()} sx={{ flex: 1 }} />
                         </Stack>
                         <LugarOcurrenciaInput/>
@@ -98,7 +106,7 @@ export const ReportePrehospitalarioCreate = () => {
                 {/* III. DATOS DEL PACIENTE */}
                 <TabbedForm.Tab label="Datos del Paciente">
                     <SectionCard title="Información del Paciente" icon={<PersonIcon />}>
-                        <TextInput source="paciente.nombre" label="Nombre del paciente" fullWidth />
+                        <TextInput source="paciente.nombre" label="Nombre del paciente" fullWidth helperText= {"Maximo de 65 caracteres"} validate={validateLimit(65)} />
                         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
                             <SelectInput
                                 source="paciente.sexo"

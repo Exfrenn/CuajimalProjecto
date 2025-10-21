@@ -1,5 +1,6 @@
 import { Edit, TabbedForm, TextInput, DateInput, NumberInput, SelectInput, ArrayInput, 
-    SimpleFormIterator, required, DateTimeInput, TimeInput, FileInput, FileField, TabbedFormTabs } from "react-admin";
+    SimpleFormIterator, required, DateTimeInput, TimeInput, FileInput, FileField, TabbedFormTabs, 
+    minLength, maxLength, regex } from "react-admin";
 
 import { useReporteNotifications } from "../hooks/useReporteNotifications";
 import { OperadorPrehospitalario } from "../../componentes/OperadorPrehospitalario";
@@ -35,20 +36,18 @@ import { Fullscreen } from "@mui/icons-material";
 export const ReportePrehospitalarioEdit = () => {
     const { onEditSuccess } = useReporteNotifications();
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
+    const validateLimit = (max: number) => [
+        required('El nombre es obligatorio'),
+        minLength(2, 'El nombre debe tener al menos 2 caracteres'),
+        maxLength(max, `El nombre no puede exceder ${max} caracteres`),
+        regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, 'El nombre solo puede contener letras'),
+    ];
 
     return (
-        <Edit mutationOptions={{ onSuccess: onEditSuccess }}>  
-            {isSmall ? 
-                (<ReportePrehospitalarioEditMobile/>)
-            : (
+        <Edit mutationOptions={{ onSuccess: onEditSuccess }} 
+>  
+            {isSmall ? ( <ReportePrehospitalarioEditMobile/>) : (
                 <TabbedForm warnWhenUnsavedChanges tabs={<TabbedFormTabs variant="scrollable" scrollButtons="auto" />}>
-                    <Box
-                        display="flex"
-                        flexDirection={{ xs: 'column', sm: 'row' }}
-                        justifyContent="space-between"
-                        alignItems="center"
-                        gap={2}
-                        ></Box>
 
                 {/* PREÁMBULO */}
                 <TabbedForm.Tab label="Preambulo">
@@ -60,26 +59,38 @@ export const ReportePrehospitalarioEdit = () => {
                 {/* I. DATOS DEL SERVICIO */}
                 <TabbedForm.Tab label="Datos del Servicio">
                     <SectionCard title="Cronometría" icon={<AccessTimeIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
                             <TimeInput source="servicio.cronometro.hora_llamada" label="Hora de llamada" sx={{ flex: 1 }} />
                             <TimeInput source="servicio.cronometro.hora_salida" label="Hora de salida" sx={{ flex: 1 }} />
                             <TimeInput source="servicio.cronometro.hora_llegada" label="Hora de llegada" sx={{ flex: 1 }} />
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
                             <TimeInput source="servicio.cronometro.hora_traslado" label="Hora de traslado" sx={{ flex: 1 }} />
                             <TimeInput source="servicio.cronometro.hora_hospital" label="Hora hospital" sx={{ flex: 1 }} />
                             <TimeInput source="servicio.cronometro.salida_hospital" label="Salida hospital" sx={{ flex: 1 }} />
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
                             <TimeInput source="servicio.cronometro.hora_base" label="Hora base" sx={{ flex: 1 }} />
+                        </Stack>
                     </SectionCard>
 
                     <SelectInput source="servicio.motivo" label="Motivo de atención" choices={atencionChoices} validate={required()} fullWidth />
 
                     <SectionCard title="Ubicación del Servicio" icon={<LocationOnIcon />}>
-                        <TextInput source="servicio.ubicacion.calle" label="Calle" fullWidth />
-                            <TextInput source="servicio.ubicacion.interseccion1" label="Intersección 1" sx={{ flex: 1 }} />
-                            <TextInput source="servicio.ubicacion.interseccion2" label="Intersección 2" sx={{ flex: 1 }} />
-                            <TextInput source="servicio.ubicacion.colonia" label="Colonia/Comunidad" sx={{ flex: 1 }} />
+                        <TextInput source="servicio.ubicacion.calle" label="Calle" fullWidth helperText= {"Maximo de 50 caracteres"} validate={validateLimit(50)} />
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <TextInput source="servicio.ubicacion.interseccion1" label="Intersección 1" sx={{ flex: 1 }} helperText= {"Maximo de 40 caracteres"} validate={validateLimit(40)} />
+                            <TextInput source="servicio.ubicacion.interseccion2" label="Intersección 2" sx={{ flex: 1 }} helperText= {"Maximo de 50 caracteres"} validate={validateLimit(50)} />
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
+                            <TextInput source="servicio.ubicacion.colonia" label="Colonia/Comunidad" sx={{ flex: 1 }} helperText= {"Maximo de 60 caracteres"} validate={validateLimit(60)} />
                             <SelectInput source="servicio.ubicacion.alcaldia" label="Alcaldía" choices={alcaldiasCDMX} validate={required()} sx={{ flex: 1 }} />
+                        </Stack>
                         <LugarOcurrenciaInput/>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
                             <NumberInput source="servicio.ubicacion.coordenadas.0" label="Longitud" sx={{ flex: 1 }} />
                             <NumberInput source="servicio.ubicacion.coordenadas.1" label="Latitud" sx={{ flex: 1 }} />
+                        </Stack>
                         <Box sx={{ mt: 2 }}>
                             <BotonSoloCoordenadas/>
                         </Box>
@@ -91,6 +102,7 @@ export const ReportePrehospitalarioEdit = () => {
                     <TextInput source="control.ambulancia_numero" label="Número de Ambulancia" />
 
                     <OperadorPrehospitalario />
+                    
                     <TextInput source="control.tum" label="T.U.M" />
                     <TextInput source="control.socorrista" label="Socorrista" />
                     <TextInput source="control.helicoptero" label="Helicóptero Matrícula" />
@@ -99,7 +111,8 @@ export const ReportePrehospitalarioEdit = () => {
                 {/* III. DATOS DEL PACIENTE */}
                 <TabbedForm.Tab label="Datos del Paciente">
                     <SectionCard title="Información del Paciente" icon={<PersonIcon />}>
-                        <TextInput source="paciente.nombre" label="Nombre del paciente" fullWidth />
+                        <TextInput source="paciente.nombre" label="Nombre del paciente" fullWidth helperText= {"Maximo de 65 caracteres"} validate={validateLimit(65)} />
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
                             <SelectInput
                                 source="paciente.sexo"
                                 label="Sexo"
@@ -108,11 +121,16 @@ export const ReportePrehospitalarioEdit = () => {
                             />
                             <NumberInput source="paciente.edad.anos" label="Edad (años)" sx={{ flex: 1 }} />
                             <NumberInput source="paciente.edad.meses" label="Edad (meses)" sx={{ flex: 1 }} />
+                        </Stack>
                         <TextInput source="paciente.domicilio" label="Domicilio" fullWidth sx={{ mt: 2 }} />
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
                             <TextInput source="paciente.colonia" label="Colonia/Comunidad" sx={{ flex: 1 }} />
                             <TextInput source="paciente.alcaldia" label="Alcaldía/Municipio" sx={{ flex: 1 }} />
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
                             <TextInput source="paciente.derechohabiente" label="Derechohabiente a" sx={{ flex: 1 }} />
                             <TextInput source="paciente.telefono" label="Teléfono" sx={{ flex: 1 }} />
+                        </Stack>
                         <TextInput source="paciente.ocupacion" label="Ocupación" fullWidth sx={{ mt: 2 }} />
                     </SectionCard>
                 </TabbedForm.Tab>
@@ -120,8 +138,10 @@ export const ReportePrehospitalarioEdit = () => {
                 {/* IV. PARTO */}
                 <TabbedForm.Tab label="Parto">
                     <SectionCard title="Información de la Madre" icon={<PregnantWomanIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
                             <NumberInput source="parto.madre.semanas_gesta" label="Semanas de gesta" sx={{ flex: 1 }} />
                             <TimeInput source="parto.madre.hora_inicio" label="Hora de inicio contracciones" sx={{ flex: 1 }} />
+                        </Stack>
                         <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
                             <TextInput source="parto.madre.frecuencia" label="Frecuencia" sx={{ flex: 1 }} />
                             <TextInput source="parto.madre.duracion" label="Duración" sx={{ flex: 1 }} />
@@ -129,8 +149,11 @@ export const ReportePrehospitalarioEdit = () => {
                     </SectionCard>
 
                     <SectionCard title="Información del Recién Nacido" icon={<LocalHospitalIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
                             <DateTimeInput source="parto.postparto.hora_nacimiento" label="Hora de nacimiento" sx={{ flex: 1 }} />
                             <TextInput source="parto.postparto.placenta" label="Placenta expulsada" sx={{ flex: 1 }} />
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 2 }}>
                             <TextInput source="parto.postparto.lugar" label="Lugar" sx={{ flex: 1 }} />
                             <SelectInput
                                 source="parto.postparto.producto"
@@ -138,6 +161,7 @@ export const ReportePrehospitalarioEdit = () => {
                                 choices={productoChoices}
                                 sx={{ flex: 1 }}
                             />
+                        </Stack>
                         <SelectInput
                             source="parto.postparto.sexo"
                             label="Sexo del RN"
@@ -155,6 +179,7 @@ export const ReportePrehospitalarioEdit = () => {
                 <TabbedForm.Tab label="Causa Traumatica">
                     <SectionCard title="Información del Trauma" icon={<WarningIcon />}>
                         <AgenteCausalInput/>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
                             <SelectInput 
                                 source="trauma.accidente_auto" 
                                 label="Accidente automovilístico" 
@@ -169,10 +194,12 @@ export const ReportePrehospitalarioEdit = () => {
                                 validate={required()}
                                 fullWidth
                             />
+                        </Stack>
                         <TextInput source="trauma.cms" label="CMS" fullWidth/>
                     </SectionCard>
 
                     <SectionCard title="Condiciones del Vehículo" icon={<DirectionsCarIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
                             <SelectInput 
                                 source="trauma.parabrisas" 
                                 label="Parabrisas" 
@@ -187,6 +214,8 @@ export const ReportePrehospitalarioEdit = () => {
                                 choices={volanteChoices}
                                 fullWidth
                             />
+                        </Stack>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
                             <SelectInput 
                                 source="trauma.bolsa_aire" 
                                 label="Bolsa de aire" 
@@ -201,9 +230,11 @@ export const ReportePrehospitalarioEdit = () => {
                                 choices={cinturonChoices}
                                 fullWidth
                             />
+                        </Stack>
                     </SectionCard>
 
                     <SectionCard title="Situación del Paciente" icon={<PersonIcon />}>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
                             <SelectInput 
                                 source="trauma.dentro_vehiculo" 
                                 label="Dentro del vehículo" 
@@ -218,6 +249,7 @@ export const ReportePrehospitalarioEdit = () => {
                                 choices={atropelladoChoices}
                                 fullWidth
                             />
+                        </Stack>
                     </SectionCard>
                 </TabbedForm.Tab>
 
@@ -225,6 +257,7 @@ export const ReportePrehospitalarioEdit = () => {
                 <TabbedForm.Tab label="Causa Clinica">
                     <SectionCard title="Origen Clínico" icon={<MedicalServicesIcon />}>
                         <OrigenProbableInput/>
+                        <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }}>
                             <SelectInput
                                 source="clinica.primera_vez"
                                 label="¿Primera vez?"
@@ -237,6 +270,7 @@ export const ReportePrehospitalarioEdit = () => {
                                 choices={booleanChoices}
                                 fullWidth
                             />
+                        </Stack>
                     </SectionCard>
                 </TabbedForm.Tab>
 
