@@ -7,6 +7,8 @@ const jwt=require("jsonwebtoken")
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const https = require('https');
+
 
 const app = express();
 app.use(cors());
@@ -15,13 +17,13 @@ let db;
 app.use(bodyParser.json());
 
 // Middleware de autenticación JWT
-function authenticateToken(req, res, next) {
+async function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
 
     if (token == null) return res.sendStatus(401);
 
-    jwt.verify(token, "secretKey", (err, user) => {
+    jwt.verify(token, await process.env.JWTKEY, (err, user) => {
         if (err) return res.sendStatus(403);
         req.user = user; // Guarda la info del usuario en req.user
         next();
@@ -715,7 +717,7 @@ app.post("/login", async (req, res) => {
         const rol = await db.collection("roles").findOne({ "id": data.rol_id });
         const permisos = rol ? rol.permisos : [];
         
-        let token = jwt.sign({ "email": data.email, "rol_id": data.rol_id }, "secretKey", { expiresIn: 900 });
+        let token = jwt.sign({ "email": data.email, "rol_id": data.rol_id }, await process.env.JWTKEY, { expiresIn: 900 });
         res.json({ 
             "token": token, 
             "id": data.id,
@@ -732,16 +734,28 @@ app.post("/login", async (req, res) => {
     }
 });
 
+const options = {
+      key: fs.readFileSync('backend.key'),
+      cert: fs.readFileSync('backend.crt')
+    };
 
 async function connectToDB(){
-    let client = new MongoClient("mongodb://127.0.0.1:27017/ProyectoCPP");
+    let client = new MongoClient(await process.env.DB);
     await client.connect();
     db = client.db();
     console.log("conectado a la base de datos")
 }
 
-app.listen(PORT, ()=>{
-    connectToDB();
-    console.log("aplicacion corriendo en puerto 3000");
-})
 
+https.createServer(options, app).listen(PORT, async () => {
+		await process.loadEnvFile(".env");
+		connectToDB();
+      	console.log('HTTPS Server running on port 3000');
+});
+
+
+/*app.listen(PORT, async ()=>{
+	await process.loadEnvFile(".env");
+	connectToDB();
+	console.log("aplicacion corriendo en puerto 3000");
+});*/
