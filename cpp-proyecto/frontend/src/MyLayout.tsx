@@ -1,26 +1,11 @@
-import { forwardRef } from 'react';
-import { AppBar, Layout, UserMenu, useLogout, Sidebar } from 'react-admin';
+import { AppBar, Layout, UserMenu, Sidebar, Logout } from 'react-admin';
 import { MenuItem, Box, IconButton, ListItemIcon, ListItemText, } from '@mui/material';
-import LogoutIcon from '@mui/icons-material/Logout';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import './styles/sidebar.css';
 import './styles/acc.css';
+
 import PersonIcon from '@mui/icons-material/Person';
 import { useNavigate } from 'react-router-dom';
-
-const MyLogoutButton = forwardRef<any, any>((props, ref) => {
-    const logout = useLogout();
-    const handleClick = () => logout();
-    return (
-        <MenuItem
-            onClick={handleClick}
-            ref={ref}
-            {...props}
-        >
-            <LogoutIcon /> Cerrar sesión
-        </MenuItem>
-    );
-});
 
 
 
@@ -35,10 +20,11 @@ const CustomUserMenu = () => {
                 </ListItemIcon>
                 <ListItemText>Mi Perfil</ListItemText>
             </MenuItem>
-        <MyLogoutButton />
+            <Logout />
         </UserMenu>
     );
 };
+
 
 const MyAppBar = () => {
     const handleAccessibilityToggle = () => {
