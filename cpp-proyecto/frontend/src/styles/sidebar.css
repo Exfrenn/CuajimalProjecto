@@ -1,31 +1,28 @@
-/* SIDEBAR */
 .RaSidebar-root, .MuiDrawer-root {
     height: 100% !important;
 }
 
-.RaSidebar-root .MuiDrawer-paper, .MuiDrawer-root .MuiDrawer-paper, div.MuiDrawer-paper {
+.RaSidebar-root .MuiDrawer-paper, 
+.MuiDrawer-root .MuiDrawer-paper, 
+div.MuiDrawer-paper {
     background: url(/img/fu.jpg) repeat !important;
     background-size: 140px auto !important;
     background-position: top left !important;
     color: #ffffff !important;
-    min-height: 152vh auto !important;
+    min-height: 100vh !important; 
     height: 100% !important;
     position: relative !important;
-    background-image: url(/img/fu.jpg) !important;
-    background-repeat: no-repeat !important;
     transition: all 0.3s ease-in-out !important;
 }
 
 .RaSidebar-docked .MuiDrawer-paper {
     width: 210px !important;
-    background-size: cover !important;
 }
 
 .RaSidebar-closed .MuiDrawer-paper {
     width: 55px !important;
 }
 
-/* Separación entre items del menú */
 .MuiDrawer-paper .MuiList-root .MuiListItem-root, 
 .MuiDrawer-paper .MuiMenuItem-root, 
 .RaMenuItemLink-root {
@@ -34,7 +31,6 @@
     padding-bottom: 8px !important;
 }
 
-/* Estilo para sidebar cerrado - ÍCONO ARRIBA, NOMBRE ABAJO */
 .RaSidebar-closed .MuiDrawer-paper .MuiListItem-root,
 .RaSidebar-closed .MuiDrawer-paper .RaMenuItemLink-root {
     flex-direction: column !important;
@@ -51,7 +47,6 @@
     margin: 0 !important;
 }
 
-/* TAMAÑO DE LETRA DEL MENÚ CERRADO */
 .RaSidebar-closed .MuiDrawer-paper .MuiListItemText-root span,
 .RaSidebar-closed .MuiDrawer-paper .MuiListItemText-primary,
 .RaSidebar-closed .MuiDrawer-paper .MuiTypography-root {
