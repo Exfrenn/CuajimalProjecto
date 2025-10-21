@@ -1,23 +1,19 @@
-import { 
-    Edit, 
-    SimpleForm, 
-    TextInput, 
-    PasswordInput, 
-    ReferenceField,
-    TextField,
-    useGetIdentity,
-    useNotify,
-    useRefresh,
-    Labeled
-} from "react-admin";
+import { Edit, SimpleForm, TextInput, PasswordInput, ReferenceField, TextField, useGetIdentity, useNotify, useRefresh, Labeled, required, minLength, maxLength, email, regex } from "react-admin";
 import { Card, CardContent, Typography, Box, Stack } from "@mui/material";
 import PersonIcon from '@mui/icons-material/Person';
+
+// Validadores
+const validateNombre = [required('El nombre es obligatorio'), minLength(2, 'El nombre debe tener al menos 2 caracteres'), maxLength(50, 'El nombre no puede exceder 50 caracteres'), regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, 'El nombre solo puede contener letras')];
+const validateApellido = [required('El apellido es obligatorio'), minLength(2, 'El apellido debe tener al menos 2 caracteres'), maxLength(50, 'El apellido no puede exceder 50 caracteres'), regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, 'El apellido solo puede contener letras')];
+const validateEmail = [required('El email es obligatorio'), email('Debe ser un email válido')];
+const validatePassword = [minLength(6, 'La contraseña debe tener al menos 6 caracteres'), maxLength(50, 'La contraseña no puede exceder 50 caracteres')];
 
 const equalToPassword = (value: any, allValues: any) => {
     if (value && value !== allValues.password) {
         return 'Las dos contraseñas deben coincidir';
     }
-}
+    return undefined;
+};
 
 export const Perfil = () => {
     const { identity, isLoading } = useGetIdentity();
@@ -58,27 +54,9 @@ export const Perfil = () => {
                             </Typography>
                             
                             <Stack spacing={2} sx={{ width: '100%' }}>
-                                <TextInput 
-                                    source="nombre" 
-                                    label="Nombre" 
-                                    fullWidth
-                                />
-                                <TextInput 
-                                    source="apellido" 
-                                    label="Apellido" 
-                                    fullWidth
-                                />
-                                <TextInput 
-                                    source="usuario" 
-                                    label="Nombre de Usuario" 
-                                    fullWidth
-                                />
-                                <TextInput 
-                                    source="email" 
-                                    label="Email" 
-                                    type="email"
-                                    fullWidth
-                                />
+                                <TextInput source="nombre" label="Nombre" fullWidth validate={validateNombre} />
+                                <TextInput source="apellido" label="Apellido" fullWidth validate={validateApellido} />
+                                <TextInput source="email" label="Email" type="email" fullWidth validate={validateEmail} />
                             </Stack>
 
                             <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>
@@ -107,17 +85,8 @@ export const Perfil = () => {
                             </Typography>
                             
                             <Stack spacing={2} sx={{ width: '100%' }}>
-                                <PasswordInput 
-                                    source="password" 
-                                    label="Nueva Contraseña"
-                                    fullWidth
-                                />
-                                <PasswordInput 
-                                    source="validar_password" 
-                                    label="Confirmar Nueva Contraseña"
-                                    validate={equalToPassword}
-                                    fullWidth
-                                />
+                                <PasswordInput source="password" label="Nueva Contraseña" fullWidth validate={validatePassword} />
+                                <PasswordInput source="validar_password" label="Confirmar Nueva Contraseña" validate={equalToPassword} fullWidth />
                             </Stack>
                         </SimpleForm>
                     </Edit>
