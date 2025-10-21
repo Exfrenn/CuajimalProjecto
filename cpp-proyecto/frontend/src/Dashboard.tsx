@@ -1,15 +1,24 @@
-import { Card, CardContent, Grid, Typography, Box, Chip } from '@mui/material';
-import { Title, useGetList } from 'react-admin';
+import { Card, CardContent, Typography, Box, Chip, Alert, AlertTitle } from '@mui/material';
+import { useGetList, useGetIdentity } from 'react-admin';
 import { 
-    TrendingUp as TrendingUpIcon, 
     People as PeopleIcon, 
     Report as ReportIcon,
     Schedule as ScheduleIcon,
-    AdminPanelSettings as RoleIcon 
+    AdminPanelSettings as RoleIcon,
+    LocalHospital as HospitalIcon,
+    Block as BlockIcon
 } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 
-const StatCard = ({ title, value, icon, color, subtitle }) => {
+interface StatCardProps {
+    title: string;
+    value: number;
+    icon: React.ReactNode;
+    color: string;
+    subtitle?: string;
+}
+
+const StatCard = ({ title, value, icon, color, subtitle }: StatCardProps) => {
     const theme = useTheme();
     
     return (
@@ -55,24 +64,94 @@ const StatCard = ({ title, value, icon, color, subtitle }) => {
 
 export const Dashboard = () => {
     const theme = useTheme();
+    const { data: identity } = useGetIdentity();
     
+    // Control de acceso: Solo Admin (1) y Jefe de Turno (2) pueden ver el dashboard completo
+    const rolesPermitidos = [1, 2]; // Admin y Jefe de Turno
+    const tieneAcceso = identity && rolesPermitidos.includes(identity.rol_id);
+    
+    // Solo hacer las consultas si el usuario tiene acceso
     const { data: usuarios, isLoading: loadingUsuarios } = useGetList('usuarios', {
         pagination: { page: 1, perPage: 1000 }
+    }, {
+        enabled: tieneAcceso // Solo consultar si tiene acceso
     });
     
-    const { data: reportes, isLoading: loadingReportes } = useGetList('reportes_urbanos', {
+    const { data: reportesUrbanos, isLoading: loadingReportesUrbanos } = useGetList('reportes_urbanos', {
         pagination: { page: 1, perPage: 1000 }
+    }, {
+        enabled: tieneAcceso
+    });
+    
+    const { data: reportesPrehospitalarios, isLoading: loadingReportesPrehospitalarios } = useGetList('reportes_prehospitalarios', {
+        pagination: { page: 1, perPage: 1000 }
+    }, {
+        enabled: tieneAcceso
     });
     
     const { data: turnos, isLoading: loadingTurnos } = useGetList('turnos', {
         pagination: { page: 1, perPage: 1000 }
+    }, {
+        enabled: tieneAcceso
     });
     
     const { data: roles, isLoading: loadingRoles } = useGetList('roles', {
         pagination: { page: 1, perPage: 1000 }
+    }, {
+        enabled: tieneAcceso
     });
 
-    if (loadingUsuarios || loadingReportes || loadingTurnos || loadingRoles) {
+    // Mostrar pantalla de carga solo si está cargando la identidad
+    if (!identity) {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+                <Typography>Cargando...</Typography>
+            </Box>
+        );
+    }
+
+    // Pantalla de acceso denegado para operadores y paramédicos (mostrar inmediatamente)
+    if (!tieneAcceso) {
+        return (
+            <Box sx={{ p: 3 }}>
+                <Alert 
+                    severity="error" 
+                    icon={<BlockIcon fontSize="large" />}
+                    sx={{ 
+                        maxWidth: 600, 
+                        mx: 'auto', 
+                        mt: 8,
+                        '& .MuiAlert-message': {
+                            width: '100%'
+                        }
+                    }}
+                >
+                    <AlertTitle sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+                        Acceso Denegado al Dashboard
+                    </AlertTitle>
+                    <Typography variant="body1" sx={{ mt: 2, mb: 2 }}>
+                        No tienes permisos para acceder al tablero de estadísticas.
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        Solo los <strong>Administradores</strong> y <strong>Jefes de Turno</strong> pueden visualizar esta información.
+                    </Typography>
+                    <Box sx={{ mt: 3 }}>
+                        <Typography variant="body2">
+                            Puedes acceder a:
+                        </Typography>
+                        <Box component="ul" sx={{ mt: 1 }}>
+                            <li>Crear y editar reportes</li>
+                            <li>Ver tus reportes asignados</li>
+                            <li>Actualizar tu perfil</li>
+                        </Box>
+                    </Box>
+                </Alert>
+            </Box>
+        );
+    }
+
+    // Mostrar pantalla de carga mientras se cargan los datos (solo si tiene acceso)
+    if (loadingUsuarios || loadingReportesUrbanos || loadingReportesPrehospitalarios || loadingTurnos || loadingRoles) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
                 <Typography>Cargando estadísticas...</Typography>
@@ -80,8 +159,8 @@ export const Dashboard = () => {
         );
     }
 
-    const reportesPendientes = reportes?.filter(r => r.estado === 'pendiente')?.length || 0;
-    const reportesEnProceso = reportes?.filter(r => r.estado === 'en_proceso')?.length || 0;
+    const reportesUrbanosPendientes = reportesUrbanos?.filter(r => r.estado === 'pendiente')?.length || 0;
+    const reportesUrbanosEnProceso = reportesUrbanos?.filter(r => r.estado === 'en_proceso')?.length || 0;
 
     return (
         <Box sx={{ p: 3, xs: { 12: 3 }, sm: { 6: 3 }, md: { 3: 3 } }}>
@@ -120,26 +199,30 @@ export const Dashboard = () => {
                     />
             </Grid>
 
-            <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
-                    <Card>
+            {/* Detail Cards */}
+            <Box sx={{ 
+                display: 'grid', 
+                gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, 
+                gap: 3 
+            }}>
+                <Card>
                         <CardContent>
                             <Typography variant="h5" gutterBottom>
-                                Estado de Reportes
+                                Reportes Urbanos
                             </Typography>
                             <Box sx={{ mt: 2 }}>
                                 <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
                                     <Typography>Pendientes</Typography>
-                                    <Chip label={reportesPendientes} color="warning" size="small" />
+                                    <Chip label={reportesUrbanosPendientes} color="warning" size="small" />
                                 </Box>
                                 <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
                                     <Typography>En Proceso</Typography>
-                                    <Chip label={reportesEnProceso} color="info" size="small" />
+                                    <Chip label={reportesUrbanosEnProceso} color="info" size="small" />
                                 </Box>
                                 <Box display="flex" justifyContent="space-between" alignItems="center">
                                     <Typography>Completados</Typography>
                                     <Chip 
-                                        label={(reportes?.length || 0) - reportesPendientes - reportesEnProceso} 
+                                        label={(reportesUrbanos?.length || 0) - reportesUrbanosPendientes - reportesUrbanosEnProceso} 
                                         color="success" 
                                         size="small" 
                                     />
@@ -147,38 +230,71 @@ export const Dashboard = () => {
                             </Box>
                         </CardContent>
                     </Card>
-                </Grid>
                 
-                <Grid item xs={12} md={6}>
-                    <Card>
-                        <CardContent>
-                            <Typography variant="h5" gutterBottom>
-                                Acciones Rápidas
-                            </Typography>
-                            <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                <Card>
+                    <CardContent>
+                        <Typography variant="h5" gutterBottom>
+                            Reportes Prehospitalarios
+                        </Typography>
+                        <Box sx={{ mt: 2 }}>
+                            <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+                                <Typography>Total Atenciones</Typography>
+                                <Chip label={reportesPrehospitalarios?.length || 0} color="primary" size="small" />
+                            </Box>
+                            <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+                                <Typography>Prioridad Alta</Typography>
                                 <Chip 
-                                    label="Ver Mapa de Reportes" 
-                                    clickable 
-                                    color="primary" 
-                                    onClick={() => window.location.href = '#/mapa'}
-                                />
-                                <Chip 
-                                    label="Crear Nuevo Reporte" 
-                                    clickable 
-                                    color="secondary" 
-                                    onClick={() => window.location.href = '#/reportes_urbanos/create'}
-                                />
-                                <Chip 
-                                    label="Gestionar Usuarios" 
-                                    clickable 
-                                    variant="outlined" 
-                                    onClick={() => window.location.href = '#/usuarios'}
+                                    label={reportesPrehospitalarios?.filter(r => r.evaluacion_secundaria?.prioridad === 'Rojo')?.length || 0} 
+                                    color="error" 
+                                    size="small" 
                                 />
                             </Box>
-                        </CardContent>
-                    </Card>
-                </Grid>
-            </Grid>
+                            <Box display="flex" justifyContent="space-between" alignItems="center">
+                                <Typography>Con Traslado</Typography>
+                                <Chip 
+                                    label={reportesPrehospitalarios?.filter(r => r.traslado?.hospital)?.length || 0} 
+                                    color="success" 
+                                    size="small" 
+                                />
+                            </Box>
+                        </Box>
+                    </CardContent>
+                </Card>
+                
+                <Card>
+                    <CardContent>
+                        <Typography variant="h5" gutterBottom>
+                            Acciones Rápidas
+                        </Typography>
+                        <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                            <Chip 
+                                label="Ver Estadísticas" 
+                                clickable 
+                                color="primary" 
+                                onClick={() => window.location.href = '#/estadisticas'}
+                            />
+                            <Chip 
+                                label="Crear Reporte Urbano" 
+                                clickable 
+                                color="secondary" 
+                                onClick={() => window.location.href = '#/reportes_urbanos/create'}
+                            />
+                            <Chip 
+                                label="Crear Reporte Prehospitalario" 
+                                clickable 
+                                color="error" 
+                                onClick={() => window.location.href = '#/reportes_prehospitalarios/create'}
+                            />
+                            <Chip 
+                                label="Gestionar Usuarios" 
+                                clickable 
+                                variant="outlined" 
+                                onClick={() => window.location.href = '#/usuarios'}
+                            />
+                        </Box>
+                    </CardContent>
+                </Card>
+            </Box>
         </Box>
     );
 };
