@@ -748,11 +748,20 @@ async function connectToDB(){
 
 
 https.createServer(options, app).listen(PORT, async () => {
-		await process.loadEnvFile(".env");
-		connectToDB();
-      	console.log('HTTPS Server running on port 3000');
-});
+    try {
+        await process.loadEnvFile(".env");
+        
+        // Espera a que la conexión a la BD sea exitosa
+        await connectToDB(); 
+        
+        console.log('✅ HTTPS Server running on port 3000');
+        console.log('✅ Database connected successfully');
 
+    } catch (error) {
+        console.error('❌ Failed to start server:', error);
+        process.exit(1); // Detiene el proceso si no se puede conectar a la BD
+    }
+});
 
 /*app.listen(PORT, async ()=>{
 	await process.loadEnvFile(".env");
