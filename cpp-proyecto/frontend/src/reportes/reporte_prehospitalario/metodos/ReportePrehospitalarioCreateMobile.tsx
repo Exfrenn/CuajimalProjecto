@@ -52,8 +52,6 @@ import {
 
 import { LugarOcurrenciaInput, AgenteCausalInput, OrigenProbableInput, InstitucionInput } from "./customInputs";
 
-
-
 export const ReportePrehospitalarioCreateMobile = () => {
     return (
         <SimpleForm warnWhenUnsavedChanges>
@@ -80,7 +78,11 @@ export const ReportePrehospitalarioCreateMobile = () => {
                             <Stack spacing={2}>
                                 <SectionCard title="Cronometría" icon={<AccessTimeIcon />}>
                                     <Stack spacing={2} direction="column">
-                                        <TimeInput source="servicio.cronometro.hora_llamada" label="Hora de llamada" fullWidth />
+                                        <TextInput
+                                            source="servicio.ubicacion.calle"
+                                            label="Calle"
+                                            fullWidth
+                                            />
                                         <TimeInput source="servicio.cronometro.hora_salida" label="Hora de salida" fullWidth />
                                         <TimeInput source="servicio.cronometro.hora_llegada" label="Hora de llegada" fullWidth />
                                         <TimeInput source="servicio.cronometro.hora_traslado" label="Hora de traslado" fullWidth />
