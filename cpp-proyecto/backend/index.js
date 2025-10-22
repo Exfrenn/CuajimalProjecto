@@ -14,7 +14,22 @@ const app = express();
 app.use(cors());
 const PORT = 3000;
 let db;
-app.use(bodyParser.json());
+
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+
+app.use((req, res, next) => {
+    if (req.method === 'POST' && (req.path.includes('reportes_urbanos') || req.path.includes('reportes_prehospitalarios'))) {
+        console.log('\n === DEBUG REQUEST ===');
+        console.log('Path:', req.path);
+        console.log('Content-Type:', req.headers['content-type']);
+        console.log('Body type:', typeof req.body);
+        console.log('Body keys:', Object.keys(req.body));
+        console.log('Is Array:', Array.isArray(req.body));
+        console.log('========================\n');
+    }
+    next();
+});
 
 async function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
@@ -87,6 +102,14 @@ async function log(sujeto, objeto, accion){
 	toLog["objeto"]=objeto;
 	toLog["accion"]=accion;
 	await db.collection("logs").insertOne(toLog);
+}
+
+function normalizeBody(body) {
+	if (body && body["0"] && typeof body["0"] === "object" && !body.datos_generales) {
+		console.log("Datos envueltos en objeto '0', extrayendo...");
+		return body["0"];
+	}
+	return body;
 }
 
 const uploadsDir = path.join(__dirname, 'uploads');
@@ -189,7 +212,6 @@ app.get("/turnos", authenticateToken, checkPermissions("turnos", "list"), async 
         
         let filter = {};
         
-        // Si no es admin, solo puede ver su propio turno
         if (usuario.rol_id !== 1) {
             filter = { id: usuario.turno_id };
         }
@@ -393,6 +415,9 @@ app.get("/reportes_urbanos", authenticateToken, checkPermissions("reportes_urban
     }
     
     let data = await db.collection("reportes_urbanos").find(filtro).project({_id:0}).toArray();
+    
+    data = data.map(reporte => normalizeBody(reporte));
+    
     res.set("Access-Control-Expose-Headers", "X-Total-Count");
     res.set("X-Total-Count", data.length);
     res.json(data);
@@ -401,15 +426,21 @@ app.get("/reportes_urbanos", authenticateToken, checkPermissions("reportes_urban
 //getOne
 app.get("/reportes_urbanos/:id", authenticateToken, checkPermissions("reportes_urbanos", "show"), async (req,res)=>{
 	let data=await db.collection("reportes_urbanos").find({"id": Number(req.params.id)}).project({_id:0}).toArray();
-	res.json(data[0]);
+	res.json(normalizeBody(data[0]));
 });
 
 //createOne
 app.post("/reportes_urbanos", authenticateToken, checkPermissions("reportes_urbanos", "create"), async (req,res)=>{
-	let valores=req.body
-	if (valores["id"] === undefined || valores["id"] === null) {
+	console.log("🔍 Body original recibido - keys:", Object.keys(req.body));
+	
+	let valores = normalizeBody(req.body);
+	
+	console.log("🔍 Valores después de normalizar - id:", valores["id"], "tipo:", typeof valores["id"]);
+	
+	if (!valores["id"] || valores["id"] === null || valores["id"] === undefined || valores["id"] === "" || isNaN(Number(valores["id"]))) {
         const last = await db.collection("reportes_urbanos").find().sort({ id: -1 }).limit(1).toArray();
         valores["id"] = last.length > 0 ? last[0].id + 1 : 1;
+        console.log(" ID generado automáticamente:", valores["id"]);
     }
 	valores["id"]=Number(valores["id"])
 	let data=await db.collection("reportes_urbanos").insertOne(valores);
@@ -425,16 +456,15 @@ app.delete("/reportes_urbanos/:id", authenticateToken, checkPermissions("reporte
 
 //updateOne
 app.put("/reportes_urbanos/:id", authenticateToken, checkPermissions("reportes_urbanos", "edit"), async(req,res)=>{
-	let valores=req.body
+	let valores = normalizeBody(req.body);
 	valores["id"]=Number(valores["id"])
 	let data =await db.collection("reportes_urbanos").updateOne({"id":valores["id"]}, {"$set":valores})
 	data=await db.collection("reportes_urbanos").find({"id":valores["id"]}).project({_id:0}).toArray();
-	res.json(data[0]);
+	res.json(normalizeBody(data[0]));
 })
 
 //Reporte Prehospitalarios------------------------------------------------------
 app.get("/reportes_prehospitalarios", authenticateToken, checkPermissions("reportes_prehospitalarios", "list"), async (req,res)=>{
-    // Obtener usuario actual
     const userEmail = req.user.email;
     const usuario = await db.collection("usuarios").findOne({ "email": userEmail });
     
@@ -458,6 +488,9 @@ app.get("/reportes_prehospitalarios", authenticateToken, checkPermissions("repor
     }
     
     let data = await db.collection("reportes_prehospitalarios").find(filtro).project({_id:0}).toArray();
+    
+    data = data.map(reporte => normalizeBody(reporte));
+    
     res.set("Access-Control-Expose-Headers", "X-Total-Count");
     res.set("X-Total-Count", data.length);
     res.json(data);
@@ -466,15 +499,21 @@ app.get("/reportes_prehospitalarios", authenticateToken, checkPermissions("repor
 //getOne
 app.get("/reportes_prehospitalarios/:id", authenticateToken, checkPermissions("reportes_prehospitalarios", "show"), async (req,res)=>{
 	let data=await db.collection("reportes_prehospitalarios").find({"id": Number(req.params.id)}).project({_id:0}).toArray();
-	res.json(data[0]);
+	res.json(normalizeBody(data[0]));
 });
 
 //createOne
 app.post("/reportes_prehospitalarios", authenticateToken, checkPermissions("reportes_prehospitalarios", "create"), async (req,res)=>{
-	let valores=req.body
-	if (valores["id"] === undefined || valores["id"] === null) {
+	console.log(" Body original recibido - keys:", Object.keys(req.body));
+	
+	let valores = normalizeBody(req.body);
+	
+	console.log(" Valores después de normalizar - id:", valores["id"], "tipo:", typeof valores["id"]);
+	
+	if (!valores["id"] || valores["id"] === null || valores["id"] === undefined || valores["id"] === "" || isNaN(Number(valores["id"]))) {
         const last = await db.collection("reportes_prehospitalarios").find().sort({ id: -1 }).limit(1).toArray();
         valores["id"] = last.length > 0 ? last[0].id + 1 : 1;
+        console.log(" ID generado automáticamente:", valores["id"]);
     }
 	valores["id"]=Number(valores["id"])
 	let data=await db.collection("reportes_prehospitalarios").insertOne(valores);
@@ -490,11 +529,11 @@ app.delete("/reportes_prehospitalarios/:id", authenticateToken, checkPermissions
 
 //updateOne
 app.put("/reportes_prehospitalarios/:id", authenticateToken, checkPermissions("reportes_prehospitalarios", "edit"), async(req,res)=>{
-	let valores=req.body
+	let valores = normalizeBody(req.body);
 	valores["id"]=Number(valores["id"])
 	let data =await db.collection("reportes_prehospitalarios").updateOne({"id":valores["id"]}, {"$set":valores})
 	data=await db.collection("reportes_prehospitalarios").find({"id":valores["id"]}).project({_id:0}).toArray();
-	res.json(data[0]);
+	res.json(normalizeBody(data[0]));
 })
 
 //Lugares de ocurrencia---------------------------------------------------------
@@ -725,11 +764,11 @@ https.createServer(options, app).listen(PORT, async () => {
         
         await connectToDB(); 
         
-        console.log('✅ HTTPS Server running on port 3000');
-        console.log('✅ Database connected successfully');
+        console.log(' Servidor corriendo en puerto 3000');
+        console.log(' Conexión a base de datos realizada exitosamente');
 
     } catch (error) {
-        console.error('❌ Failed to start server:', error);
+        console.error(' Error al inicializar el servidor:', error);
         process.exit(1); 
     }
 });
