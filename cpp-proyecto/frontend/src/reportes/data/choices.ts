@@ -1,4 +1,3 @@
-// reportes/reporte_urbano/data/choices.ts
 export const tipoServicioChoices = [
     { id: 'Mitigacion', name: 'Mitigación' },
     { id: 'Evaluacion', name: 'Evaluación' },
