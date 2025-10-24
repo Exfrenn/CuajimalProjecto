@@ -5,56 +5,48 @@ import { useMemo } from "react";
 import { useWatch } from 'react-hook-form';
 
 
-// Validación: Turno requerido si no es admin
 const turnoRequiredIfNotAdmin = (value: any, allValues: any) => {
     const rolId = Number(allValues.rol_id);
     if (rolId === 1) {
-        return undefined; // No requerido si es admin
+        return undefined; 
     }
     return value ? undefined : 'El turno es obligatorio para este rol';
 };
 
-// Validación: Tipo de servicio requerido si es jefe de turno
 const tipoServicioRequiredIfJefeTurno = (value: any, allValues: any) => {
     const rolId = Number(allValues.rol_id);
-    if (rolId === 2) { // 2 = Jefe de turno
+    if (rolId === 2) { 
         return value ? undefined : 'El tipo de servicio es obligatorio para Jefe de turno';
     }
     return undefined;
 };
 
-// Validación: Operadores requeridos si es jefe de turno
 const operadoresRequiredIfJefeTurno = (value: any, allValues: any) => {
     const rolId = Number(allValues.rol_id);
-    if (rolId === 2) { // 2 = Jefe de turno
+    if (rolId === 2) { 
         return (value && value.length > 0) ? undefined : 'Debe seleccionar al menos un operador/paramédico';
     }
     return undefined;
 };
 
-// Validación de contraseña
 const equalToPassword = (value: any, allValues: any) => {
     if (value !== allValues.password) {
         return 'Las dos contraseñas deben coincidir';
     }
 };
 
-// Componente para seleccionar operadores/paramédicos según turno y tipo de servicio
 const OperadoresInput = () => {
     const rolId = useWatch({ name: 'rol_id' });
     const turnoId = useWatch({ name: 'turno_id' });
     const tipoServicio = useWatch({ name: 'tipo_servicio' });
 
-    // Obtener usuarios SIEMPRE (los hooks deben ejecutarse siempre en el mismo orden)
     const { data: usuarios = [], isLoading } = useGetList('usuarios', {
         pagination: { page: 1, perPage: 1000 },
         sort: { field: 'nombre', order: 'ASC' },
     });
 
-    // Determinar qué rol filtrar según tipo de servicio
     const rolFiltro = tipoServicio === 'urbano' ? 4 : tipoServicio === 'prehospitalario' ? 3 : null;
 
-    // Filtrar operadores/paramédicos del mismo turno y tipo de servicio
     const usuariosFiltrados = useMemo(() => {
         if (!turnoId || !rolFiltro) return [];
         
@@ -64,7 +56,6 @@ const OperadoresInput = () => {
         );
     }, [usuarios, turnoId, rolFiltro]);
 
-    // Solo mostrar si es jefe de turno (rol_id === 2)
     if (Number(rolId) !== 2) {
         return null;
     }
@@ -75,7 +66,7 @@ const OperadoresInput = () => {
         return (
             <Box sx={{ mb: 2, p: 2, bgcolor: 'warning.light', borderRadius: 1 }}>
                 <Typography variant="body2">
-                    ⚠️ Primero selecciona un turno para ver los operadores/paramédicos disponibles
+                     Primero selecciona un turno para ver los operadores/paramédicos disponibles
                 </Typography>
             </Box>
         );
@@ -85,7 +76,7 @@ const OperadoresInput = () => {
         return (
             <Box sx={{ mb: 2, p: 2, bgcolor: 'warning.light', borderRadius: 1 }}>
                 <Typography variant="body2">
-                    ⚠️ Primero selecciona un tipo de servicio para ver los operadores/paramédicos disponibles
+                     Primero selecciona un tipo de servicio para ver los operadores/paramédicos disponibles
                 </Typography>
             </Box>
         );
@@ -114,23 +105,17 @@ const OperadoresInput = () => {
         />
     );
 };
-// Lista de usuarios
 export const UsuarioList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
     const { data: identity } = useGetIdentity();
     
-    // Determinar filtro según rol
     let filter = {};
     
     if (identity?.rol_id === 3 || identity?.rol_id === 4) {
-        // Paramédico u Operador: solo se ven a sí mismos
         filter = { id: identity.id };
     } else if (identity?.rol_id === 2) {
-        // Jefe de turno: ve a los operadores que tiene a cargo
-        // El backend ya filtra esto, pero podemos agregar el filtro aquí también
-        filter = {}; // El backend maneja el filtrado por operadores_id
+        filter = {}; 
     }
-    // Admin (rol_id === 1): ve todos (sin filtro)
     
     return (
         <List filter={filter}>     
@@ -177,7 +162,6 @@ export const UsuarioList = () => {
     );
 };
 
-// Show de usuario
 export const UsuarioShow = () => (
     <Show>
         <SimpleShowLayout>
@@ -206,7 +190,6 @@ export const UsuarioShow = () => (
     </Show>
 );
 
-// Edit de usuario
 export const UsuarioEdit = () => {
     const notify = useNotify();
     const redirect = useRedirect();
@@ -253,7 +236,6 @@ export const UsuarioEdit = () => {
     );
 };
 
-// Create de usuario
 export const UsuarioCreate = () => {
     const notify = useNotify();
     const redirect = useRedirect();
