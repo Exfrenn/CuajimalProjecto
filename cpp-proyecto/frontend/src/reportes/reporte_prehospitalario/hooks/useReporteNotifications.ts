@@ -1,4 +1,3 @@
-// reportes/reporte_urbano/hooks/useReporteNotifications.ts
 import { useNotify, useRedirect, useRefresh } from 'react-admin';
 
 export const useReporteNotifications = () => {
