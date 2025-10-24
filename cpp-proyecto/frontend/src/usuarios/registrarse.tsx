@@ -67,7 +67,6 @@ const Registrarse: React.FC = () => {
 
     const steps = ['Información Personal', 'Credenciales', 'Asignación'];
 
-    // Validadores
     const validateEmail = (email: string): string | undefined => {
         if (!email) return 'El email es obligatorio';
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -168,7 +167,6 @@ const Registrarse: React.FC = () => {
                 if (contentType && contentType.includes('application/json')) {
                     const errorData = await res.json();
                     
-                    // Manejo de errores del servidor (validación server-side)
                     if (errorData.errors) {
                         const serverErrors: ValidationErrors = {};
                         if (errorData.errors.email) serverErrors.email = errorData.errors.email;
