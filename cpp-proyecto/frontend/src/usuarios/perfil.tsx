@@ -2,7 +2,6 @@ import { Edit, SimpleForm, TextInput, PasswordInput, ReferenceField, TextField, 
 import { Card, CardContent, Typography, Box, Stack } from "@mui/material";
 import PersonIcon from '@mui/icons-material/Person';
 
-// Validadores
 const validateNombre = [required('El nombre es obligatorio'), minLength(2, 'El nombre debe tener al menos 2 caracteres'), maxLength(50, 'El nombre no puede exceder 50 caracteres'), regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, 'El nombre solo puede contener letras')];
 const validateApellido = [required('El apellido es obligatorio'), minLength(2, 'El apellido debe tener al menos 2 caracteres'), maxLength(50, 'El apellido no puede exceder 50 caracteres'), regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, 'El apellido solo puede contener letras')];
 const validateEmail = [required('El email es obligatorio'), email('Debe ser un email válido')];
