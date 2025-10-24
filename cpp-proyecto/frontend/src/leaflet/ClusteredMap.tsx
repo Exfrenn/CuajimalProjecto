@@ -28,7 +28,6 @@ interface ClusteredMapProps {
 }
 
 export default function ClusteredMap({ reportes, alcaldiasGeojson }: ClusteredMapProps) {
-  // Agrupa los reportes por alcaldía
   const agrupadosPorAlcaldia = useMemo(() => {
     return reportes.reduce((acc, rep) => {
       const alcaldia = rep.atencion_emergencia.ubicacion.alcaldia || "Sin alcaldía";
