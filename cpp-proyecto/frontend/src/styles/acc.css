@@ -1,7 +1,5 @@
-/* acc.css */
 
-/* Variables de colores para accesibilidad visual */
-:root {
+\:root {
   --acc-fondo: #FFF8E1;
   --acc-fondo-cards: #FFFFFF;
   --acc-morado: #7E57C2;
@@ -11,20 +9,17 @@
   --acc-sidebar: #5E35B1;
 }
 
-/* CAMBIAR FONDO COMPLETO DE LA PÁGINA */
 body.accessibility-mode {
   background-color: var(--acc-fondo) !important;
   color: #212121 !important;
 }
 
-/* Contenedor principal */
 body.accessibility-mode .RaLayout-content,
 body.accessibility-mode main,
 body.accessibility-mode .RaLayout-contentWithSidebar {
   background-color: var(--acc-fondo) !important;
 }
 
-/* Sidebar morado oscuro */
 body.accessibility-mode .RaSidebar-root .MuiDrawer-paper,
 body.accessibility-mode .MuiDrawer-root .MuiDrawer-paper,
 body.accessibility-mode div.MuiDrawer-paper {
@@ -32,7 +27,6 @@ body.accessibility-mode div.MuiDrawer-paper {
   background-image: none !important;
 }
 
-/* Items del menú */
 body.accessibility-mode .RaMenuItemLink-root {
   color: #FFFFFF !important;
   font-weight: 600 !important;
@@ -42,7 +36,6 @@ body.accessibility-mode .RaMenuItemLink-root:hover {
   background-color: rgba(255, 255, 255, 0.2) !important;
 }
 
-/* Item activo del menú */
 body.accessibility-mode .RaMenuItemLink-active {
   background: var(--acc-verde) !important;
   color: #FFFFFF !important;
@@ -53,12 +46,10 @@ body.accessibility-mode .RaMenuItemLink-active .RaMenuItemLink-icon {
   color: #FFFFFF !important;
 }
 
-/* Iconos del sidebar */
 body.accessibility-mode .RaMenuItemLink-icon {
   color: #FFFFFF !important;
 }
 
-/* Botón CREAR */
 body.accessibility-mode .RaCreateButton-root {
   background: var(--acc-verde) !important;
   color: #FFFFFF !important;
@@ -69,7 +60,6 @@ body.accessibility-mode .RaCreateButton-root:hover {
   background: #00897B !important;
 }
 
-/* Botones principales */
 body.accessibility-mode .MuiButton-containedPrimary {
   background: var(--acc-azul) !important;
   color: #FFFFFF !important;
@@ -80,7 +70,6 @@ body.accessibility-mode .MuiButton-containedPrimary:hover {
   background: #1E88E5 !important;
 }
 
-/* Cards y Papers */
 body.accessibility-mode .MuiCard-root,
 body.accessibility-mode .MuiPaper-root {
   background-color: var(--acc-fondo-cards) !important;
@@ -88,7 +77,6 @@ body.accessibility-mode .MuiPaper-root {
   box-shadow: 0 2px 8px rgba(94, 53, 177, 0.15) !important;
 }
 
-/* Tablas */
 body.accessibility-mode .MuiTable-root,
 body.accessibility-mode .RaList-content,
 body.accessibility-mode .RaList-main {
@@ -114,7 +102,6 @@ body.accessibility-mode .MuiTableRow-root:hover {
   background-color: #F3E5F5 !important;
 }
 
-/* Chips */
 body.accessibility-mode .MuiChip-colorSuccess {
   background-color: var(--acc-verde) !important;
   color: #FFFFFF !important;
@@ -136,7 +123,6 @@ body.accessibility-mode .MuiChip-colorWarning {
   border: 2px solid #FB8C00 !important;
 }
 
-/* Inputs */
 body.accessibility-mode .MuiOutlinedInput-root {
   background-color: var(--acc-fondo-cards) !important;
 }
@@ -156,7 +142,6 @@ body.accessibility-mode .MuiOutlinedInput-notchedOutline {
   border-color: #9E9E9E !important;
 }
 
-/* Links */
 body.accessibility-mode a {
   color: var(--acc-azul) !important;
   font-weight: 600 !important;
@@ -167,7 +152,6 @@ body.accessibility-mode a:hover {
   color: #1976D2 !important;
 }
 
-/* Textos */
 body.accessibility-mode h1,
 body.accessibility-mode h2,
 body.accessibility-mode h3,
@@ -178,7 +162,6 @@ body.accessibility-mode h6 {
   color: #212121 !important;
 }
 
-/* AppBar */
 body.accessibility-mode .RaAppBar-title {
   font-weight: 700 !important;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
