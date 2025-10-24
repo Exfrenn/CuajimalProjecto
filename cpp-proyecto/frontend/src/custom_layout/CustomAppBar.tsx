@@ -43,10 +43,10 @@ export const CustomAppBar = () => (
                 width: '100%',
                 position: 'absolute',
                 left: 0,
-                pointerEvents: 'none', // Permite clicks en elementos debajo
+                pointerEvents: 'none', 
             }}
         >
-            <Box sx={{ pointerEvents: 'auto' }}> {/* Reactiva clicks solo en el logo */}
+            <Box sx={{ pointerEvents: 'auto' }}> 
                 <Logo />
             </Box>
         </Box>
