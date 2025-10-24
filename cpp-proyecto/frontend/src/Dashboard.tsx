@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, Box, Chip, Alert, AlertTitle } from '@mui/material';
+import { Card, CardContent, Typography, Box, Chip, Alert, AlertTitle, Grid } from '@mui/material';
 import { useGetList, useGetIdentity } from 'react-admin';
 import { 
     People as PeopleIcon, 
