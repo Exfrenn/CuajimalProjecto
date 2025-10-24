@@ -420,7 +420,7 @@ export const ReportePrehospitalarioEdit = () => {
                         removeIcon={RemoveCircleIcon}
                         accept={{ 'application/pdf': ['.pdf'] }}
                         multiple={false}
-                        maxSize={5000000} // opcional: 5MB
+                        maxSize={5000000} 
                     >
                         <FileField source="src" title="title" />
                     </FileInput>
