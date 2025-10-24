@@ -1,4 +1,3 @@
-// Componente que auto-asigna el turno del usuario actual para operadores/paramédicos
 import { useGetIdentity, ReferenceInput, SelectInput, required } from 'react-admin';
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -18,13 +17,12 @@ export const TurnoInput = ({ source, label = "Turno" }: TurnoInputProps) => {
             const rolId = identity.rol_id;
             if (rolId === 3 || rolId === 4) {
                 // Auto-asignar el turno del usuario
-                console.log('🔧 TurnoInput: Asignando turno', identity.turno_id, 'al campo', source);
+                console.log(' TurnoInput: Asignando turno', identity.turno_id, 'al campo', source);
                 setValue(source, identity.turno_id, { shouldDirty: true, shouldValidate: true });
             }
         }
     }, [identity, setValue, source]);
     
-    // Si es Operador (4) o Paramédico (3), mostrar el turno deshabilitado
     if (identity && (identity.rol_id === 3 || identity.rol_id === 4)) {
         return (
             <ReferenceInput 
@@ -42,7 +40,6 @@ export const TurnoInput = ({ source, label = "Turno" }: TurnoInputProps) => {
         );
     }
     
-    // Para otros roles (Admin, Jefe), mostrar el selector normal
     return (
         <ReferenceInput 
             label={label}
