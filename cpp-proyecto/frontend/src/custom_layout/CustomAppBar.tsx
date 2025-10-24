@@ -12,7 +12,7 @@ const Logo = () => (
             cursor: 'pointer',
         }}
         alt="Logo"
-        src="/img/logo-blanco.png" // Coloca tu logo en public/img/logo.png
+        src="/img/logo-blanco.png" 
         onClick={() => window.location.href = '/#/'}
     />
 );
