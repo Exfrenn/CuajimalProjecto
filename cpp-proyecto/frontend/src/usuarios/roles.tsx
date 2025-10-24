@@ -6,7 +6,6 @@ export const RolList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
     const { data: identity } = useGetIdentity();
     
-    // Filtrar: solo mostrar su propio rol si no es admin
     const filter = identity?.rol_id !== 1 ? { id: identity?.rol_id } : {};
     
     return (
@@ -37,13 +36,11 @@ export const RolShow = () => (
                 label="Permisos"
                 render={(record: any) => {
                     if (Array.isArray(record.permisos)) {
-                        // Si son objetos {action, resource}
                         if (record.permisos.length > 0 && typeof record.permisos[0] === 'object') {
                             return record.permisos
                                 .map((p: any) => `${p.action} en ${p.resource}`)
                                 .join(', ');
                         }
-                        // Si son strings (formato antiguo)
                         return record.permisos.join(', ');
                     }
                     return record.permisos;

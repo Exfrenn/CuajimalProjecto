@@ -8,11 +8,9 @@ import { TiempoRespuesta } from './TiempoRespuesta';
 export const Estadisticas = () => {
     const { data: identity } = useGetIdentity();
     
-    // Control de acceso: Solo Admin (1) y Jefe de Turno (2)
     const rolesPermitidos = [1, 2];
     const tieneAcceso = identity && rolesPermitidos.includes(identity.rol_id);
 
-    // Pantalla de carga
     if (!identity) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
@@ -21,7 +19,6 @@ export const Estadisticas = () => {
         );
     }
 
-    // Pantalla de acceso denegado
     if (!tieneAcceso) {
         return (
             <Box sx={{ p: 3 }}>
@@ -62,7 +59,6 @@ export const Estadisticas = () => {
         );
     }
 
-    // Dashboard de estadísticas (solo para roles permitidos)
     return (
         <Box sx={{ p: 2 }}>
             <Title title="Estadísticas" />

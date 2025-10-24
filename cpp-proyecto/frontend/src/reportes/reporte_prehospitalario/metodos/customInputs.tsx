@@ -69,7 +69,7 @@ export const OrigenProbableInput = () => {
                     const newNombreOrigenProbable = prompt("Ingresa el nuevo origen probable");
                     if (newNombreOrigenProbable) {
                         const newOrigenProbable = await create(
-                            "origen_probable", // ← CORREGIDO: era "agentes_causal"
+                            "origen_probable", 
                             { data: { nombre: newNombreOrigenProbable } },
                             { returnPromise: true }
                         );

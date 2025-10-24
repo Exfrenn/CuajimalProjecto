@@ -46,7 +46,6 @@ export const TablaApgar: React.FC = () => {
             } as any;
         }
 
-        // Convertir valor apropiadamente
         const valorFinal = value === '' ? undefined : Number(value);
 
         nuevasEvaluaciones[tiempoIndex] = {
@@ -54,12 +53,10 @@ export const TablaApgar: React.FC = () => {
             [signo]: valorFinal
         };
 
-        // Calcular puntaje total solo si todos los valores están definidos
         const eval_actual = nuevasEvaluaciones[tiempoIndex];
         const valores = [eval_actual.color, eval_actual.fc, eval_actual.irritabilidad, 
                         eval_actual.tono, eval_actual.respiracion];
         
-        // Solo calcular si todos los valores están definidos
         const todosDefinidos = valores.every(v => v !== undefined);
         if (todosDefinidos) {
             const total = valores.reduce((sum, val) => sum + (val || 0), 0);

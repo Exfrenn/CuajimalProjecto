@@ -13,7 +13,7 @@ export interface ReporteUrbano {
   datos_generales: { folio: string; fecha: string };
   atencion_emergencia: {
     ubicacion: {
-      coordenadas: [number, number]; // [long, lat]
+      coordenadas: [number, number];
       referencia: string;
       alcaldia?: string;
     };
@@ -28,7 +28,6 @@ interface ClusteredMapProps {
 }
 
 export default function ClusteredMap({ reportes, alcaldiasGeojson }: ClusteredMapProps) {
-  // Agrupa los reportes por alcaldía
   const agrupadosPorAlcaldia = useMemo(() => {
     return reportes.reduce((acc, rep) => {
       const alcaldia = rep.atencion_emergencia.ubicacion.alcaldia || "Sin alcaldía";

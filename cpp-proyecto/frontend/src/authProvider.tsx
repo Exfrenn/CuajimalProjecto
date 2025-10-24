@@ -29,7 +29,6 @@ const authProvider:AuthProvider={
             }))
             return Promise.resolve();
         }catch(error: unknown){
-            // Fix para TypeScript
             const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
             if(errorMessage.includes('401')){
                 throw new Error("Email o contraseña incorrectos");
@@ -61,13 +60,13 @@ const authProvider:AuthProvider={
                 const user = JSON.parse(identity);
                 return Promise.resolve({
                     id: user.id,
-                    fullName: user.name,  // ✅ React-Admin espera "fullName" no "name"
-                    nombre: user.name,    // Para usar en componentes personalizados
+                    fullName: user.name, 
+                    nombre: user.name, 
                     apellido: user.apellido || '',
-                    rol_id: user.rol_id,  // ✅ Importante para auto-asignación
+                    rol_id: user.rol_id,  
                     turno_id: user.turno_id,
                     tipo_servicio: user.tipo_servicio,
-                    avatar: undefined,  // Opcional: puedes agregar avatar después
+                    avatar: undefined,  
                 });
             }
             return Promise.reject();
@@ -96,13 +95,10 @@ const authProvider:AuthProvider={
             
             const permisos = JSON.parse(permisosStr);
             
-            // Caso especial para el Dashboard/Tablero
             if (resource === '' || resource === undefined) {
-                // Acceso al dashboard requiere permiso para "tablero"
                 return permisos.some((p: any) => p.resource === 'tablero');
             }
             
-            // Verifica si el usuario tiene el permiso específico {action, resource}
             return permisos.some((p: any) => 
                 p.resource === resource && p.action === action
             );

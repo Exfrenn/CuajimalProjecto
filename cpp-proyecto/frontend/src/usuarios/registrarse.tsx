@@ -24,7 +24,6 @@ const Registrarse: React.FC = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
 
-    // Datos hardcodeados para evitar necesidad de autenticación
     const turnos = [
         { id: 1, nombre: 'Matutino Semanal' },
         { id: 2, nombre: 'Vespertino Semanal' },
@@ -47,7 +46,7 @@ const Registrarse: React.FC = () => {
         genero: '',
         password: '',
         confirmPassword: '',
-        rol_id: 3, // Paramédico por defecto
+        rol_id: 3, 
         turno_id: 1,
         tipo_servicio: ''
     });

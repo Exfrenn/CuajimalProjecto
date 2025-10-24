@@ -24,7 +24,6 @@ export const RankingEmergencias = () => {
         );
     }
 
-    // Ranking de emergencias urbanas por tipo de servicio
     const urbanosCount: Record<string, number> = {};
     urbanos?.forEach((reporte: any) => {
         const tipo = reporte.personal_y_activacion?.tipo_servicio || 'Sin especificar';
@@ -36,7 +35,6 @@ export const RankingEmergencias = () => {
         .sort((a, b) => b.total - a.total)
         .slice(0, 10);
 
-    // Ranking de emergencias prehospitalarias por tipo de emergencia
     const prehospitalariosCount: Record<string, number> = {};
     prehospitalarios?.forEach((reporte: any) => {
         const tipo = reporte.servicio?.motivo || 'Sin especificar';
