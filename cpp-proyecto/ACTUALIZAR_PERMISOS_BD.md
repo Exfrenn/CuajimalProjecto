@@ -5,7 +5,6 @@
 Ejecuta estos comandos en MongoDB para actualizar los permisos de cada rol:
 
 ```javascript
-// 1. Administrador - Acceso completo
 db.roles.updateOne(
   { "id": 1 },
   {
@@ -28,7 +27,6 @@ db.roles.updateOne(
   }
 )
 
-// 2. Jefe de turno - Puede ver reportes y usuarios, requiere acceso de lectura a roles/turnos
 db.roles.updateOne(
   { "id": 2 },
   {
@@ -38,8 +36,8 @@ db.roles.updateOne(
         "reportes_prehospitalarios",
         "reportes_urbanos",
         "usuarios",
-        "roles",      // Acceso de lectura (necesario para relaciones)
-        "turnos",     // Acceso de lectura (necesario para relaciones)
+        "roles",      
+        "turnos",     
         "list",
         "show",
         "edit"
@@ -48,16 +46,15 @@ db.roles.updateOne(
   }
 )
 
-// 3. Paramédico - Solo reportes prehospitalarios
 db.roles.updateOne(
   { "id": 3 },
   {
     $set: {
       "permisos": [
         "reportes_prehospitalarios",
-        "roles",      // Acceso de lectura (necesario para ver referencias)
-        "turnos",     // Acceso de lectura (necesario para ver referencias)
-        "usuarios",   // Acceso de lectura (necesario para ver referencias)
+        "roles",      
+        "turnos",     
+        "usuarios",  
         "list",
         "show",
         "create"
@@ -66,16 +63,15 @@ db.roles.updateOne(
   }
 )
 
-// 4. Operador - Solo reportes urbanos
 db.roles.updateOne(
   { "id": 4 },
   {
     $set: {
       "permisos": [
         "reportes_urbanos",
-        "roles",      // Acceso de lectura (necesario para ver referencias)
-        "turnos",     // Acceso de lectura (necesario para ver referencias)
-        "usuarios",   // Acceso de lectura (necesario para ver referencias)
+        "roles",      
+        "turnos",     
+        "usuarios",   
         "list",
         "show",
         "create"
