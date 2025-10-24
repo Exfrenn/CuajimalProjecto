@@ -41,29 +41,24 @@ export const PermisosInput = (props: any) => {
     const { field } = useInput(props);
     const [permisos, setPermisos] = useState<Permiso[]>([]);
 
-    // Inicializar permisos desde el valor del campo
     useEffect(() => {
         if (field.value && Array.isArray(field.value)) {
             setPermisos(field.value);
         }
     }, [field.value]);
 
-    // Verificar si un permiso específico está activado
     const tienePermiso = (resource: string, action: string): boolean => {
         return permisos.some(p => p.resource === resource && p.action === action);
     };
 
-    // Toggle de un permiso específico
     const togglePermiso = (resource: string, action: string) => {
         let nuevosPermisos: Permiso[];
         
         if (tienePermiso(resource, action)) {
-            // Remover el permiso
             nuevosPermisos = permisos.filter(
                 p => !(p.resource === resource && p.action === action)
             );
         } else {
-            // Agregar el permiso
             nuevosPermisos = [...permisos, { resource, action }];
         }
         
@@ -71,7 +66,6 @@ export const PermisosInput = (props: any) => {
         field.onChange(nuevosPermisos);
     };
 
-    // Seleccionar/Deseleccionar todos los permisos de un recurso
     const toggleRecurso = (resource: string) => {
         const todasLasAcciones = acciones.map(a => a.id);
         const tieneTodasLasAcciones = todasLasAcciones.every(action => 
@@ -81,10 +75,8 @@ export const PermisosInput = (props: any) => {
         let nuevosPermisos: Permiso[];
         
         if (tieneTodasLasAcciones) {
-            // Remover todos los permisos de este recurso
             nuevosPermisos = permisos.filter(p => p.resource !== resource);
         } else {
-            // Remover permisos existentes del recurso y agregar todos
             nuevosPermisos = permisos.filter(p => p.resource !== resource);
             todasLasAcciones.forEach(action => {
                 nuevosPermisos.push({ resource, action });
@@ -95,7 +87,6 @@ export const PermisosInput = (props: any) => {
         field.onChange(nuevosPermisos);
     };
 
-    // Contar permisos activos por recurso
     const contarPermisosRecurso = (resource: string): number => {
         return permisos.filter(p => p.resource === resource).length;
     };
