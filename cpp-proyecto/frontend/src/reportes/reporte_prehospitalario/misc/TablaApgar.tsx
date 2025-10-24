@@ -34,7 +34,6 @@ export const TablaApgar: React.FC = () => {
     const handleValueChange = (tiempoIndex: number, signo: string, value: string | number) => {
         const nuevasEvaluaciones = [...evaluaciones];
         
-        // Asegurar que existe la evaluación para este tiempo
         if (!nuevasEvaluaciones[tiempoIndex]) {
             nuevasEvaluaciones[tiempoIndex] = {
                 tiempo: tiemposEvaluacion[tiempoIndex],
@@ -46,7 +45,6 @@ export const TablaApgar: React.FC = () => {
             } as any;
         }
 
-        // Convertir valor apropiadamente
         const valorFinal = value === '' ? undefined : Number(value);
 
         nuevasEvaluaciones[tiempoIndex] = {
@@ -54,12 +52,10 @@ export const TablaApgar: React.FC = () => {
             [signo]: valorFinal
         };
 
-        // Calcular puntaje total solo si todos los valores están definidos
         const eval_actual = nuevasEvaluaciones[tiempoIndex];
         const valores = [eval_actual.color, eval_actual.fc, eval_actual.irritabilidad, 
                         eval_actual.tono, eval_actual.respiracion];
         
-        // Solo calcular si todos los valores están definidos
         const todosDefinidos = valores.every(v => v !== undefined);
         if (todosDefinidos) {
             const total = valores.reduce((sum, val) => sum + (val || 0), 0);
@@ -284,7 +280,7 @@ export const TablaApgar: React.FC = () => {
                             {tiemposEvaluacion.map((tiempo, index) => {
                                 const eval_data = evaluaciones[index];
                                 let total: number | undefined;
-                                let backgroundColor = '#f5f5f5'; // color neutral por defecto
+                                let backgroundColor = '#f5f5f5'; 
                                 
                                 if (eval_data) {
                                     const valores = [eval_data.color, eval_data.fc, eval_data.irritabilidad, 
