@@ -6,7 +6,6 @@ interface AlcaldiasLayerProps {
 }
 
 export default function AlcaldiasLayer({ geojson, onFeatureClick }: AlcaldiasLayerProps) {
-  // Personaliza el estilo aquí
   const style: GeoJSONProps["style"] = () => ({
     color: "#3388ff",
     weight: 1,
