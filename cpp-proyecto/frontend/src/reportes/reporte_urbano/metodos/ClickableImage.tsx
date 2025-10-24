@@ -5,7 +5,6 @@ import { useState } from 'react';
 
 
 
-// Componente para mostrar imagen con click para ampliar
 const ClickableImage = ({ src, title }: { src: string; title: string }) => {
     const [open, setOpen] = useState(false);
 
