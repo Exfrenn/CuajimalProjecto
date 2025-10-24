@@ -1,4 +1,3 @@
-/* SIDEBAR */
 .RaSidebar-root, .MuiDrawer-root {
     height: 100% !important;
 }
@@ -25,7 +24,6 @@
     width: 55px !important;
 }
 
-/* Separación entre items del menú */
 .MuiDrawer-paper .MuiList-root .MuiListItem-root, 
 .MuiDrawer-paper .MuiMenuItem-root, 
 .RaMenuItemLink-root {
@@ -34,7 +32,6 @@
     padding-bottom: 8px !important;
 }
 
-/* Estilo para sidebar cerrado - ÍCONO ARRIBA, NOMBRE ABAJO */
 .RaSidebar-closed .MuiDrawer-paper .MuiListItem-root,
 .RaSidebar-closed .MuiDrawer-paper .RaMenuItemLink-root {
     flex-direction: column !important;
@@ -51,7 +48,6 @@
     margin: 0 !important;
 }
 
-/* TAMAÑO DE LETRA DEL MENÚ CERRADO */
 .RaSidebar-closed .MuiDrawer-paper .MuiListItemText-root span,
 .RaSidebar-closed .MuiDrawer-paper .MuiListItemText-primary,
 .RaSidebar-closed .MuiDrawer-paper .MuiTypography-root {
