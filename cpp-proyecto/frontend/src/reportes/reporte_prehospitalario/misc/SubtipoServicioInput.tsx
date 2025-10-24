@@ -1,4 +1,3 @@
-// reportes/reporte_urbano/components/SubtipoServicioInput.tsx
 import { SelectInput, required } from 'react-admin';
 import { useWatch } from 'react-hook-form';
 import { subtipoChoices } from '../../data/choices';
