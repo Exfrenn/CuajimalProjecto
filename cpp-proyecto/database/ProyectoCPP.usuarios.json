@@ -1,0 +1,58 @@
+[
+{
+  "_id": {
+    "$oid": "68f64b28a973ec70605b5542"
+  },
+  "id": 1,
+  "nombre": "Jefe Semanal",
+  "apellido": "Matutino",
+  "usuario": "JefeSemMat",
+  "email": "jefeSemMatOp@gmail.com",
+  "password": "$argon2id$v=19$m=19456,t=2,p=1$KYC/qM1we2bjuomzKvR7UA$fAPNcxr4HJDMlHBSMNk3xVS7NXFv4zTr8Xpqh4SH8LA",
+  "rol_id": 2,
+  "turno_id": 1,
+  "operadores_id": [
+    3
+  ],
+  "tipo_servicio": "urbano"
+},
+{
+  "_id": {
+    "$oid": "68f64b58a973ec70605b5543"
+  },
+  "id": 2,
+  "nombre": "Operador Semanal Matutino",
+  "apellido": "1",
+  "usuario": "OperadorSemanalMat",
+  "email": "operador1MatSem@gmail.com",
+  "password": "$argon2id$v=19$m=19456,t=2,p=1$JRUFQ2isa8lC4+QmnQjSng$dvqKfMdmhd7McmdbMMwK8HENgZ8pLatNJlTJdfoeGiY",
+  "rol_id": 4,
+  "turno_id": 1
+},
+{
+  "_id": {
+    "$oid": "68f68b5dc7cdcc6025c9f1ba"
+  },
+  "id": 3,
+  "nombre": "Paramedico Semanal Matutino",
+  "apellido": "1",
+  "usuario": "paramedico1MatSem@gmail.com",
+  "email": "paramedico1MatSem@gmail.com",
+  "password": "$argon2id$v=19$m=19456,t=2,p=1$dNyr6MPCb7WE+jTXdA+AGg$QXyWoOjXUURL7FD7qWnvyIUT6SDj+n0CbziWkEgOyeI",
+  "rol_id": 3,
+  "turno_id": 1,
+  "tipo_servicio": "prehospitalario"
+},
+{
+  "_id": {
+    "$oid": "68f68bc2c7cdcc6025c9f1bb"
+  },
+  "id": 4,
+  "nombre": "Jefe Paramedicos Semanal Matutino",
+  "apellido": "2",
+  "usuario": "Operador",
+  "email": "jefeParamSemMat@gmail.com",
+  "password": "$argon2id$v=19$m=19456,t=2,p=1$ul3uGwlZre62kDULBjzVdA$1cLv/rv4PmXAWr2e2ZllpEJm23QjX6+j+oEErymvBqg",
+  "rol_id": 2,
+  "turno_id": 1
+}]

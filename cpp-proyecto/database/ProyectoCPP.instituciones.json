@@ -1,0 +1,63 @@
+[{
+  "_id": {
+    "$oid": "68eeaa6c7a81142bab8cc34a"
+  },
+  "id": 1,
+  "nombre": "Bomberos"
+},
+{
+  "_id": {
+    "$oid": "68eeaa6c7a81142bab8cc34b"
+  },
+  "id": 2,
+  "nombre": "Seguridad Pública"
+},
+{
+  "_id": {
+    "$oid": "68eeaa6c7a81142bab8cc34c"
+  },
+  "id": 3,
+  "nombre": "C5"
+},
+{
+  "_id": {
+    "$oid": "68eeaa6c7a81142bab8cc34d"
+  },
+  "id": 4,
+  "nombre": "Cruz Roja"
+},
+{
+  "_id": {
+    "$oid": "68eeaa6c7a81142bab8cc34e"
+  },
+  "id": 5,
+  "nombre": "Protección Civil Municipal"
+},
+{
+  "_id": {
+    "$oid": "68eeaa6c7a81142bab8cc34f"
+  },
+  "id": 6,
+  "nombre": "Protección Civil Estatal"
+},
+{
+  "_id": {
+    "$oid": "68eeaa6c7a81142bab8cc350"
+  },
+  "id": 7,
+  "nombre": "CFE"
+},
+{
+  "_id": {
+    "$oid": "68eeaa6c7a81142bab8cc351"
+  },
+  "id": 8,
+  "nombre": "SAPAC"
+},
+{
+  "_id": {
+    "$oid": "68eeaa6c7a81142bab8cc352"
+  },
+  "id": 9,
+  "nombre": "Tránsito Municipal"
+}]

@@ -1,0 +1,77 @@
+[{
+  "_id": {
+    "$oid": "68ef27a01a9cee289d7ef91f"
+  },
+  "id": 1,
+  "nombre": "Neurologica"
+},
+{
+  "_id": {
+    "$oid": "68ef27a01a9cee289d7ef920"
+  },
+  "id": 2,
+  "nombre": "Infecciosa"
+},
+{
+  "_id": {
+    "$oid": "68ef27a01a9cee289d7ef921"
+  },
+  "id": 3,
+  "nombre": "Musculo esqueletico"
+},
+{
+  "_id": {
+    "$oid": "68ef27a01a9cee289d7ef922"
+  },
+  "id": 4,
+  "nombre": "Urogenital"
+},
+{
+  "_id": {
+    "$oid": "68ef27a01a9cee289d7ef923"
+  },
+  "id": 5,
+  "nombre": "Digestiva"
+},
+{
+  "_id": {
+    "$oid": "68ef27a01a9cee289d7ef924"
+  },
+  "id": 6,
+  "nombre": "Cardiovascular"
+},
+{
+  "_id": {
+    "$oid": "68ef27a01a9cee289d7ef925"
+  },
+  "id": 7,
+  "nombre": "Oncologico"
+},
+{
+  "_id": {
+    "$oid": "68ef27a01a9cee289d7ef926"
+  },
+  "id": 8,
+  "nombre": "Metabolico"
+},
+{
+  "_id": {
+    "$oid": "68ef27a01a9cee289d7ef927"
+  },
+  "id": 9,
+  "nombre": "Ginecoobstetrica"
+},
+{
+  "_id": {
+    "$oid": "68ef27a01a9cee289d7ef928"
+  },
+  "id": 10,
+  "nombre": "Respiratorio"
+},
+{
+  "_id": {
+    "$oid": "68ef27a01a9cee289d7ef929"
+  },
+  "id": 11,
+  "nombre": "Cognitivo emocional"
+}]

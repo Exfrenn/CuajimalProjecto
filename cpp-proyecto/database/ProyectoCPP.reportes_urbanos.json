@@ -1,0 +1,72 @@
+[{
+  "_id": {
+    "$oid": "68f64f333e11108e9699dbf2"
+  },
+  "datos_generales": {
+    "turno_id": 1,
+    "folio": "Modi aperiam nulla i",
+    "fecha": "1970-06-26T12:24"
+  },
+  "personal_y_activacion": {
+    "personal_a_cargo": [
+      3
+    ],
+    "modo_activacion": "Seguimiento de llamada",
+    "tipo_servicio": "Mitigacion",
+    "subtipo_servicio": "Inundacion"
+  },
+  "acciones_realizadas": {
+    "observaciones": [
+      {
+        "texto": "Sunt aut est maxime",
+        "fotos": [
+          {
+            "src": "http://localhost:3000/uploads/images-1760972595066-298971574.png",
+            "title": "Screenshot 2025-10-18 135408.png"
+          }
+        ]
+      }
+    ],
+    "trabajos_realizados": "Numquam aut quia est",
+    "conclusion_dictamen": "Sed labore est mole"
+  },
+  "responsables_y_autoridades": {
+    "responsables": [
+      {
+        "relacion": "Adipisicing in quia ",
+        "nombre": "Quae harum possimus",
+        "telefono": "Enim necessitatibus ",
+        "direccion": "Error pariatur Duis",
+        "identificacion": "Nisi sit aut elit "
+      }
+    ],
+    "autoridades_participantes": [
+      {
+        "unidad": "Sunt ipsam iusto se",
+        "responsable": "Voluptate voluptates",
+        "matricula": "Et minus enim culpa ",
+        "institucion": 2
+      }
+    ]
+  },
+  "atencion_emergencia": {
+    "tiempo_traslado_minutos": 88,
+    "fecha_hora_atencion": "2023-04-07T23:04",
+    "km_recorridos": 47,
+    "ubicacion": {
+      "calle": "Inventore eu id anim",
+      "colonia": "Qui voluptates est ",
+      "estado": "Ipsum labore libero ",
+      "municipio": "Rerum velit praesen",
+      "codigo_postal": "Cupiditate excepteur",
+      "coordenadas": [
+        90,
+        63
+      ],
+      "referencia": "Est rerum sit et mo",
+      "alcaldia": "Álvaro Obregón"
+    },
+    "gravedad_emergencia": "Baja"
+  },
+  "id": 1
+}]

@@ -1,0 +1,88 @@
+[{
+  "_id": {
+    "$oid": "68f567b3fc9a501426cb2fa6"
+  },
+  "nombre": "Matutino Semanal",
+  "dias": [
+    "Lun",
+    "Mar",
+    "Mie",
+    "Jue",
+    "Vie"
+  ],
+  "hora_inicio": "2025-10-19T14:00:22.147Z",
+  "hora_fin": "2025-10-19T21:00:28.960Z",
+  "id": 1
+},
+{
+  "_id": {
+    "$oid": "68f567d0fc9a501426cb2fa8"
+  },
+  "nombre": "Vespertino Semanal",
+  "dias": [
+    "Lun",
+    "Mar",
+    "Mie",
+    "Jue",
+    "Vie"
+  ],
+  "hora_inicio": "2025-10-19T21:00:50.259Z",
+  "hora_fin": "2025-10-20T03:00:59.691Z",
+  "id": 2
+},
+{
+  "_id": {
+    "$oid": "68f56820fc9a501426cb2faa"
+  },
+  "nombre": "Vespertino (Lun-Mie-Vie)",
+  "dias": [
+    "Lun",
+    "Mie",
+    "Vie"
+  ],
+  "hora_inicio": "2025-10-20T03:00:05.673Z",
+  "hora_fin": "2025-10-19T14:00:17.083Z",
+  "id": 3
+},
+{
+  "_id": {
+    "$oid": "68f56851fc9a501426cb2fad"
+  },
+  "nombre": "Vespertino (Mar-Jue-Dom)",
+  "dias": [
+    "Mar",
+    "Jue",
+    "Dom"
+  ],
+  "hora_inicio": "2025-10-20T03:00:02.275Z",
+  "hora_fin": "2025-10-19T14:00:07.779Z",
+  "id": 4
+},
+{
+  "_id": {
+    "$oid": "68f56890fc9a501426cb2fb1"
+  },
+  "nombre": "Fin de Semana Matutino",
+  "dias": [
+    "Sab",
+    "Dom",
+    "Fes"
+  ],
+  "hora_inicio": "2025-10-19T15:00:08.927Z",
+  "hora_fin": "2025-10-20T02:00:10.279Z",
+  "id": 5
+},
+{
+  "_id": {
+    "$oid": "68f568b3fc9a501426cb2fb3"
+  },
+  "nombre": "Fin de Semana Vespertino",
+  "dias": [
+    "Sab",
+    "Dom",
+    "Fes"
+  ],
+  "hora_inicio": "2025-10-20T03:00:17.395Z",
+  "hora_fin": "2025-10-19T14:00:18.743Z",
+  "id": 6
+}]

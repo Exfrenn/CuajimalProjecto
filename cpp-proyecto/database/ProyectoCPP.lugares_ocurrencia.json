@@ -1,0 +1,42 @@
+[{
+  "_id": {
+    "$oid": "68ee859f4b77ef094ce8729a"
+  },
+  "id": 1,
+  "nombre": "Transporte Publico"
+},
+{
+  "_id": {
+    "$oid": "68ee859f4b77ef094ce8729b"
+  },
+  "id": 2,
+  "nombre": "Escuela"
+},
+{
+  "_id": {
+    "$oid": "68ee859f4b77ef094ce8729c"
+  },
+  "id": 3,
+  "nombre": "Trabajo"
+},
+{
+  "_id": {
+    "$oid": "68ee859f4b77ef094ce8729d"
+  },
+  "id": 4,
+  "nombre": "Hogar"
+},
+{
+  "_id": {
+    "$oid": "68ee859f4b77ef094ce8729e"
+  },
+  "id": 5,
+  "nombre": "Recreacion y deporte"
+},
+{
+  "_id": {
+    "$oid": "68ee859f4b77ef094ce8729f"
+  },
+  "id": 6,
+  "nombre": "Via publica"
+}]

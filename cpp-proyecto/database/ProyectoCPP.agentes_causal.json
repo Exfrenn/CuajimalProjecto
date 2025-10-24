@@ -1,0 +1,98 @@
+[{
+  "_id": {
+    "$oid": "68eebd77588899722a7cf779"
+  },
+  "id": 1,
+  "nombre": "Arma"
+},
+{
+  "_id": {
+    "$oid": "68eebd77588899722a7cf77a"
+  },
+  "id": 2,
+  "nombre": "Juguete"
+},
+{
+  "_id": {
+    "$oid": "68eebd77588899722a7cf77b"
+  },
+  "id": 3,
+  "nombre": "Explosion"
+},
+{
+  "_id": {
+    "$oid": "68eebd77588899722a7cf77c"
+  },
+  "id": 4,
+  "nombre": "Fuego"
+},
+{
+  "_id": {
+    "$oid": "68eebd77588899722a7cf77d"
+  },
+  "id": 5,
+  "nombre": "Animal"
+},
+{
+  "_id": {
+    "$oid": "68eebd77588899722a7cf77e"
+  },
+  "id": 6,
+  "nombre": "Bicicleta"
+},
+{
+  "_id": {
+    "$oid": "68eebd77588899722a7cf77f"
+  },
+  "id": 7,
+  "nombre": "Automotor"
+},
+{
+  "_id": {
+    "$oid": "68eebd77588899722a7cf780"
+  },
+  "id": 8,
+  "nombre": "Maquinaria"
+},
+{
+  "_id": {
+    "$oid": "68eebd77588899722a7cf781"
+  },
+  "id": 9,
+  "nombre": "Herramienta"
+},
+{
+  "_id": {
+    "$oid": "68eebd77588899722a7cf782"
+  },
+  "id": 10,
+  "nombre": "Electricidad"
+},
+{
+  "_id": {
+    "$oid": "68eebd77588899722a7cf783"
+  },
+  "id": 11,
+  "nombre": "Sustancia caliente"
+},
+{
+  "_id": {
+    "$oid": "68eebd77588899722a7cf784"
+  },
+  "id": 12,
+  "nombre": "Sustancia toxica"
+},
+{
+  "_id": {
+    "$oid": "68eebd77588899722a7cf785"
+  },
+  "id": 13,
+  "nombre": "Producto biologico"
+},
+{
+  "_id": {
+    "$oid": "68eebd77588899722a7cf786"
+  },
+  "id": 14,
+  "nombre": "Ser humano"
+}]

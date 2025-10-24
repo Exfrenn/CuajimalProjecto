@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 // Middleware de autenticación JWT
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+    const token = authHeader && authHeader.split(' ')[1];
 
     if (token == null) return res.sendStatus(401);
 
@@ -28,7 +28,7 @@ function authenticateToken(req, res, next) {
     });
 }
 
-// Middleware de permisos - Compatible con nueva estructura {action, resource}
+// Middleware de permisos
 function checkPermissions(resource, action) {
     return async (req, res, next) => {
         try {
@@ -45,18 +45,14 @@ function checkPermissions(resource, action) {
                 return res.sendStatus(403);
             }
 
-            // Soporte para ambos formatos de permisos:
-            // Nuevo formato: [{action: "list", resource: "usuarios"}, ...]
-            // Formato antiguo: ["usuarios", "list", ...]
             let tienePermiso = false;
 
             if (rol.permisos.length > 0 && typeof rol.permisos[0] === 'object') {
-                // Nuevo formato: verifica que exista el objeto con action y resource exactos
+                // verifica que exista el objeto con action y resource exactos
                 tienePermiso = rol.permisos.some(p => 
                     p.resource === resource && p.action === action
                 );
             } else {
-                // Formato antiguo (compatibilidad): verifica que existan ambos strings
                 tienePermiso = rol.permisos.includes(resource) && rol.permisos.includes(action);
             }
 

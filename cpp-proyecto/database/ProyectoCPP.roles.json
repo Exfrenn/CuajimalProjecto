@@ -1,0 +1,280 @@
+[{
+  "_id": {
+    "$oid": "68e2ca08bf48aa7bfc2073ff"
+  },
+  "id": 1,
+  "nombre": "Administrador",
+  "permisos": [
+    {
+      "action": "list",
+      "resource": "tablero"
+    },
+    {
+      "action": "list",
+      "resource": "turnos"
+    },
+    {
+      "action": "show",
+      "resource": "turnos"
+    },
+    {
+      "action": "create",
+      "resource": "turnos"
+    },
+    {
+      "action": "edit",
+      "resource": "turnos"
+    },
+    {
+      "action": "delete",
+      "resource": "turnos"
+    },
+    {
+      "action": "list",
+      "resource": "roles"
+    },
+    {
+      "action": "show",
+      "resource": "roles"
+    },
+    {
+      "action": "create",
+      "resource": "roles"
+    },
+    {
+      "action": "edit",
+      "resource": "roles"
+    },
+    {
+      "action": "delete",
+      "resource": "roles"
+    },
+    {
+      "action": "list",
+      "resource": "usuarios"
+    },
+    {
+      "action": "show",
+      "resource": "usuarios"
+    },
+    {
+      "action": "create",
+      "resource": "usuarios"
+    },
+    {
+      "action": "edit",
+      "resource": "usuarios"
+    },
+    {
+      "action": "delete",
+      "resource": "usuarios"
+    },
+    {
+      "action": "list",
+      "resource": "reportes_urbanos"
+    },
+    {
+      "action": "show",
+      "resource": "reportes_urbanos"
+    },
+    {
+      "action": "create",
+      "resource": "reportes_urbanos"
+    },
+    {
+      "action": "edit",
+      "resource": "reportes_urbanos"
+    },
+    {
+      "action": "delete",
+      "resource": "reportes_urbanos"
+    },
+    {
+      "action": "list",
+      "resource": "reportes_prehospitalarios"
+    },
+    {
+      "action": "show",
+      "resource": "reportes_prehospitalarios"
+    },
+    {
+      "action": "create",
+      "resource": "reportes_prehospitalarios"
+    },
+    {
+      "action": "edit",
+      "resource": "reportes_prehospitalarios"
+    },
+    {
+      "action": "delete",
+      "resource": "reportes_prehospitalarios"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "68e2ca08bf48aa7bfc207400"
+  },
+  "id": 2,
+  "nombre": "Jefe de turno",
+  "permisos": [
+    {
+      "resource": "usuarios",
+      "action": "show"
+    },
+    {
+      "resource": "reportes_urbanos",
+      "action": "show"
+    },
+    {
+      "resource": "reportes_prehospitalarios",
+      "action": "show"
+    },
+    {
+      "resource": "turnos",
+      "action": "show"
+    },
+    {
+      "resource": "roles",
+      "action": "show"
+    },
+    {
+      "resource": "usuarios",
+      "action": "list"
+    },
+    {
+      "resource": "reportes_urbanos",
+      "action": "list"
+    },
+    {
+      "resource": "reportes_prehospitalarios",
+      "action": "list"
+    },
+    {
+      "resource": "usuarios",
+      "action": "edit"
+    },
+    {
+      "resource": "roles",
+      "action": "edit"
+    },
+    {
+      "resource": "turnos",
+      "action": "edit"
+    },
+    {
+      "resource": "roles",
+      "action": "list"
+    },
+    {
+      "resource": "turnos",
+      "action": "list"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "68e2ca08bf48aa7bfc207401"
+  },
+  "id": 3,
+  "nombre": "Paramedico",
+  "permisos": [
+    {
+      "resource": "usuarios",
+      "action": "show"
+    },
+    {
+      "resource": "roles",
+      "action": "show"
+    },
+    {
+      "resource": "turnos",
+      "action": "show"
+    },
+    {
+      "resource": "turnos",
+      "action": "edit"
+    },
+    {
+      "resource": "roles",
+      "action": "edit"
+    },
+    {
+      "resource": "usuarios",
+      "action": "edit"
+    },
+    {
+      "resource": "usuarios",
+      "action": "list"
+    },
+    {
+      "resource": "roles",
+      "action": "list"
+    },
+    {
+      "resource": "turnos",
+      "action": "list"
+    },
+    {
+      "resource": "reportes_prehospitalarios",
+      "action": "show"
+    },
+    {
+      "resource": "reportes_prehospitalarios",
+      "action": "list"
+    },
+    {
+      "resource": "reportes_prehospitalarios",
+      "action": "create"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "68e2ca08bf48aa7bfc207402"
+  },
+  "id": 4,
+  "nombre": "Operador",
+  "permisos": [
+    {
+      "resource": "reportes_urbanos",
+      "action": "list"
+    },
+    {
+      "resource": "reportes_urbanos",
+      "action": "show"
+    },
+    {
+      "resource": "reportes_urbanos",
+      "action": "create"
+    },
+    {
+      "resource": "turnos",
+      "action": "show"
+    },
+    {
+      "resource": "roles",
+      "action": "show"
+    },
+    {
+      "resource": "usuarios",
+      "action": "show"
+    },
+    {
+      "resource": "turnos",
+      "action": "list"
+    },
+    {
+      "resource": "roles",
+      "action": "list"
+    },
+    {
+      "resource": "usuarios",
+      "action": "list"
+    },
+    {
+      "resource": "usuarios",
+      "action": "edit"
+    }
+  ]
+}]

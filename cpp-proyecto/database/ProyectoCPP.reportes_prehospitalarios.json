@@ -1,0 +1,206 @@
+[{
+  "_id": {
+    "$oid": "68f69d58c7cdcc6025c9f1bc"
+  },
+  "preambulo": {
+    "turno_id": 1,
+    "fecha": "2001-09-28T11:01",
+    "folio": "Obcaecati impedit c"
+  },
+  "control": {
+    "operador": [
+      4
+    ],
+    "ambulancia_numero": "Earum alias in deser",
+    "tum": "Voluptatem tempora ",
+    "socorrista": "Fugiat tenetur sapie",
+    "helicoptero": "Odit maiores vel exp"
+  },
+  "evaluacion_secundaria": {
+    "zonas_lesion": [
+      {
+        "zona": "Quis eligendi conseq",
+        "hallazgo": "DEF",
+        "fecha": "1999-01-19"
+      }
+    ],
+    "signos_vitales": [
+      {
+        "hora": "2025-10-20T23:08:28.555Z",
+        "fr": "Sint blanditiis nos",
+        "fc": "Repudiandae quasi ni",
+        "tas": "Minima repellendus ",
+        "tad": "Illum repellendus ",
+        "sao2": "Harum ipsam distinct",
+        "gluc": "Aut ut molestiae ea ",
+        "neuro": "A"
+      }
+    ],
+    "glasgow": 6,
+    "pupilas": "Derecha",
+    "glasgow_ocular": 2,
+    "glasgow_motora": 1,
+    "glasgow_verbal": 3,
+    "alergias": "Magni et dolor elige",
+    "medicamentos": "Duis Nam magnam est",
+    "padecimientos": "Nulla ullam molestia",
+    "ultima_comida": "Reprehenderit maior",
+    "eventos_previos": "Necessitatibus sunt ",
+    "condicion": "Critico",
+    "prioridad": "Amarillo"
+  },
+  "tratamiento": {
+    "asistencia_ventilatoria": {
+      "medicacion": [
+        {
+          "hora": "2025-10-20T23:06:09.177Z",
+          "medicamento": "Ut molestiae dolorib",
+          "dosis": "Eligendi nemo iure h",
+          "via": "Molestias in fugiat"
+        }
+      ],
+      "ltsxmin": 50,
+      "tipo": "Válvula de demanda"
+    },
+    "vias_venosas": [
+      {
+        "tipo": null,
+        "lineaIV": 98,
+        "cateter": 30,
+        "cantidad": 80
+      }
+    ],
+    "dr_tratante": "Quia libero dicta et",
+    "control_cervical": "Collarin blando",
+    "via_aerea": "Combitubo",
+    "hemorragias": "Gravedad",
+    "atencion_basica": "RCP básica"
+  },
+  "legales": {
+    "autoridades": [
+      {
+        "unidad": "Eiusmod repudiandae ",
+        "oficiales": "Dicta assumenda quas",
+        "institucion": 1
+      }
+    ],
+    "vehiculos": [
+      {
+        "tipo": "Qui mollit harum in ",
+        "placas": "Dolore repudiandae i"
+      }
+    ]
+  },
+  "servicio": {
+    "cronometro": {
+      "hora_llamada": "2025-10-20T11:30:48.174Z",
+      "hora_salida": "2025-10-20T12:21:48.591Z",
+      "hora_llegada": "2025-10-20T19:47:48.842Z",
+      "hora_traslado": "2025-10-21T05:52:49.071Z",
+      "hora_hospital": "2025-10-20T11:58:49.294Z",
+      "salida_hospital": "2025-10-20T18:20:49.684Z",
+      "hora_base": "2025-10-20T16:41:49.916Z"
+    },
+    "ubicacion": {
+      "calle": "Fuga Non ea in volu",
+      "interseccion1": "Mollit dolor est min",
+      "interseccion2": "Incidunt doloribus ",
+      "colonia": "Id dolor ut vel fugi",
+      "coordenadas": [
+        69,
+        15
+      ],
+      "lugar_ocurrencia": 2,
+      "alcaldia": "Cuajimalpa de Morelos"
+    },
+    "motivo": "Traumatismo"
+  },
+  "paciente": {
+    "nombre": "Dicta eiusmod error ",
+    "edad": {
+      "anos": 90,
+      "meses": 45
+    },
+    "domicilio": "Ullam adipisci occae",
+    "colonia": "Debitis sint ex sun",
+    "alcaldia": "Vitae illo iste unde",
+    "derechohabiente": "A sit elit saepe qu",
+    "telefono": "Eiusmod est provide",
+    "ocupacion": "Consequatur nihil te",
+    "sexo": "Masc"
+  },
+  "parto": {
+    "madre": {
+      "semanas_gesta": 62,
+      "hora_inicio": "2025-10-21T03:12:23.150Z",
+      "frecuencia": "Nulla aut neque ulla",
+      "duracion": "Consectetur molesti"
+    },
+    "postparto": {
+      "hora_nacimiento": "1989-02-02T03:35",
+      "placenta": "Proident at commodo",
+      "lugar": "Fugit dolorem in li",
+      "sexo": "Fem",
+      "producto": "vivo"
+    },
+    "edad_gestacional": "Quas et ipsum volup",
+    "evaluaciones_apgar": [
+      {
+        "tiempo": "1min",
+        "color": 2,
+        "fc": 2,
+        "irritabilidad": 2,
+        "tono": 2,
+        "respiracion": 2,
+        "puntaje_total": 10
+      }
+    ]
+  },
+  "trauma": {
+    "agente": 3,
+    "accidente_auto": 1,
+    "impacto": 1,
+    "cms": "Ipsa ratione et pro",
+    "dentro_vehiculo": "Si",
+    "atropellado": "Automotor",
+    "cinturon_seguridad": "Colocado",
+    "volante": "Doblado",
+    "parabrisas": "Integro",
+    "bolsa_aire": "No"
+  },
+  "clinica": {
+    "origen": 7,
+    "subsecuente": "Si",
+    "primera_vez": "Si"
+  },
+  "evaluacion_inicial": {
+    "nivel_consciencia": "Alerta",
+    "deglucion": "Presente",
+    "via_aerea": "Permeable",
+    "ventilacion": "Automatismo regular",
+    "auscultacion": "Ruidos respiratorios normales",
+    "hemitorax": "Derecho",
+    "sitio": "Base",
+    "pulsos": {
+      "presencia": "Carotideo",
+      "calidad": "Arritmico"
+    },
+    "piel": "Palida",
+    "caracteristicas": "Caliente",
+    "observaciones": "lololol"
+  },
+  "traslado": {
+    "hospital": "Libero facere et qua",
+    "dr": "Eaque amet autem ex",
+    "folio_cru": "Proident quis tempo",
+    "negativa": "Si"
+  },
+  "observaciones": {
+    "pertenencias": "Labore voluptatum in"
+  },
+  "documento_pdf": {
+    "src": "http://localhost:3000/uploads/pdf-1760992600052-88783033.pdf",
+    "title": "Copia de Sistema de gestiÃ³n de.pdf"
+  },
+  "id": 1
+}]
