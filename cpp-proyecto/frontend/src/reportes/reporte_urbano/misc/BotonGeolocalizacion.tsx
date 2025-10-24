@@ -3,7 +3,6 @@ import GpsFixed from "@mui/icons-material/GpsFixed";
 import { useFormContext } from "react-hook-form";
 import { useNotify } from "react-admin";
 
-// Lista de alcaldías válidas de CDMX
 const alcaldiasCDMX = [
     "Álvaro Obregón", "Azcapotzalco", "Benito Juárez", "Coyoacán",
     "Cuajimalpa de Morelos", "Cuauhtémoc", "Gustavo A. Madero", "Iztacalco",
@@ -11,7 +10,6 @@ const alcaldiasCDMX = [
     "Tláhuac", "Tlalpan", "Venustiano Carranza", "Xochimilco"
 ];
 
-// Reemplaza esto con tu API KEY de Google
 const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY as string;
 
 async function obtenerDireccionGoogle(lat: number, lng: number) {
@@ -57,7 +55,6 @@ const BotonGeolocalizacion = () => {
                 setValue("atencion_emergencia.ubicacion.coordenadas.0", longitude, { shouldDirty: true });
                 setValue("atencion_emergencia.ubicacion.coordenadas.1", latitude, { shouldDirty: true });
 
-                // Llama a Google Geocoding API
                 try {
                     const direccion = await obtenerDireccionGoogle(latitude, longitude);
                     setValue("atencion_emergencia.ubicacion.calle", direccion.calle, { shouldDirty: true });
@@ -65,7 +62,6 @@ const BotonGeolocalizacion = () => {
                     setValue("atencion_emergencia.ubicacion.estado", direccion.estado, { shouldDirty: true });
                     setValue("atencion_emergencia.ubicacion.municipio", direccion.municipio, { shouldDirty: true });
 
-                    // Validar alcaldía
                     const alcaldiaValida = alcaldiasCDMX.find(
                         a => a.toLowerCase() === (direccion.alcaldia || "").toLowerCase()
                     );

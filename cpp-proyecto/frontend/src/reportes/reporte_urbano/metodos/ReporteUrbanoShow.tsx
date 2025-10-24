@@ -191,7 +191,7 @@ export const ReporteUrbanoShow = () => {
                             {isSmall ? (
                                 <SimpleList
                                     primaryText={record => record.texto}
-                                    secondaryText={() => <FotosField />} // Usamos el componente personalizado aquí
+                                    secondaryText={() => <FotosField />} 
                                     linkType={false}
                                 />
                             ) : (

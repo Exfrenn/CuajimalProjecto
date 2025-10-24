@@ -34,7 +34,6 @@ export const TablaApgar: React.FC = () => {
     const handleValueChange = (tiempoIndex: number, signo: string, value: string | number) => {
         const nuevasEvaluaciones = [...evaluaciones];
         
-        // Asegurar que existe la evaluación para este tiempo
         if (!nuevasEvaluaciones[tiempoIndex]) {
             nuevasEvaluaciones[tiempoIndex] = {
                 tiempo: tiemposEvaluacion[tiempoIndex],
@@ -281,7 +280,7 @@ export const TablaApgar: React.FC = () => {
                             {tiemposEvaluacion.map((tiempo, index) => {
                                 const eval_data = evaluaciones[index];
                                 let total: number | undefined;
-                                let backgroundColor = '#f5f5f5'; // color neutral por defecto
+                                let backgroundColor = '#f5f5f5'; 
                                 
                                 if (eval_data) {
                                     const valores = [eval_data.color, eval_data.fc, eval_data.irritabilidad, 

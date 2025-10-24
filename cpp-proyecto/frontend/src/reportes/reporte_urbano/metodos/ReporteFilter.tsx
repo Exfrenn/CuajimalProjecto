@@ -7,7 +7,6 @@ import BuildIcon from '@mui/icons-material/Build';
 import CategoryIcon from '@mui/icons-material/Category';
 import { FC } from 'react';
 
-// Definimos el componente usando React.FC (Functional Component)
 export const ReporteFilterSidebar: FC = () => (
     <Card sx={{ order: -1, mr: 2, mt: 8, width: 250 }}>
         <CardContent>
