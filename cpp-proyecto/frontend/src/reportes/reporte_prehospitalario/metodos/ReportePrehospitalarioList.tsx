@@ -42,10 +42,7 @@ const PrioridadField = ({ record }: { record?: any }) => {
 export const ReportePrehospitalarioList = () => {
     const isSmall = useMediaQuery<Theme>((theme) => theme.breakpoints.down("sm"));
     
-    // El backend ya filtra los reportes según el rol:
-    // - Paramédico (rol_id 3): ve solo sus reportes
-    // - Jefe (rol_id 2): ve reportes de sus paramédicos
-    // - Admin (rol_id 1): ve todos
+
 
     return (
         <List filters={reporteFilters}>
