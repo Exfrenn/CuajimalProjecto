@@ -66,15 +66,13 @@ export const Dashboard = () => {
     const theme = useTheme();
     const { data: identity } = useGetIdentity();
     
-    // Control de acceso: Solo Admin (1) y Jefe de Turno (2) pueden ver el dashboard completo
-    const rolesPermitidos = [1, 2]; // Admin y Jefe de Turno
+    const rolesPermitidos = [1, 2]; 
     const tieneAcceso = identity && rolesPermitidos.includes(identity.rol_id);
     
-    // Solo hacer las consultas si el usuario tiene acceso
     const { data: usuarios, isLoading: loadingUsuarios } = useGetList('usuarios', {
         pagination: { page: 1, perPage: 1000 }
     }, {
-        enabled: tieneAcceso // Solo consultar si tiene acceso
+        enabled: tieneAcceso 
     });
     
     const { data: reportesUrbanos, isLoading: loadingReportesUrbanos } = useGetList('reportes_urbanos', {
@@ -101,7 +99,6 @@ export const Dashboard = () => {
         enabled: tieneAcceso
     });
 
-    // Mostrar pantalla de carga solo si está cargando la identidad
     if (!identity) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
@@ -110,7 +107,6 @@ export const Dashboard = () => {
         );
     }
 
-    // Pantalla de acceso denegado para operadores y paramédicos (mostrar inmediatamente)
     if (!tieneAcceso) {
         return (
             <Box sx={{ p: 3 }}>
@@ -150,7 +146,6 @@ export const Dashboard = () => {
         );
     }
 
-    // Mostrar pantalla de carga mientras se cargan los datos (solo si tiene acceso)
     if (loadingUsuarios || loadingReportesUrbanos || loadingReportesPrehospitalarios || loadingTurnos || loadingRoles) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
