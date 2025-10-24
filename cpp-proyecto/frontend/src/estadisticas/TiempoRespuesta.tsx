@@ -2,7 +2,6 @@ import { Card, CardContent, Typography, Box } from '@mui/material';
 import { useGetList } from 'react-admin';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-// Función para calcular tiempo en minutos entre dos fechas ISO
 const calcularMinutos = (fechaInicio: string, fechaFin: string): number | null => {
     if (!fechaInicio || !fechaFin) return null;
     
@@ -10,14 +9,11 @@ const calcularMinutos = (fechaInicio: string, fechaFin: string): number | null =
         const inicio = new Date(fechaInicio);
         const fin = new Date(fechaFin);
         
-        // Validar que las fechas sean válidas
         if (isNaN(inicio.getTime()) || isNaN(fin.getTime())) return null;
         
-        // Calcular diferencia en milisegundos y convertir a minutos
         const diferenciaMs = fin.getTime() - inicio.getTime();
         const diferenciaMinutos = Math.round(diferenciaMs / (1000 * 60));
         
-        // Retornar solo si es positivo y razonable (menos de 24 horas = 1440 min)
         return diferenciaMinutos > 0 && diferenciaMinutos < 1440 ? diferenciaMinutos : null;
     } catch {
         return null;
@@ -43,7 +39,6 @@ export const TiempoRespuesta = () => {
         );
     }
 
-    // Calcular tiempo promedio de respuesta para urbanos (usando tiempo_traslado_minutos)
     const tiemposUrbanos = urbanos
         ?.map((reporte: any) => ({
             tiempo: reporte.atencion_emergencia?.tiempo_traslado_minutos,
@@ -51,8 +46,7 @@ export const TiempoRespuesta = () => {
         }))
         .filter((item: any) => item.tiempo != null && item.tiempo > 0) || [];
 
-    // Calcular tiempo promedio de respuesta para prehospitalarios
-    // (desde hora_llamada hasta hora_llegada)
+
     const tiemposPrehospitalarios = prehospitalarios
         ?.map((reporte: any) => {
             const tiempo = calcularMinutos(
@@ -66,7 +60,6 @@ export const TiempoRespuesta = () => {
         })
         .filter((item: any) => item.tiempo != null && item.tiempo > 0) || [];
 
-    // Promedio general
     const promedioUrbanos = tiemposUrbanos.length > 0
         ? (tiemposUrbanos.reduce((acc: number, item: any) => acc + item.tiempo, 0) / tiemposUrbanos.length).toFixed(1)
         : 0;
@@ -75,17 +68,14 @@ export const TiempoRespuesta = () => {
         ? (tiemposPrehospitalarios.reduce((acc: number, item: any) => acc + item.tiempo, 0) / tiemposPrehospitalarios.length).toFixed(1)
         : 0;
 
-    // Agrupar por tipo de emergencia (top 8)
     const tiemposPorTipo: Record<string, number[]> = {};
     
-    // Urbanos
     tiemposUrbanos.forEach((item: any) => {
         const key = `U: ${item.tipo}`;
         if (!tiemposPorTipo[key]) tiemposPorTipo[key] = [];
         tiemposPorTipo[key].push(item.tiempo);
     });
     
-    // Prehospitalarios
     tiemposPrehospitalarios.forEach((item: any) => {
         const key = `P: ${item.tipo}`;
         if (!tiemposPorTipo[key]) tiemposPorTipo[key] = [];
