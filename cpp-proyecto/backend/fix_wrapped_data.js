@@ -7,9 +7,9 @@ async function fixWrappedData() {
         await client.connect();
         const db = client.db();
         
-        console.log("🔧 Iniciando limpieza de datos envueltos...\n");
+        console.log(" Iniciando limpieza de datos envueltos...\n");
         
-        console.log("📋 Procesando reportes_urbanos...");
+        console.log(" Procesando reportes_urbanos...");
         const reportesUrbanos = await db.collection("reportes_urbanos").find({}).toArray();
         let urbanosFixed = 0;
         let urbanosIDFixed = 0;
